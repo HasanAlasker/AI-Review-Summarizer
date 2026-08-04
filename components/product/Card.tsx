@@ -1,16 +1,14 @@
-import React from "react";
-import {
-  Card as ShadCard,
-  CardAction,
-  CardHeader,
-  CardContent,
-  CardFooter,
-  CardTitle,
-  CardDescription,
-} from "../ui/card";
 import { Product } from "@/lib/generated/prisma/client";
-import { Button } from "../ui/button";
 import Link from "next/link";
+import { Button } from "../ui/button";
+import {
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+  Card as ShadCard
+} from "../ui/card";
 
 export default function Card({
   id,

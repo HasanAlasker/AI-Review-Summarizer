@@ -1,3 +1,4 @@
+import Grid from "@/components/general/Grid";
 import Card from "@/components/product/Card";
 import { prisma } from "@/lib/prisma";
 
@@ -17,7 +18,7 @@ export default async function page() {
 
   return (
     <div>
-      <div className="grid md:grid-cols-2 gap-5">{ProductList}</div>
+      <Grid>{ProductList}</Grid>
     </div>
   );
 }
