@@ -1,9 +1,12 @@
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <>
-      <Button > Click Me</Button>
+      <Button>
+        <Link href={"/products"}>View Products</Link>
+      </Button>
     </>
   );
 }
