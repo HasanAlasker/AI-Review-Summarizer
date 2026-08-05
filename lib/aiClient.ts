@@ -1,23 +1,23 @@
 import { GoogleGenAI } from "@google/genai";
+import fs from "fs";
+import path from "path";
 
-const ai = new GoogleGenAI({});
+const templatePath = path.join(process.cwd(), "app/prompts/reviewSummary.txt");
+const template = fs.readFileSync(templatePath, "utf-8");
 
 export const AIclient = {
-  async GenerateSummary(
-    joinedReview: string,
-    instructions: string,
-    model?: string,
-  ) {
-    const interaction = await ai.interactions.create({
-      model: model ?? "gemini-3.6-flash",
-      input: joinedReview,
-      system_instruction: instructions,
-    });
-    return {
-      id: interaction.id,
-      summary: interaction.output_text,
-    };
-  },
+  async GenerateSummary(joinedReviews: string, model?: string) {
+    const summaryInstructions = template.replace(
+      "{{joinedReviews}}",
+      joinedReviews,
+    );
+    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
-  // in the future i can add more ai implementations => ex customer service chat bot
+    const response = await ai.interactions.create({
+      model: model ?? "gemini-3.6-flash",
+      input: summaryInstructions,
+    });
+
+    return response.output_text;
+  },
 };

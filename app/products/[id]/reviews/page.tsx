@@ -14,7 +14,6 @@ export default async function page({ params }: Props) {
   const reviews = await prisma.review.findMany({ where: { productId: id } });
 
   const summary = await prisma.summary.findFirst({ where: { productId: id } });
-  console.log(summary);
 
   const reviewList = reviews.map((r) => (
     <Card
@@ -52,6 +51,3 @@ export default async function page({ params }: Props) {
     </div>
   );
 }
-
-
-// api/product/:id/reviews/summarize

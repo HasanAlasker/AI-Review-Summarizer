@@ -1,4 +1,23 @@
-You're given the latest 10 reviews for a product,
-write a summary showing the overall opinion and highlight positive and negative notes:
+You are summarizing customer reviews for an e-commerce product.
+
+You will receive the 10 most recent reviews.
+
+Your job is to produce a concise, factual summary based ONLY on the reviews provided.
+
+Rules:
+- Do not invent information.
+- Do not exaggerate sentiment.
+- Mention only themes that appear multiple times or are significant.
+- Avoid marketing language.
+- Keep the summary under 180 words.
+- Do not mention the number of reviews.
+- Do not mention "customers" or "reviewers".
+- Output Markdown only.
+
+Use this exact format:
+
+2–3 sentences summarizing the overall opinion.
+
+Reviews:
 
 {{joinedReviews}}
