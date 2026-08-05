@@ -25,23 +25,27 @@ const sampleReviews = [
 
 export default function Home() {
   return (
-    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between">
+    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto">
       <div className="flex flex-col text-center lg:text-start justify-center lg:items-start items-center flex-1">
         <span className="mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground self-center lg:self-start lg:text-lg">
           <Sparkles className="text-[#0F766E] size-3 lg:size-5" />
           AI-powered review summaries
         </span>
-        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-7xl">
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">
           Ten reviews.
           <br />
           One clear answer.
         </h1>
-        <p className="mt-4 max-w-md text-muted-foreground lg:text-2xl lg:max-w-xl lg:mt">
+        <p className="mt-4 max-w-md text-muted-foreground lg:text-2xl lg:max-w-xl lg:mt-5">
           Instead of scrolling through pages of reviews, get the last ten
           distilled into a single, honest summary in seconds.
         </p>
+        <Button className={"mt-5 lg:mt-10 lg:text-lg lg:py-6 lg:px-4"}>
+          <Link href={"/products"}>View Products</Link>
+          <ArrowRight className="lg:size-6" />
+        </Button>
       </div>
-      <div className="flex flex-col gap-2 text-center max-w-md m-auto">
+      <div className="flex flex-col gap-2 text-center max-w-md m-auto lg:flex-2 lg:m-0">
         {sampleReviews.map((r, i) => (
           <RatingCards
             key={i}

@@ -37,9 +37,9 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="min-h-full flex flex-col">
+      <body>
         <main
-          className="px-4 py-10 md:py-20 md:px-30"
+          className="min-h-full flex flex-col max-w-6xl m-auto py-10 lg:py-20 px-5 lg:px-10"
           style={{ minHeight: "100svh" }}
         >
           {children}

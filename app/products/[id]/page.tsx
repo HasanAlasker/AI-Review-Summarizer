@@ -11,8 +11,8 @@ export default async function page({ params }: Props) {
   const product = await prisma.product.findUnique({ where: { id } });
 
   return (
-    <div>
-      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20">
+    <div className="m-auto">
+      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20 ">
         <div className="w-full aspect-square max-w-lg bg-gray-50 rounded-lg border border-border">
           <PackageOpen
             width={"50%"}
