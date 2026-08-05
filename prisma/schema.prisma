@@ -12,6 +12,7 @@ model Product {
   name        String
   description String?
   price       Decimal
+  imageURL    String?
   createdAt   DateTime @default(now())
   reviews     Review[]
   summary     Summary?

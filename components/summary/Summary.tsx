@@ -7,6 +7,7 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Sparkles } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 
 export default function SummaryBox({
   id,
@@ -25,8 +26,10 @@ export default function SummaryBox({
           <span className="text-sm"> {createdAt.toLocaleDateString()}</span>
         </CardDescription>
       </CardHeader>
-      <CardContent >
-        <p className="text-lg">{content}</p>
+      <CardContent>
+        <ReactMarkdown>
+          {content}
+        </ReactMarkdown>
       </CardContent>
     </Card>
   );

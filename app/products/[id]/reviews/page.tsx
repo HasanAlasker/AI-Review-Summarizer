@@ -13,7 +13,10 @@ export default async function page({ params }: Props) {
   const reviews = await prisma.review.findMany({ where: { productId: id } });
 
   const summary = await prisma.summary.findFirst({ where: { productId: id } });
-  const noSummary = !summary || new Date() > summary.expiresAt;
+  const date = new Date();
+  // to test when the summary is expired
+  // date.setDate(date.getDate() + 11);
+  const noSummary = !summary || date > summary.expiresAt;
 
   const reviewList = reviews.map((r) => (
     <Card
