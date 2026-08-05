@@ -1,0 +1,4 @@
+You're given the latest 10 reviews for a product,
+write a summary showing the overall opinion and highlight positive and negative notes:
+
+{{joinedReviews}}

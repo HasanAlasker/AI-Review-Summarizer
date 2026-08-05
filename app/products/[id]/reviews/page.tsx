@@ -52,3 +52,6 @@ export default async function page({ params }: Props) {
     </div>
   );
 }
+
+
+// api/product/:id/reviews/summarize
