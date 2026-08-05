@@ -1,9 +1,8 @@
 import Grid from "@/components/general/Grid";
 import Card from "@/components/review/Card";
-import Summary from "@/components/review/Summary";
-import { Button } from "@/components/ui/button";
+import SumBtn from "@/components/summary/SumBtn";
+import Summary from "@/components/summary/Summary";
 import { prisma } from "@/lib/prisma";
-import { Sparkles } from "lucide-react";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -14,6 +13,7 @@ export default async function page({ params }: Props) {
   const reviews = await prisma.review.findMany({ where: { productId: id } });
 
   const summary = await prisma.summary.findFirst({ where: { productId: id } });
+  const noSummary = !summary || new Date() > summary.expiresAt;
 
   const reviewList = reviews.map((r) => (
     <Card
@@ -29,15 +29,7 @@ export default async function page({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-10">
-      {!summary && (
-        <Button
-          size={"lg"}
-          className="flex justify-center items-center text-lg self-start py-6 px-6"
-        >
-          <Sparkles className="size-4.5" />
-          <p>Summarize</p>
-        </Button>
-      )}
+      {noSummary && <SumBtn productId={id} />}
       {summary && (
         <Summary
           id={summary.id}
