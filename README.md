@@ -8,17 +8,10 @@ Built with **Next.js**, **Prisma**, **PostgreSQL**, and **Google Gemini**, this 
 
 ---
 
-## ✨ Demo
-
-> **Coming Soon**
-
----
-
 ## 📸 Preview
 
-| Product Catalog  | AI Summary       |
-| ---------------- | ---------------- |
-| *Add screenshot* | *Add screenshot* |
+<img src="./public/1.png" />
+<img src="./public/2.png" />
 
 ---
 
