@@ -19,8 +19,8 @@ export default function SummaryBox({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className=" text-2xl font-bold">Review Summary</CardTitle>
-        <CardDescription className="flex items-center gap-2 text-lg">
+        <CardTitle className=" text-xl font-bold">Review Summary</CardTitle>
+        <CardDescription className="flex items-center gap-2 text-md">
           <Sparkles size={18} />
           Generated with AI -{" "}
           <span className="text-sm"> {createdAt.toLocaleDateString()}</span>
