@@ -4,9 +4,9 @@ import "react-loading-skeleton/dist/skeleton.css";
 export default function Loading() {
   return (
     <div className="flex flex-1 w-full">
-      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20 w-full">
+      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20 w-full h-full">
         {/* Image skeleton */}
-        <div className="w-full h-full aspect-square max-w-lg bg-white rounded-lg border border-border overflow-hidden">
+        <div className="w-full aspect-square  bg-white rounded-lg border border-border overflow-hidden">
           <Skeleton width={"100%"} className="aspect-square" />
         </div>
 
