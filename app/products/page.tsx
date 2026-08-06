@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Grid from "@/components/general/Grid";
 import Card from "@/components/product/Card";
 import { prisma } from "@/lib/prisma";
@@ -23,3 +24,8 @@ export default async function page() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Products",
+  description: "Browse products"
+};

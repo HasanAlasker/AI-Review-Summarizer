@@ -1,15 +1,22 @@
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { MessageCircleCode, PackageOpen, ShoppingCart } from "lucide-react";
+import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { cache } from "react";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
+
+export const getProduct = cache(async (id: string) => {
+  return prisma.product.findUnique({ where: { id } });
+});
+
 export default async function page({ params }: Props) {
   const { id } = await params;
-  const product = await prisma.product.findUnique({ where: { id } });
+  const product = await getProduct(id);
 
   return (
     <div className="m-auto">
@@ -53,4 +60,13 @@ export default async function page({ params }: Props) {
       </div>
     </div>
   );
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const product = await getProduct(id);
+  return {
+    title: product?.name,
+    description: product?.description,
+  };
 }
