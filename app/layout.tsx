@@ -44,7 +44,7 @@ export default function RootLayout({
     >
       <body>
         <main
-          className="min-h-full flex flex-col max-w-6xl m-auto py-10 lg:py-20 px-5 lg:px-10"
+          className="min-h-full flex flex-col max-w-6xl lg:m-auto py-10 lg:py-20 px-5 lg:px-10"
           style={{ minHeight: "100svh" }}
         >
           {children}
