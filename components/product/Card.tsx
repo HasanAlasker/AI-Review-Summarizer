@@ -7,7 +7,7 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-  Card as ShadCard
+  Card as ShadCard,
 } from "../ui/card";
 
 export default function Card({
@@ -16,6 +16,7 @@ export default function Card({
   description,
   price,
   createdAt,
+  imageURL,
 }: Product) {
   return (
     <ShadCard className="flex flex-col justify-between">

@@ -13,6 +13,7 @@ export default async function page() {
       description={p.description}
       price={p.price}
       createdAt={p.createdAt}
+      imageURL={p?.imageURL}
     />
   ));
 
