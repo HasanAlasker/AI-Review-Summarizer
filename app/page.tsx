@@ -25,9 +25,10 @@ const sampleReviews = [
 
 export default function Home() {
   return (
-    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto">
+    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto relative">
+      <div className="bg-grid-white fixed inset-0 -z-1"></div>
       <div className="flex flex-col text-center lg:text-start justify-center lg:items-start items-center flex-1">
-        <span className="mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground self-center lg:self-start lg:text-lg">
+        <span className="mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground self-center lg:self-start lg:text-lg bg-[#ffffff86] backdrop-blur-md shadow-md shadow-black/20">
           <Sparkles className="text-[#0F766E] size-3 lg:size-5" />
           AI-powered review summaries
         </span>
@@ -55,7 +56,7 @@ export default function Home() {
           />
         ))}
         <ArrowDown className="self-center" />
-        <Card className="border-[#0F766E] bg-[#d9fdfa]/40 px-5 py-3 text-sm font-medium ">
+        <Card className="border-[#0F766E] bg-[#d9fdfa3d] px-5 py-3 text-sm font-medium backdrop-blur-md shadow-md shadow-black/20">
           <div className="flex gap-2 text-[#0F766E] justify-center items-center">
             <Sparkles size={18} />
             <p>AI Summary</p>

@@ -115,6 +115,7 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+  --s: rgba(181, 255, 214, 0.759);
 }
 
 @layer base {
@@ -127,4 +128,11 @@
   html {
     @apply font-sans;
   }
+}
+
+@utility bg-grid-white {
+  background-size: 60px 60px;
+  background-image:
+    linear-gradient(to right, rgba(181, 255, 214, 0.8) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(181, 255, 214, 0.8) 1px, transparent 1px);
 }

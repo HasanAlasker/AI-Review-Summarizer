@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { MessageCircleCode, PackageOpen, ShoppingCart } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 
 interface Props {
@@ -14,11 +15,21 @@ export default async function page({ params }: Props) {
     <div className="m-auto">
       <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20 ">
         <div className="w-full aspect-square max-w-lg bg-gray-50 rounded-lg border border-border">
-          <PackageOpen
-            width={"50%"}
-            strokeWidth={1}
-            className="text-border h-full m-auto"
-          />
+          {product?.imageURL ? (
+            <Image
+              src={product?.imageURL}
+              alt={`image of ${product.name}`}
+              width={100}
+              height={100}
+              className="w-full aspect-square object-contain rounded-lg"
+            ></Image>
+          ) : (
+            <PackageOpen
+              width={"50%"}
+              strokeWidth={1}
+              className="text-border h-full m-auto"
+            />
+          )}
         </div>
         <div className="flex flex-col justify-between gap-15">
           <div className="flex flex-col gap-10 h-full">

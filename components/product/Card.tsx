@@ -9,6 +9,7 @@ import {
   CardTitle,
   Card as ShadCard,
 } from "../ui/card";
+import Image from "next/image";
 
 export default function Card({
   id,
@@ -20,13 +21,23 @@ export default function Card({
 }: Product) {
   return (
     <ShadCard className="flex flex-col justify-between">
-      <div>
-        <CardHeader>
+      <CardContent className="flex flex-col md:flex-row gap-2">
+        {imageURL && (
+          <Image
+            src={imageURL}
+            alt={`image of ${name}`}
+            width={100}
+            height={100}
+            className="aspect-square object-contain w-full max-w-xs self-center md:w-30"
+          />
+        )}
+        <div className="flex flex-1 flex-col">
           <CardTitle>{name}</CardTitle>
           <CardDescription>{description}</CardDescription>
-        </CardHeader>
-        <CardContent>Stocked at: {createdAt.toLocaleDateString()}</CardContent>
-      </div>
+
+          <p className="mt-3">Stocked at: {createdAt.toLocaleDateString()}</p>
+        </div>
+      </CardContent>
       <CardFooter>
         <div className="flex w-full items-center justify-between">
           <p>{"$" + price.toString()}</p>
