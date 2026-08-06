@@ -1,15 +1,14 @@
 import { Product } from "@/lib/generated/prisma/client";
+import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
 import {
   CardContent,
   CardDescription,
   CardFooter,
-  CardHeader,
   CardTitle,
-  Card as ShadCard,
+  Card as ShadCard
 } from "../ui/card";
-import Image from "next/image";
 
 export default function Card({
   id,
@@ -26,8 +25,9 @@ export default function Card({
           <Image
             src={imageURL}
             alt={`image of ${name}`}
-            width={100}
-            height={100}
+            width={1200}
+            height={1200}
+            quality={100}
             className="aspect-square object-contain w-full max-w-xs self-center md:w-30"
           />
         )}

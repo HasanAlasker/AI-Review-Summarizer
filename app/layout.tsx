@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 
@@ -19,8 +19,10 @@ export const metadata: Metadata = {
   title: { default: "Review Sum", template: "%s | Review Sum" },
   description:
     "Instead of scrolling through pages of reviews, get the last ten distilled into a single, honest summary in seconds.",
+};
+
+export const viewport: Viewport = {
   themeColor: "#0f172a",
-  
 };
 
 export default function RootLayout({

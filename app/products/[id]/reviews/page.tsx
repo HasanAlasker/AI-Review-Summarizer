@@ -3,6 +3,7 @@ import Card from "@/components/review/Card";
 import SumBtn from "@/components/summary/SumBtn";
 import Summary from "@/components/summary/Summary";
 import { prisma } from "@/lib/prisma";
+import { Metadata } from "next";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -46,3 +47,8 @@ export default async function page({ params }: Props) {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Reviews",
+  description: "Product Reviews",
+};

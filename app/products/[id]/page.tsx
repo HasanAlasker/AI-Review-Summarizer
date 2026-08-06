@@ -5,6 +5,7 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { cache } from "react";
+import Loading from "./loading";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -20,14 +21,14 @@ export default async function page({ params }: Props) {
 
   return (
     <div className="m-auto">
-      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20 ">
-        <div className="w-full aspect-square max-w-lg bg-gray-50 rounded-lg border border-border">
+      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20">
+        <div className="w-full aspect-square max-w-lg bg-white rounded-lg border border-border">
           {product?.imageURL ? (
             <Image
               src={product?.imageURL}
               alt={`image of ${product.name}`}
-              width={100}
-              height={100}
+              width={1500}
+              height={1500}
               className="w-full aspect-square object-contain rounded-lg"
             ></Image>
           ) : (

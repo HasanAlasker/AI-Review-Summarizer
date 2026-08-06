@@ -1,7 +1,7 @@
-import { Metadata } from "next";
 import Grid from "@/components/general/Grid";
 import Card from "@/components/product/Card";
 import { prisma } from "@/lib/prisma";
+import { Metadata } from "next";
 
 export default async function page() {
   const products = await prisma.product.findMany();
@@ -27,5 +27,5 @@ export default async function page() {
 
 export const metadata: Metadata = {
   title: "Products",
-  description: "Browse products"
+  description: "Browse products",
 };
