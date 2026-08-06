@@ -44,9 +44,11 @@ export default function RootLayout({
     >
       <body>
         <main
-          className="min-h-full flex flex-col max-w-6xl lg:m-auto py-10 lg:py-20 px-5 lg:px-10"
+          className="min-h-full flex flex-col max-w-6xl lg:m-auto py-10 lg:py-20 px-5 lg:px-10 relative"
           style={{ minHeight: "100svh" }}
         >
+      <div className="bg-grid-white fixed inset-0 -z-1"></div>
+
           {children}
         </main>
       </body>
