@@ -16,7 +16,7 @@ export async function GET(req: NextRequest, { params }: Props) {
     if (!summary)
       return NextResponse.json(
         { message: "No summary available", summary: "" },
-        { status: 404 },
+        { status: 200 },
       );
 
     return NextResponse.json({ summary }, { status: 200 });

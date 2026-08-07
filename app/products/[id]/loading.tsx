@@ -6,7 +6,7 @@ export default function Loading() {
     <div className="flex flex-1 w-full">
       <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20 w-full h-full">
         {/* Image skeleton */}
-        <div className="w-full aspect-square  bg-white rounded-lg border border-border overflow-hidden">
+        <div className="w-full aspect-square  bg-white rounded-lg border border-border ">
           <Skeleton width={"100%"} className="aspect-square" />
         </div>
 

@@ -1,7 +1,6 @@
 import Grid from "@/components/general/Grid";
 import Card from "@/components/review/Card";
-import SumBtn from "@/components/summary/SumBtn";
-import Summary from "@/components/summary/Summary";
+import SummarySec from "@/components/summary/SummarySec";
 import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 
@@ -12,12 +11,6 @@ interface Props {
 export default async function page({ params }: Props) {
   const { id } = await params;
   const reviews = await prisma.review.findMany({ where: { productId: id } });
-
-  const summary = await prisma.summary.findFirst({ where: { productId: id } });
-  const date = new Date();
-  // to test when the summary is expired
-  // date.setDate(date.getDate() + 11);
-  const noSummary = !summary || date > summary.expiresAt;
 
   const reviewList = reviews.map((r) => (
     <Card
@@ -33,16 +26,7 @@ export default async function page({ params }: Props) {
 
   return (
     <div className="flex flex-col gap-10">
-      {noSummary && <SumBtn productId={id} />}
-      {summary && (
-        <Summary
-          id={summary.id}
-          productId={summary.productId}
-          content={summary.content}
-          createdAt={summary.createdAt}
-          expiresAt={summary.expiresAt}
-        />
-      )}
+      <SummarySec id={id} />
       <Grid>{reviewList}</Grid>
     </div>
   );

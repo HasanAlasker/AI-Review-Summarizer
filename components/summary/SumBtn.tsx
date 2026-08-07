@@ -1,46 +1,51 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { Summary } from "@/lib/generated/prisma/client";
 import axios from "axios";
 import { Sparkles } from "lucide-react";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { Dispatch, SetStateAction } from "react";
 import { Spinner } from "../ui/spinner";
-import SkeletonCard from "./Skeleton";
+import { summaryResponse } from "./SummarySec";
 
 interface Props {
   productId: string;
+  loading: boolean;
+  setSummary: Dispatch<SetStateAction<Summary | undefined>>;
+  setLoading: Dispatch<SetStateAction<boolean>>;
+  setErr: Dispatch<SetStateAction<string>>;
 }
-export default function SumBtn({ productId }: Props) {
-  const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState(false);
-
-  const router = useRouter();
-
+export default function SumBtn({
+  productId,
+  loading,
+  setSummary,
+  setLoading,
+  setErr,
+}: Props) {
   const handleSummarization = async () => {
     setLoading(true);
     try {
-      await axios.post(`/api/products/${productId}/reviews/summarize`);
+      const { data } = await axios.post<summaryResponse>(
+        `/api/products/${productId}/reviews/summarize`,
+      );
+      if (data.summary) setSummary(data.summary);
     } catch (error) {
       console.log(error);
+      setErr("Couldn't summarize");
     } finally {
-      router.refresh();
       setLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col gap-5">
-      <Button
-        size={"lg"}
-        className="flex justify-center items-center text-lg self-start py-6 px-6"
-        onClick={handleSummarization}
-        disabled={loading}
-      >
-        {loading ? <Spinner /> : <Sparkles className="size-4.5" />}
+    <Button
+      size={"lg"}
+      className="flex justify-center items-center text-lg self-start py-6 px-6"
+      onClick={handleSummarization}
+      disabled={loading}
+    >
+      {loading ? <Spinner /> : <Sparkles className="size-4.5" />}
 
-        <p>{loading ? "Summarizing" : "Summarize"}</p>
-      </Button>
-      {loading && <SkeletonCard />}
-    </div>
+      <p>{loading ? "Summarizing" : "Summarize"}</p>
+    </Button>
   );
 }

@@ -20,10 +20,10 @@ export default function SummaryBox({
     <Card>
       <CardHeader>
         <CardTitle className=" text-xl font-bold">Review Summary</CardTitle>
-        <CardDescription className="flex items-center gap-2 text-md">
+        <CardDescription className="flex items-center gap-2 text-Pmd">
           <Sparkles size={18} />
           Generated with AI -{" "}
-          <span className="text-sm"> {createdAt.toLocaleDateString()}</span>
+          <span className="text-sm"> {new Date(createdAt).toLocaleDateString()}</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
