@@ -1,3 +1,4 @@
+import EReviews from "@/components/empty/EReviews";
 import Grid from "@/components/general/Grid";
 import Card from "@/components/review/Card";
 import SummarySec from "@/components/summary/SummarySec";
@@ -25,9 +26,15 @@ export default async function page({ params }: Props) {
   ));
 
   return (
-    <div className="flex flex-col gap-10">
-      <SummarySec id={id} />
-      <Grid>{reviewList}</Grid>
+    <div className="flex flex-1 flex-col gap-10">
+      {reviewList.length > 0 ? (
+        <>
+          <SummarySec id={id} />
+          <Grid>{reviewList}</Grid>
+        </>
+      ) : (
+        <EReviews />
+      )}
     </div>
   );
 }
