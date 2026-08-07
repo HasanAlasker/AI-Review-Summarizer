@@ -25,16 +25,12 @@ export default async function page({ params }: Props) {
     />
   ));
 
+  if (reviews.length === 0) return <EReviews />;
+
   return (
     <div className="flex flex-1 flex-col gap-10">
-      {reviewList.length > 0 ? (
-        <>
-          <SummarySec id={id} />
-          <Grid>{reviewList}</Grid>
-        </>
-      ) : (
-        <EReviews />
-      )}
+      <SummarySec id={id} />
+      <Grid>{reviewList}</Grid>
     </div>
   );
 }

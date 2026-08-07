@@ -11,7 +11,7 @@ import { ArrowLeft, MessageSquareCode, ShoppingBasket } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
-export default function EReviews() {
+export default function EProduct() {
   const router = useRouter();
   return (
     <Empty className="bg-background border border-border rounded-2xl">
@@ -19,14 +19,13 @@ export default function EReviews() {
         <EmptyMedia variant={"icon"}>
           <MessageSquareCode />
         </EmptyMedia>
-        <EmptyTitle>No Reviews</EmptyTitle>
-        <EmptyDescription>This product has no reviews yet</EmptyDescription>
+        <EmptyTitle>Product Not Found</EmptyTitle>
+        <EmptyDescription>
+          This product does not exist please make sure the URL is correct
+        </EmptyDescription>
       </EmptyHeader>
       <EmptyContent className="flex-row gap-4 justify-center items-center">
-        <Button onClick={() => router.back()}>
-          <ArrowLeft /> Back
-        </Button>
-        <Button onClick={() => router.push("/products")} variant={"secondary"}>
+        <Button onClick={() => router.push("/products")}>
           <ShoppingBasket />
           Products
         </Button>

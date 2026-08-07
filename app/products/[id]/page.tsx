@@ -6,6 +6,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { cache } from "react";
 import Loading from "./loading";
+import EReviews from "@/components/empty/EReviews";
+import EProduct from "@/components/empty/EProduct";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -18,6 +20,8 @@ export const getProduct = cache(async (id: string) => {
 export default async function page({ params }: Props) {
   const { id } = await params;
   const product = await getProduct(id);
+
+  if(!product) return <EProduct />
 
   return (
     <div className="m-auto">
