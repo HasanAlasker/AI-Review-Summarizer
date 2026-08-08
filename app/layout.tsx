@@ -47,7 +47,7 @@ export default function RootLayout({
     >
       <body className="min-h-svh flex flex-col gap-10 max-w-6xl lg:m-auto pb-10 lg:pb-20 px-5 lg:px-10">
         <NavBar />
-        <main className="relative" style={{ minHeight: "100svh" }}>
+        <main className="relative flex flex-col flex-1">
           <div className="bg-grid-white fixed inset-0 -z-1"></div>
 
           {children}

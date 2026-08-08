@@ -22,7 +22,7 @@ export default function NavBar() {
   const router = useRouter();
 
   return (
-    <nav className="z-50 flex w-full m-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md ">
+    <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
       <ButtonGroup>
         {!HIDE_HOME_ON.includes(pathname) && (
           <Button variant={"outline"} onClick={() => router.push("/")}>

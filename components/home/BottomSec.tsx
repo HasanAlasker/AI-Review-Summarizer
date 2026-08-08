@@ -5,7 +5,7 @@ import RatingCards from "./RatingCards";
 
 export default function BottomSec() {
   return (
-    <div className="flex flex-col gap-4 text-center max-w-md m-auto lg:flex-2 lg:m-0">
+    <div className="flex flex-col gap-4 text-center justify-center max-w-md m-auto lg:flex-2 lg:m-0">
       {sampleReviews.map((r, i) => (
         <RatingCards key={i} content={r.text} rating={r.rating} user={r.user} />
       ))}
