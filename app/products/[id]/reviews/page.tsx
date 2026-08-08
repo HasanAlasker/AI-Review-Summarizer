@@ -29,7 +29,7 @@ export default async function page({ params }: Props) {
 
   return (
     <div className="flex flex-1 flex-col gap-10">
-      <SummarySec id={id} />
+      {/* <SummarySec id={id} /> */}
       <Grid>{reviewList}</Grid>
     </div>
   );

@@ -42,7 +42,7 @@ export default function Card({
         <div className="flex w-full items-center justify-between">
           <p>{"$" + price.toString()}</p>
           <Button >
-            <Link scroll={false} href={`/products/${id}`}>Learn More</Link>
+            <Link href={`/products/${id}`}>Learn More</Link>
           </Button>
         </div>
       </CardFooter>

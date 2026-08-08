@@ -40,7 +40,7 @@ export default function Home() {
           distilled into a single, honest summary in seconds.
         </p>
         <Button className={"mt-5 lg:mt-10 lg:text-lg lg:py-6 lg:px-4"}>
-          <Link scroll={false} href={"/products"}>View Products</Link>
+          <Link href={"/products"}>View Products</Link>
           <ArrowRight className="lg:size-6" />
         </Button>
       </div>
