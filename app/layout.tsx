@@ -3,6 +3,7 @@ import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import LoadTheme from "@/components/general/LoadTheme";
+import ScrollToTop from "@/components/general/ScrollToTop";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -52,6 +53,7 @@ export default function RootLayout({
 
           {children}
           <LoadTheme />
+          <ScrollToTop />
         </main>
       </body>
     </html>
