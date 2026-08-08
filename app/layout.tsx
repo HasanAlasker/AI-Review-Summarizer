@@ -4,6 +4,7 @@ import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
 import LoadTheme from "@/components/general/LoadTheme";
 import ScrollToTop from "@/components/general/ScrollToTop";
+import NavBar from "@/components/general/NavBar";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -44,11 +45,9 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="">
-        <main
-          className="min-h-svh flex flex-col max-w-6xl lg:m-auto pb-10 lg:pb-20 px-5 lg:px-10 relative"
-          style={{ minHeight: "100svh" }}
-        >
+      <body className="min-h-svh flex flex-col gap-10 max-w-6xl lg:m-auto pb-10 lg:pb-20 px-5 lg:px-10">
+        <NavBar />
+        <main className="relative" style={{ minHeight: "100svh" }}>
           <div className="bg-grid-white fixed inset-0 -z-1"></div>
 
           {children}

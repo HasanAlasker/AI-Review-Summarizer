@@ -41,9 +41,9 @@ export default function Card({
       <CardFooter>
         <div className="flex w-full items-center justify-between">
           <p>{"$" + price.toString()}</p>
-          <Button>
-            <Link href={`/products/${id}`}>Learn More</Link>
-          </Button>
+          <Link href={`/products/${id}`}>
+            <Button>Learn More</Button>
+          </Link>
         </div>
       </CardFooter>
     </ShadCard>

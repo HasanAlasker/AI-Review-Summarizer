@@ -18,10 +18,12 @@ export default function TopSec() {
         Instead of scrolling through pages of reviews, get the last ten
         distilled into a single, honest summary in seconds.
       </p>
-      <Button className={"mt-5 lg:mt-10 lg:text-lg lg:py-6 lg:px-4"}>
-        <Link href={"/products"}>View Products</Link>
-        <ArrowRight className="lg:size-6" />
-      </Button>
+      <Link href={"/products"}>
+        <Button className={"mt-5 lg:mt-10 lg:text-lg lg:py-6 lg:px-4"}>
+          View Products
+          <ArrowRight className="lg:size-6" />
+        </Button>
+      </Link>
     </div>
   );
 }

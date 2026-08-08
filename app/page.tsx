@@ -3,7 +3,7 @@ import TopSec from "@/components/home/TopSec";
 
 export default function Home() {
   return (
-    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto pt-10 lg:pt-20">
+    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto ">
       <TopSec />
       <BottomSec />
     </div>
