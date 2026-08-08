@@ -2,6 +2,7 @@ import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import LoadTheme from "@/components/general/LoadTheme";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -42,7 +43,7 @@ export default function RootLayout({
         inter.variable,
       )}
     >
-      <body className="light">
+      <body className="">
         <main
           className="min-h-svh flex flex-col max-w-6xl lg:m-auto pb-10 lg:pb-20 px-5 lg:px-10 relative"
           style={{ minHeight: "100svh" }}
@@ -50,6 +51,7 @@ export default function RootLayout({
           <div className="bg-grid-white fixed inset-0 -z-1"></div>
 
           {children}
+          <LoadTheme />
         </main>
       </body>
     </html>

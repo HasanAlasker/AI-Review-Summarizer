@@ -1,4 +1,3 @@
-// app/page.tsx
 import RatingCards from "@/components/home/RatingCards";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -25,7 +24,7 @@ const sampleReviews = [
 
 export default function Home() {
   return (
-    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto ">
+    <div className="min-h-full flex flex-col gap-20 lg:flex-row justify-between w-full m-auto pt-10 lg:pt-20">
       <div className="flex flex-col text-center lg:text-start justify-center lg:items-start items-center flex-1">
         <span className="mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground self-center lg:self-start lg:text-lg bg-background backdrop-blur-md shadow-sm shadow-black/20">
           <Sparkles className="text-[#0F766E] size-3 lg:size-5" />
