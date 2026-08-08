@@ -10,7 +10,7 @@ interface Props {
 
 export default function RatingCards({ rating, content, user }: Props) {
   return (
-    <Card>
+    <Card className="[--card-spacing:--spacing(4)]">
       <CardHeader>
         <CardTitle className="flex gap-2 justify-center items-center">
           <p className="text-sm text-gray-400">{user}</p>

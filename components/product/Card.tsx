@@ -7,7 +7,7 @@ import {
   CardDescription,
   CardFooter,
   CardTitle,
-  Card as ShadCard
+  Card as ShadCard,
 } from "../ui/card";
 
 export default function Card({
@@ -20,7 +20,7 @@ export default function Card({
 }: Product) {
   return (
     <ShadCard className="flex flex-col justify-between">
-      <CardContent className="flex flex-col md:flex-row gap-2">
+      <CardContent className="flex flex-col md:flex-row gap-3">
         {imageURL && (
           <Image
             src={imageURL}
@@ -28,7 +28,7 @@ export default function Card({
             width={1200}
             height={1200}
             quality={100}
-            className="aspect-square object-contain w-full max-w-xs self-center md:w-30"
+            className="aspect-square object-contain w-full max-w-xs self-center md:w-30 rounded-md"
           />
         )}
         <div className="flex flex-1 flex-col">
@@ -41,7 +41,7 @@ export default function Card({
       <CardFooter>
         <div className="flex w-full items-center justify-between">
           <p>{"$" + price.toString()}</p>
-          <Button >
+          <Button>
             <Link href={`/products/${id}`}>Learn More</Link>
           </Button>
         </div>

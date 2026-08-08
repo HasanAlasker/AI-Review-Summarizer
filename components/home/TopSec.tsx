@@ -6,7 +6,7 @@ export default function TopSec() {
   return (
     <div className="flex flex-col text-center lg:text-start justify-center lg:items-start items-center flex-1">
       <span className="mb-4 flex w-fit items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-medium text-muted-foreground self-center lg:self-start lg:text-lg bg-background backdrop-blur-md shadow-sm shadow-black/20">
-        <Sparkles className="text-[#0F766E] size-3 lg:size-5" />
+        <Sparkles className="text-[#0F766E] dark:text-[#17978d] size-3 lg:size-5" />
         AI-powered review summaries
       </span>
       <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl lg:text-6xl">

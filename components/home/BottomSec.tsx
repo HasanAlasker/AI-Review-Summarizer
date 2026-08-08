@@ -10,8 +10,8 @@ export default function BottomSec() {
         <RatingCards key={i} content={r.text} rating={r.rating} user={r.user} />
       ))}
       <ArrowDown className="self-center" />
-      <Card className="border-[#0F766E] bg-[#d9fdfa3d] px-5 py-3 text-sm font-medium backdrop-blur-md shadow-sm shadow-black/20">
-        <div className="flex gap-2 text-[#0F766E] justify-center items-center">
+      <Card className="border-[#0F766E] bg-[#d9fdfa3d] dark:bg-accent px-5 py-3 text-sm font-medium backdrop-blur-md shadow-sm shadow-black/20 [--card-spacing:--spacing(4)]">
+        <div className="flex gap-2 text-[#0F766E] dark:text-[#17978d] justify-center items-center">
           <Sparkles size={18} />
           <p>AI Summary</p>
         </div>
