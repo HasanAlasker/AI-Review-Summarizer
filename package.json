@@ -19,6 +19,7 @@
     "clsx": "^2.1.1",
     "lucide-react": "^1.28.0",
     "next": "16.2.12",
+    "next-auth": "^4.24.15",
     "prisma": "^7.9.1",
     "react": "19.2.4",
     "react-dom": "19.2.4",
