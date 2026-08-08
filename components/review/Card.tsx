@@ -1,14 +1,10 @@
-import { Product, Review } from "@/lib/generated/prisma/client";
-import Link from "next/link";
-import { Button } from "../ui/button";
+import { Review } from "@/lib/generated/prisma/client";
 import {
-  CardAction,
   CardContent,
   CardDescription,
-  CardFooter,
   CardHeader,
   CardTitle,
-  Card as ShadCard,
+  Card as ShadCard
 } from "../ui/card";
 import Stars from "./Stars";
 

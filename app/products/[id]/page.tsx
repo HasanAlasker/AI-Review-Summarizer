@@ -50,7 +50,7 @@ export default async function page({ params }: Props) {
               {product?.description}
             </p>
             <p className="text-2xl font-medium">${product?.price.toString()}</p>
-            <Link href={`/products/${id}/reviews`}>
+            <Link scroll={false} href={`/products/${id}/reviews`}>
               <Button variant={"outline"}>
                 <MessageCircleCode data-icon={"inline-start"} />
                 Read Reviews
