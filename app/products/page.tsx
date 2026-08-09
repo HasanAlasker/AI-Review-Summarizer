@@ -16,6 +16,7 @@ export default async function page() {
       price={p.price}
       createdAt={p.createdAt}
       imageURL={p?.imageURL}
+      isDeleted={p.isDeleted}
     />
   ));
 
