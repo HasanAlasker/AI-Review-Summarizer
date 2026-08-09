@@ -4,13 +4,13 @@ import {
   CardDescription,
   CardHeader,
   CardTitle,
-  Card as ShadCard
+  Card as ShadCard,
 } from "../ui/card";
 import Stars from "./Stars";
 
 export default function Card({
   id,
-  author,
+  authorId,
   content,
   rating,
   productId,
@@ -21,7 +21,7 @@ export default function Card({
       <div>
         <CardHeader>
           <div className="flex gap-5 items-center">
-            <CardTitle className="font-bold text-lg">{author}</CardTitle>
+            <CardTitle className="font-bold text-lg">{authorId}</CardTitle>
             <Stars rating={rating} />
           </div>
           <CardDescription>{content}</CardDescription>
