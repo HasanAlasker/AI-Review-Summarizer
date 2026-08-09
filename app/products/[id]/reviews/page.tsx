@@ -17,11 +17,12 @@ export default async function page({ params }: Props) {
     <Card
       key={r.id}
       id={r.id}
-      author={r.author}
+      authorId={r.authorId}
       content={r.content}
       rating={r.rating}
       createdAt={r.createdAt}
       productId={id}
+      isDeleted={r.isDeleted}
     />
   ));
 
