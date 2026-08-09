@@ -1,3 +1,4 @@
+import EProduct from "@/components/empty/EProduct";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { MessageCircleCode, PackageOpen, ShoppingCart } from "lucide-react";
@@ -5,9 +6,6 @@ import { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { cache } from "react";
-import Loading from "./loading";
-import EReviews from "@/components/empty/EReviews";
-import EProduct from "@/components/empty/EProduct";
 
 interface Props {
   params: Promise<{ id: string }>;

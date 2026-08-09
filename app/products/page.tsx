@@ -17,6 +17,7 @@ export default async function page() {
       createdAt={p.createdAt}
       imageURL={p?.imageURL}
       isDeleted={p.isDeleted}
+      stock={p.stock}
     />
   ));
 
