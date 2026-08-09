@@ -21,12 +21,12 @@ export default async function page({ params }: Props) {
   const { id } = await params;
   const product = await getProduct(id);
 
-  if(!product) return <EProduct />
+  if (!product) return <EProduct />;
 
   return (
-    <div className="m-auto">
-      <div className="flex flex-col md:flex-row gap-10 md:gap-10 lg:gap-20">
-        <div className="w-full aspect-square max-w-lg bg-white rounded-lg border border-border flex justify-center items-center">
+    <div className="flex flex-1 min-h-full w-full m-auto">
+      <div className="flex flex-col flex-1 md:flex-row gap-10 md:gap-10 lg:gap-20">
+        <div className="w-full h-full aspect-square max-w-lg bg-white rounded-lg border border-border flex justify-center items-center">
           {product?.imageURL ? (
             <Image
               src={product?.imageURL}

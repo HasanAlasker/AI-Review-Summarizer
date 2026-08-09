@@ -3,6 +3,7 @@ import FormCard from "@/components/form/FormCard";
 import InputField from "@/components/form/Input";
 import { Button } from "@/components/ui/button";
 import { FieldGroup } from "@/components/ui/field";
+import axios from "axios";
 import * as Yup from "yup";
 
 const validationSchema = Yup.object({
@@ -33,6 +34,13 @@ type ProductFormValues = {
 export default function page() {
   const handleSubmit = async (values: ProductFormValues) => {
     console.log(values);
+    // todo: reset form after res, show loading state, upload images
+    try {
+      const res = await axios.post("/api/admin/product", values);
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
   };
   const initialValues: ProductFormValues = {
     name: "",
