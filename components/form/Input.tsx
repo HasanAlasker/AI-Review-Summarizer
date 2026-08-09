@@ -1,13 +1,12 @@
 "use client";
-import { Field, FieldError, FieldLabel } from "../ui/field";
-import { Input } from "@/components/ui/input";
 import { ErrorMessage, useField } from "formik";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupInput,
-} from "../ui/input-group";
 import { DynamicIcon, IconName } from "lucide-react/dynamic";
+import { Field, FieldError, FieldLabel } from "../ui/field";
+import {
+    InputGroup,
+    InputGroupAddon,
+    InputGroupInput,
+} from "../ui/input-group";
 
 interface Props {
   label: string;
@@ -18,7 +17,7 @@ interface Props {
   multiline?: boolean;
   maxHeight?: number;
 }
-export default function InputFeild({
+export default function InputField({
   label,
   placeholder,
   type,
