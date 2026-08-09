@@ -103,6 +103,8 @@ enum OrderStatus {
   CANCELLED
 }
 
+// todo: new model: product images
+
 model Product {
   id          String      @id @default(uuid())
   name        String
