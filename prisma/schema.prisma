@@ -37,19 +37,6 @@ model Session {
   @@map("sessions")
 }
 
-model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String?   @unique
-  emailVerified DateTime? @map("email_verified")
-  image         String?
-  role          String    @default("user")
-  accounts      Account[]
-  sessions      Session[]
-
-  @@map("users")
-}
-
 model VerificationToken {
   identifier String
   token      String
@@ -59,20 +46,85 @@ model VerificationToken {
   @@map("verification_tokens")
 }
 
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime? @map("email_verified")
+  image         String?
+  role          String    @default("user")
+  accounts      Account[]
+  sessions      Session[]
+  reviews       Review[]
+  cart          Cart?
+  orders        Order[]
+
+  @@map("users")
+}
+
+model Cart {
+  id     String     @id @default(uuid())
+  userId String     @unique
+  user   User       @relation(fields: [userId], references: [id])
+  items  CartItem[]
+}
+
+model CartItem {
+  id        String  @id @default(uuid())
+  cartId    String
+  cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int     @default(1)
+
+  @@unique([cartId, productId]) // prevents duplicate rows for same product; bump quantity instead
+}
+
+model Order {
+  id        String      @id @default(uuid())
+  userId    String
+  user      User        @relation(fields: [userId], references: [id])
+  items     OrderItem[]
+  total     Decimal
+  status    OrderStatus @default(PENDING)
+  createdAt DateTime    @default(now())
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  orderId   String
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product @relation(fields: [productId], references: [id])
+  quantity  Int
+  price     Decimal
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  SHIPPED
+  DELIVERED
+  CANCELLED
+}
+
 model Product {
-  id          String   @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String
   description String?
   price       Decimal
   imageURL    String?
-  createdAt   DateTime @default(now())
+  createdAt   DateTime    @default(now())
   reviews     Review[]
   summary     Summary?
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
 }
 
 model Review {
   id        String   @id @default(uuid())
-  author    String
+  authorId  String
+  author    User     @relation(fields: [authorId], references: [id])
   rating    Int
   content   String
   createdAt DateTime @default(now())
