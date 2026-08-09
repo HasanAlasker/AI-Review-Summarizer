@@ -14,8 +14,6 @@ import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation";
 import NavBtn from "./NavBtn";
 
-const HIDE_BACK_ON = ["/products", "/"];
-
 export default function NavBar() {
   const isDark = useTheme((state) => state.isDark);
   const pathname = usePathname();
@@ -27,10 +25,6 @@ export default function NavBar() {
     <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
       <ButtonGroup>
         <NavBtn path="/products" children={<Store />} />
-
-        {!HIDE_BACK_ON.includes(pathname) && (
-          <NavBtn back children={<Undo2 />} />
-        )}
       </ButtonGroup>
 
       <ButtonGroup>
@@ -41,7 +35,7 @@ export default function NavBar() {
           <NavBtn path="/cart" children={<ShoppingCart />} />
         )}
         {session?.user.role === "admin" && (
-          <NavBtn path="/orders" children={<WalletCards />} />
+          <NavBtn path="/admin/orders" children={<WalletCards />} />
         )}
 
         <NavBtn toggleTheme children={!isDark ? <Moon /> : <Sun />} />
