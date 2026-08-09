@@ -2,6 +2,7 @@
 import { useTheme } from "@/app/store/useTheme";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
+  LayoutDashboard,
   LogOut,
   Moon,
   ShoppingCart,
@@ -25,6 +26,9 @@ export default function NavBar() {
     <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
       <ButtonGroup>
         <NavBtn path="/products" children={<Store />} />
+        {session?.user.role === "admin" && (
+          <NavBtn path="/admin/dashboard" children={<LayoutDashboard />} />
+        )}
       </ButtonGroup>
 
       <ButtonGroup>

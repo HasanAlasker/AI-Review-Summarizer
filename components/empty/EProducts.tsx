@@ -7,27 +7,28 @@ import {
   EmptyMedia,
   EmptyTitle,
 } from "@/components/ui/empty";
-import { ScanBox, ShoppingBasket } from "lucide-react";
+import { Archive, Home } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 
-export default function EProduct() {
+export default function EProducts() {
   const router = useRouter();
   return (
     <Empty className="bg-background border border-border rounded-2xl">
       <EmptyHeader>
         <EmptyMedia variant={"icon"}>
-          <ScanBox />
+          <Archive />
         </EmptyMedia>
-        <EmptyTitle>Product Not Found</EmptyTitle>
+        <EmptyTitle>No Products</EmptyTitle>
         <EmptyDescription>
-          This product does not exist please make sure the URL is correct
+          We currently have no products in stock to display, please try again
+          later!
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent className="flex-row gap-4 justify-center items-center">
-        <Button onClick={() => router.push("/products")}>
-          <ShoppingBasket />
-          Products
+        <Button onClick={() => router.push("/")}>
+          <Home />
+          Home
         </Button>
       </EmptyContent>
     </Empty>

@@ -1,3 +1,4 @@
+import EProducts from "@/components/empty/EProducts";
 import Grid from "@/components/general/Grid";
 import Card from "@/components/product/Card";
 import { prisma } from "@/lib/prisma";
@@ -17,6 +18,8 @@ export default async function page() {
       imageURL={p?.imageURL}
     />
   ));
+
+  if (products.length === 0) return <EProducts />;
 
   return (
     <div>
