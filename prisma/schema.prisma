@@ -114,6 +114,7 @@ model Product {
   summary     Summary?
   cartItems   CartItem[]
   orderItems  OrderItem[]
+  stock       Int         @default(1)
   isDeleted   Boolean     @default(false)
 }
 

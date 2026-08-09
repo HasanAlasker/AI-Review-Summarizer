@@ -20,15 +20,11 @@ export default function NavBar() {
   const pathname = usePathname();
 
   const { data: session, status } = useSession();
-  console.log(session?.user!.role);
 
   return (
     <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
       <ButtonGroup>
         <NavBtn path="/products" children={<Store />} />
-        {session?.user.role === "admin" && (
-          <NavBtn path="/admin/dashboard" children={<LayoutDashboard />} />
-        )}
       </ButtonGroup>
 
       <ButtonGroup>
