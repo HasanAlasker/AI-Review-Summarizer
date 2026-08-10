@@ -29,6 +29,7 @@ type ProductFormValues = {
   description: string;
   imageURL: string;
   price: number | "";
+  stock: number;
 };
 
 export default function page() {
@@ -47,6 +48,7 @@ export default function page() {
     description: "",
     imageURL: "",
     price: "",
+    stock: 1,
   };
   return (
     <FormCard
@@ -74,6 +76,12 @@ export default function page() {
             label="Price"
             placeholder="0.00"
             iconName="banknote"
+          />
+          <InputField
+            name="stock"
+            label="Stock"
+            placeholder="1"
+            iconName="warehouse"
           />
           <Button type="submit">Add Product</Button>
         </FieldGroup>

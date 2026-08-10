@@ -43,7 +43,7 @@ model VerificationToken {
 }
 
 model User {
-  id            String    @id @default(cuid())
+  id            String    @id @default(uuid())
   name          String?
   email         String?   @unique
   emailVerified DateTime? @map("email_verified")
@@ -103,21 +103,38 @@ enum OrderStatus {
   CANCELLED
 }
 
-// todo: new model: product images
+model Category {
+  id       String    @id @default(uuid())
+  name     String
+  products Product[]
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  publicId  String
+  isPrimary Boolean  @default(false)
+  isDeleted Boolean  @default(false)
+  createdAt DateTime @default(now())
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+}
 
 model Product {
   id          String      @id @default(uuid())
   name        String
   description String?
   price       Decimal
-  imageURL    String?
   createdAt   DateTime    @default(now())
+  categoryId  String
+  category    Category    @relation(fields: [categoryId], references: [id])
   reviews     Review[]
   summary     Summary?
   cartItems   CartItem[]
   orderItems  OrderItem[]
   stock       Int         @default(1)
   isDeleted   Boolean     @default(false)
+  images      Image[]
 }
 
 model Review {

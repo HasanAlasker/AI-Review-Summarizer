@@ -12,7 +12,10 @@ interface Props {
 }
 
 export const getProduct = cache(async (id: string) => {
-  return prisma.product.findUnique({ where: { id } });
+  return prisma.product.findUnique({
+    where: { id },
+    include: { images: true },
+  });
 });
 
 export default async function page({ params }: Props) {
@@ -25,9 +28,9 @@ export default async function page({ params }: Props) {
     <div className="flex flex-1 min-h-full w-full m-auto">
       <div className="flex flex-col flex-1 md:flex-row gap-10 md:gap-10 lg:gap-20">
         <div className="w-full h-full aspect-square max-w-lg bg-white rounded-lg border border-border flex justify-center items-center">
-          {product?.imageURL ? (
+          {product?.images[0] ? (
             <Image
-              src={product?.imageURL}
+              src={product?.images[0].url}
               alt={`image of ${product.name}`}
               width={1500}
               height={1500}

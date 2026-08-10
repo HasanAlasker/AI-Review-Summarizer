@@ -9,14 +9,16 @@ import { Decimal } from "@prisma/client/runtime/client";
 
 export async function POST(req: NextRequest) {
   try {
-    // should i do this or use the proxy.ts that i have?
-    // const session = await getServerSession(authOptions)
-    // if(!session?.user.role) return NextResponse.json({message: "Unauthorized"}, {status: 402})
-
-    const { name, description, imageURL, price }: Product = await req.json();
-    const conPrice = Decimal(price);
+    const { name, description, price, categoryId, stock }: Product =
+      await req.json();
     const product = await prisma.product.create({
-      data: { name, description, imageURL, price: conPrice },
+      data: {
+        name,
+        description,
+        price: Decimal(price),
+        categoryId: "c2c07793-d723-4ff0-9867-980b68c0b7c1",
+        stock: Number(stock),
+      },
     });
 
     return NextResponse.json({ product }, { status: 201 });

@@ -11,18 +11,22 @@ interface Props {
 
 export default async function page({ params }: Props) {
   const { id } = await params;
-  const reviews = await prisma.review.findMany({ where: { productId: id } });
+  const reviews = await prisma.review.findMany({
+    where: { productId: id },
+    include: { author: true },
+  });
 
   const reviewList = reviews.map((r) => (
     <Card
       key={r.id}
       id={r.id}
-      authorId={r.authorId}
       content={r.content}
       rating={r.rating}
       createdAt={r.createdAt}
       productId={id}
       isDeleted={r.isDeleted}
+      author={r.author.name ?? "Reviewer"}
+      authorId={r.authorId}
     />
   ));
 

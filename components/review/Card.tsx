@@ -8,20 +8,25 @@ import {
 } from "../ui/card";
 import Stars from "./Stars";
 
+interface Props extends Review {
+  author: string;
+}
+
 export default function Card({
   id,
-  authorId,
   content,
   rating,
   productId,
   createdAt,
-}: Review) {
+  author,
+  authorId,
+}: Props) {
   return (
     <ShadCard className="flex flex-col justify-between">
       <div>
         <CardHeader>
           <div className="flex gap-5 items-center">
-            <CardTitle className="font-bold text-lg">{authorId}</CardTitle>
+            <CardTitle className="font-bold text-lg">{author}</CardTitle>
             <Stars rating={rating} />
           </div>
           <CardDescription>{content}</CardDescription>

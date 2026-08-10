@@ -1,4 +1,4 @@
-import { Product } from "@/lib/generated/prisma/client";
+import { Image as ImageModel, Product } from "@/lib/generated/prisma/client";
 import Image from "next/image";
 import Link from "next/link";
 import { Button } from "../ui/button";
@@ -10,20 +10,25 @@ import {
   Card as ShadCard,
 } from "../ui/card";
 
+interface Props extends Product {
+  images: ImageModel[];
+}
+
 export default function Card({
   id,
   name,
   description,
   price,
   createdAt,
-  imageURL,
-}: Product) {
+  images,
+}: Props) {
+  const cover = images[0]?.url;
   return (
     <ShadCard className="flex flex-col justify-between">
       <CardContent className="flex flex-col md:flex-row gap-3">
-        {imageURL && (
+        {cover && (
           <Image
-            src={imageURL}
+            src={cover}
             alt={`image of ${name}`}
             width={1200}
             height={1200}
