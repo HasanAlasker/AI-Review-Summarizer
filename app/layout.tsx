@@ -6,6 +6,7 @@ import LoadTheme from "@/components/general/LoadTheme";
 import ScrollToTop from "@/components/general/ScrollToTop";
 import NavBar from "@/components/general/NavBar";
 import AuthProvider from "@/components/auth/AuthProvider";
+import { Toaster } from "sonner";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -56,6 +57,7 @@ export default function RootLayout({
             <LoadTheme />
             <ScrollToTop />
           </main>
+          <Toaster />
         </AuthProvider>
       </body>
     </html>

@@ -8,13 +8,13 @@ import {
   CardTitle,
 } from "../ui/card";
 import AppForm from "./AppForm";
-import { Form } from "formik";
+import { Form, FormikHelpers } from "formik";
 
 interface Props<T> {
   title?: string;
   description?: string;
   form: ReactNode;
-  onSubmit: (values: T) => void | Promise<void>;
+  onSubmit: (values: T, helpers: FormikHelpers<T>) => void | Promise<void>;
   initialValues: T;
   validationSchema?: {};
 }

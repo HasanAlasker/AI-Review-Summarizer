@@ -1,11 +1,7 @@
-// add product
-
 import { Product } from "@/lib/generated/prisma/client";
-import { getServerSession } from "next-auth";
-import { NextRequest, NextResponse } from "next/server";
-import { authOptions } from "../../auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 import { Decimal } from "@prisma/client/runtime/client";
+import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +12,7 @@ export async function POST(req: NextRequest) {
         name,
         description,
         price: Decimal(price),
-        categoryId: "c2c07793-d723-4ff0-9867-980b68c0b7c1",
+        categoryId,
         stock: Number(stock),
       },
     });
