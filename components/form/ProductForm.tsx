@@ -11,6 +11,7 @@ import { Spinner } from "../ui/spinner";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { FormikHelpers } from "formik";
+import ImageInput from "./ImageInput";
 
 const validationSchema = Yup.object({
   name: Yup.string().trim().required("Product name is required"),
@@ -20,8 +21,14 @@ const validationSchema = Yup.object({
     .required("Description is required")
     .min(15)
     .max(500),
-  imageURL: Yup.string().trim().url("Must be a valid URL"),
-  // .required("Image URL is required"),
+  images: Yup.array()
+    .of(
+      Yup.object({
+        publicId: Yup.string().required(),
+        url: Yup.string().url().required(),
+      }),
+    )
+    .min(1, "Please upload at least one image"),
   price: Yup.number()
     .typeError("Price must be a number")
     .positive("Price must be greater than 0")
@@ -32,7 +39,7 @@ type ProductFormValues = {
   name: string;
   categoryId: string;
   description: string;
-  imageURL: string;
+  images: { publicId: string; url: string }[];
   price: number | "";
   stock: number;
 };
@@ -71,7 +78,7 @@ export default function ProductForm({ categoryOptions }: Props) {
     name: "",
     categoryId: "",
     description: "",
-    imageURL: "",
+    images: [],
     price: "",
     stock: 1,
   };
@@ -90,6 +97,7 @@ export default function ProductForm({ categoryOptions }: Props) {
             iconName="shapes"
             options={categoryOptions}
           />
+          <ImageInput label="Product Images" name="images" maxFiles={5} />
           <InputField
             name="name"
             label="Product Name"
