@@ -31,7 +31,7 @@ export default async function Card({
 
   return (
     <ShadCard className="flex flex-col justify-between">
-      <CardContent className="flex flex-col md:flex-row gap-3">
+      <CardContent className="flex flex-col md:flex-row gap-5">
         {cover && (
           <Image
             src={cover.url}

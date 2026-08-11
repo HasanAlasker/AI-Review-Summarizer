@@ -7,8 +7,20 @@ import { ErrorMessage } from "formik";
 import { X, ImagePlus, Star } from "lucide-react";
 
 export type ImageItem =
-  | { kind: "existing"; id: string; publicId: string; url: string; isPrimary: boolean }
-  | { kind: "new"; id: string; file: File; previewUrl: string; isPrimary: boolean };
+  | {
+      kind: "existing";
+      id: string;
+      publicId: string;
+      url: string;
+      isPrimary: boolean;
+    }
+  | {
+      kind: "new";
+      id: string;
+      file: File;
+      previewUrl: string;
+      isPrimary: boolean;
+    };
 
 interface Props {
   label: string;
@@ -59,7 +71,11 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
 
     // if we just removed the primary image, promote the next one so
     // there's always exactly one primary as long as images remain
-    if (target?.isPrimary && next.length > 0 && !next.some((img) => img.isPrimary)) {
+    if (
+      target?.isPrimary &&
+      next.length > 0 &&
+      !next.some((img) => img.isPrimary)
+    ) {
       next[0] = { ...next[0], isPrimary: true };
     }
 
@@ -69,7 +85,7 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
 
   const handleSetPrimary = (id: string) => {
     helpers.setValue(
-      images.map((img) => ({ ...img, isPrimary: img.id === id }))
+      images.map((img) => ({ ...img, isPrimary: img.id === id })),
     );
     helpers.setTouched(true, false);
   };
@@ -99,7 +115,7 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
                   width={120}
                   height={120}
                   className={`rounded-md object-cover w-30 h-30 ${
-                    img.isPrimary ? "ring-2 ring-primary" : ""
+                    img.isPrimary ? "ring-1 ring-yellow-300" : ""
                   }`}
                 />
               )}
@@ -122,7 +138,10 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
                     : "bg-black/70 text-white"
                 }`}
               >
-                <Star size={12} fill={img.isPrimary ? "currentColor" : "none"} />
+                <Star
+                  size={12}
+                  fill={img.isPrimary ? "currentColor" : "none"}
+                />
               </button>
             </div>
           ))}
@@ -150,7 +169,11 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
         </>
       )}
 
-      <ErrorMessage name={name} component={FieldError} className="text-red-500 text-sm" />
+      <ErrorMessage
+        name={name}
+        component={FieldError}
+        className="text-red-500 text-sm"
+      />
     </Field>
   );
 }
