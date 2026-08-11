@@ -70,6 +70,8 @@ export default async function page({ params }: Props) {
   );
 }
 
+export const dynamic = "force-dynamic";
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { id } = await params;
   const product = await getProduct(id);

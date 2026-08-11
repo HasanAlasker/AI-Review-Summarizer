@@ -36,6 +36,8 @@ export default async function page() {
   );
 }
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Products",
   description: "Browse products",
