@@ -169,35 +169,33 @@ Rather than freezing the interface, the application provides continuous feedback
 Clone the repository.
 
 ```bash
-git clone https://github.com/your-username/repository-name.git
+git clone https://github.com/HasanAlasker/AI-Review-Summarizer.git
 
-cd repository-name
+cd my-app
 ```
 
 Install dependencies.
 
 ```bash
-npm install
+bun install
 ```
 
 Create a `.env` file.
 
 ```env
-DATABASE_URL="your_database_url"
-
-GEMINI_API_KEY="your_gemini_api_key"
+see .env.example
 ```
 
 Push the database schema.
 
 ```bash
-npx prisma db push
+bunx prisma db push
 ```
 
 Run the development server.
 
 ```bash
-npm run dev
+bun run dev
 ```
 
 Visit:
