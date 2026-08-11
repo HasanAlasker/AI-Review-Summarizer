@@ -3,14 +3,15 @@ import { prisma } from "@/lib/prisma";
 import { Decimal } from "@prisma/client/runtime/client";
 import { NextRequest, NextResponse } from "next/server";
 
+interface ProductReq extends Product {
+  images: { publicId: string; url: string }[];
+}
+
 export async function POST(req: NextRequest) {
   try {
-    // the flow is:
-    // image is uploaded to cloudinary via <CldUploadWidget />, im not sure what is returned after
-    // create a Product -> create and Image and add the productId
-    
-    const { name, description, price, categoryId, stock }: Product =
+    const { name, description, price, categoryId, stock, images }: ProductReq =
       await req.json();
+
     const product = await prisma.product.create({
       data: {
         name,
@@ -20,6 +21,13 @@ export async function POST(req: NextRequest) {
         stock: Number(stock),
       },
     });
+
+    images.map(
+      async (i) =>
+        await prisma.image.createMany({
+          data: { productId: product.id, publicId: i.publicId, url: i.url },
+        }),
+    );
 
     return NextResponse.json({ product }, { status: 201 });
   } catch (error) {

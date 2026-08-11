@@ -97,7 +97,7 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
           <button
             type="button"
             onClick={() => inputRef.current?.click()}
-            className="flex items-center gap-2 border border-input bg-white dark:bg-[#212121] rounded-md p-2 text-sm"
+            className="flex items-center gap-2 border border-input text-[#919191] dark:text-[#6b6b6b] bg-white dark:bg-[#212121] rounded-md p-2 text-sm"
           >
             <ImagePlus size={16} />
             Select images
