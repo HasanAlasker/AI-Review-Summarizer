@@ -136,21 +136,6 @@ export default function ProductForm({
       const success = mode === "edit" ? res.status === 200 : res.status === 201;
       if (!success) return;
 
-      // Only now that the product record is safely saved do we clean up
-      // Cloudinary — delete images the user removed during this edit.
-      // if (mode === "edit") {
-      //   const keptIds = new Set(keptExisting.map((img) => img.publicId));
-      //   const removedIds = [...originalPublicIds].filter(
-      //     (id) => !keptIds.has(id),
-      //   );
-
-      //   await Promise.allSettled(
-      //     removedIds.map((publicId) =>
-      //       axios.post("/api/cloudinary/delete", { publicId }),
-      //     ),
-      //   );
-      // }
-
       newImages.forEach((img) => URL.revokeObjectURL(img.previewUrl));
 
       router.push("/products");
@@ -159,7 +144,7 @@ export default function ProductForm({
         mode === "edit"
           ? "Product updated successfully!"
           : "Product was added successfully!",
-        { position: "bottom-right" },
+        
       );
 
       if (mode === "create") resetForm();

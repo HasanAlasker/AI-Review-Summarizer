@@ -6,32 +6,27 @@ import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import ProductGrid from "@/components/product/ProductGrid";
 
 export default async function page() {
-  const products = await prisma.product.findMany({ include: { images: true } });
+  const products = await prisma.product.findMany({
+    where: { isDeleted: false, stock: { gt: 0 } },
+    include: { images: true },
+  });
   const session = await getServerSession(authOptions);
-
-  const ProductList = products.map((p) => (
-    <Card
-      key={p.id}
-      id={p.id}
-      categoryId={p.categoryId}
-      name={p.name}
-      description={p.description}
-      price={p.price}
-      createdAt={p.createdAt}
-      isDeleted={p.isDeleted}
-      stock={p.stock}
-      images={p.images}
-    />
-  ));
+  const isAdmin = session?.user.role === "admin";
 
   if (products.length === 0) return <EProducts />;
+
+  const plainProducts = products.map((p) => ({
+    ...p,
+    price: p.price.toString(), // Decimal -> number
+  }));
 
   return (
     <div>
       {session?.user.role === "admin" && <AddBtn />}
-      <Grid>{ProductList}</Grid>
+      <ProductGrid initialProducts={plainProducts} isAdmin={isAdmin} />
     </div>
   );
 }

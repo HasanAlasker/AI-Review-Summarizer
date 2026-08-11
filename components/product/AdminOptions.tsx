@@ -8,18 +8,29 @@ import {
   DropdownMenuLabel,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import axios from "axios";
 import { Ellipsis, Eye, PenLine, Trash } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 interface Props {
   productId: string;
+  onDelete: (id: string) => void;
 }
 
-export default function AdminOptions({ productId }: Props) {
+export default function AdminOptions({ productId, onDelete }: Props) {
   const router = useRouter();
 
-  const handleDelete = async () => {};
+  const handleDelete = async () => {
+    try {
+      onDelete(productId);
+      const res = await axios.patch(`/api/admin/product/${productId}/delete`);
 
+      if (res.status === 200) toast.success("Product deleted successfully");
+      else toast.warning("Couldn't delete product, try again!");
+      return res;
+    } catch (error) {}
+  };
   return (
     <DropdownMenu>
       <DropdownMenuTrigger render={<Button variant="outline" />}>
@@ -40,7 +51,7 @@ export default function AdminOptions({ productId }: Props) {
             <PenLine />
             Edit
           </DropdownMenuItem>
-          <DropdownMenuItem variant="destructive">
+          <DropdownMenuItem variant="destructive" onClick={handleDelete}>
             <Trash />
             Delete
           </DropdownMenuItem>

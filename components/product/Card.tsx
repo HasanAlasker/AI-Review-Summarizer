@@ -9,25 +9,26 @@ import {
   CardTitle,
   Card as ShadCard,
 } from "../ui/card";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import AdminOptions from "./AdminOptions";
 
-interface Props extends Product {
+interface Props extends Omit<Product, "price"> {
   images: ImageModel[];
+  isAdmin: boolean;
+  onDelete: (id: string) => void;
+  price: string;
 }
 
-export default async function Card({
+export default function Card({
   id,
   name,
   description,
   price,
   createdAt,
   images,
+  isAdmin,
+  onDelete,
 }: Props) {
-  const session = await getServerSession(authOptions);
-
-  const cover = images.find(image => image.isPrimary === true);
+  const cover = images.find((image) => image.isPrimary === true);
 
   return (
     <ShadCard className="flex flex-col justify-between">
@@ -52,8 +53,8 @@ export default async function Card({
       <CardFooter>
         <div className="flex w-full items-center justify-between">
           <p>{"$" + price.toString()}</p>
-          {session?.user.role === "admin" ? (
-            <AdminOptions productId={id} />
+          {isAdmin ? (
+            <AdminOptions productId={id} onDelete={onDelete} />
           ) : (
             <Link href={`/products/${id}`}>
               <Button>Learn More</Button>
