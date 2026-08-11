@@ -22,15 +22,17 @@ export default async function page({ params }: Props) {
   const { id } = await params;
   const product = await getProduct(id);
 
+  const cover = product?.images.find((image) => image.isPrimary === true);
+
   if (!product) return <EProduct />;
 
   return (
     <div className="flex flex-1 min-h-full w-full m-auto">
       <div className="flex flex-col flex-1 md:flex-row gap-10 md:gap-10 lg:gap-20">
         <div className="w-full h-full aspect-square max-w-lg bg-white rounded-lg border border-border flex justify-center items-center">
-          {product?.images[0] ? (
+          {cover ? (
             <Image
-              src={product?.images[0].url}
+              src={cover.url}
               alt={`image of ${product.name}`}
               width={1500}
               height={1500}

@@ -4,11 +4,11 @@ import { useField } from "formik";
 import { CldImage } from "next-cloudinary";
 import { Field, FieldLabel, FieldError } from "../ui/field";
 import { ErrorMessage } from "formik";
-import { X, ImagePlus } from "lucide-react";
+import { X, ImagePlus, Star } from "lucide-react";
 
 export type ImageItem =
-  | { kind: "existing"; id: string; publicId: string; url: string }
-  | { kind: "new"; id: string; file: File; previewUrl: string };
+  | { kind: "existing"; id: string; publicId: string; url: string; isPrimary: boolean }
+  | { kind: "new"; id: string; file: File; previewUrl: string; isPrimary: boolean };
 
 interface Props {
   label: string;
@@ -27,7 +27,6 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
         if (img.kind === "new") URL.revokeObjectURL(img.previewUrl);
       });
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFilesSelected = (fileList: FileList | null) => {
@@ -35,12 +34,15 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
 
     const remainingSlots = maxFiles - images.length;
     const files = Array.from(fileList).slice(0, remainingSlots);
+    const noImagesYet = images.length === 0;
 
-    const newImages: ImageItem[] = files.map((file) => ({
+    const newImages: ImageItem[] = files.map((file, i) => ({
       kind: "new",
       id: crypto.randomUUID(),
       file,
       previewUrl: URL.createObjectURL(file),
+      // if the field was empty, make the very first newly-added image primary
+      isPrimary: noImagesYet && i === 0,
     }));
 
     helpers.setValue([...images, ...newImages]);
@@ -53,11 +55,22 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
     const target = images.find((img) => img.id === id);
     if (target?.kind === "new") URL.revokeObjectURL(target.previewUrl);
 
-    // Note: removing an "existing" image here does NOT delete it from
-    // Cloudinary immediately — it's only removed from the form array.
-    // ProductForm diffs against the original set on successful submit
-    // and deletes there, so an abandoned edit never loses a live image.
-    helpers.setValue(images.filter((img) => img.id !== id));
+    const next = images.filter((img) => img.id !== id);
+
+    // if we just removed the primary image, promote the next one so
+    // there's always exactly one primary as long as images remain
+    if (target?.isPrimary && next.length > 0 && !next.some((img) => img.isPrimary)) {
+      next[0] = { ...next[0], isPrimary: true };
+    }
+
+    helpers.setValue(next);
+    helpers.setTouched(true, false);
+  };
+
+  const handleSetPrimary = (id: string) => {
+    helpers.setValue(
+      images.map((img) => ({ ...img, isPrimary: img.id === id }))
+    );
     helpers.setTouched(true, false);
   };
 
@@ -75,7 +88,9 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
                   alt=""
                   width={120}
                   height={120}
-                  className="rounded-md object-cover"
+                  className={`rounded-md object-cover w-30 h-30 ${
+                    img.isPrimary ? "ring-1 ring-yellow-300" : ""
+                  }`}
                 />
               ) : (
                 <img
@@ -83,15 +98,31 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
                   alt=""
                   width={120}
                   height={120}
-                  className="rounded-md object-cover w-30 h-30"
+                  className={`rounded-md object-cover w-30 h-30 ${
+                    img.isPrimary ? "ring-2 ring-primary" : ""
+                  }`}
                 />
               )}
+
               <button
                 type="button"
                 onClick={() => handleRemove(img.id)}
                 className="absolute -top-2 -right-2 bg-black/70 text-white rounded-full p-1"
               >
                 <X size={12} />
+              </button>
+
+              <button
+                type="button"
+                onClick={() => handleSetPrimary(img.id)}
+                title={img.isPrimary ? "Primary image" : "Set as primary"}
+                className={`absolute -bottom-2 -left-2 rounded-full p-1 ${
+                  img.isPrimary
+                    ? "bg-black/70 text-yellow-400"
+                    : "bg-black/70 text-white"
+                }`}
+              >
+                <Star size={12} fill={img.isPrimary ? "currentColor" : "none"} />
               </button>
             </div>
           ))}
@@ -119,11 +150,7 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
         </>
       )}
 
-      <ErrorMessage
-        name={name}
-        component={FieldError}
-        className="text-red-500 text-sm"
-      />
+      <ErrorMessage name={name} component={FieldError} className="text-red-500 text-sm" />
     </Field>
   );
 }

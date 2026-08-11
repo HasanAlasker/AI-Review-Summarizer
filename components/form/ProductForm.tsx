@@ -49,7 +49,7 @@ interface Props {
     description: string;
     price: number;
     stock: number;
-    images: { publicId: string; url: string }[];
+    images: { publicId: string; url: string; isPrimary: boolean }[];
   };
 }
 
@@ -76,6 +76,7 @@ export default function ProductForm({
           id: img.publicId,
           publicId: img.publicId,
           url: img.url,
+          isPrimary: img.isPrimary,
         })),
       }
     : {
@@ -109,7 +110,10 @@ export default function ProductForm({
 
       setLoadingLabel(newImages.length ? "Uploading images" : "Submitting");
       const uploaded = await Promise.all(
-        newImages.map((img) => uploadToCloudinary(img.file)),
+        newImages.map(async (img) => ({
+          ...(await uploadToCloudinary(img.file)),
+          isPrimary: img.isPrimary,
+        })),
       );
 
       setLoadingLabel("Submitting");
@@ -117,6 +121,7 @@ export default function ProductForm({
         ...keptExisting.map((img) => ({
           publicId: img.publicId,
           url: img.url,
+          isPrimary: img.isPrimary,
         })),
         ...uploaded,
       ];

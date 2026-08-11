@@ -39,6 +39,7 @@ export default async function EditProductPage({ params }: Props) {
         images: product.images.map((img) => ({
           publicId: img.publicId,
           url: img.url,
+          isPrimary: img.isPrimary
         })),
       }}
     />

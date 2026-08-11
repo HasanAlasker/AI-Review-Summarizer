@@ -27,14 +27,14 @@ export default async function Card({
 }: Props) {
   const session = await getServerSession(authOptions);
 
-  const cover = images[0]?.url;
+  const cover = images.find(image => image.isPrimary === true);
 
   return (
     <ShadCard className="flex flex-col justify-between">
       <CardContent className="flex flex-col md:flex-row gap-3">
         {cover && (
           <Image
-            src={cover}
+            src={cover.url}
             alt={`image of ${name}`}
             width={1200}
             height={1200}

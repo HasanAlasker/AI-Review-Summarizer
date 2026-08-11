@@ -12,6 +12,7 @@ cloudinary.config({
 const imageSchema = Yup.object({
   publicId: Yup.string().required(),
   url: Yup.string().url().required(),
+  isPrimary: Yup.boolean().required(),
 });
 
 const updateProductSchema = Yup.object({
@@ -59,7 +60,9 @@ export async function PATCH(
       (img) => !existingPublicIds.has(img.publicId),
     );
 
-    const primaryPublicId = values.images[0]?.publicId;
+    const primaryImage = values.images.find((img) => img.isPrimary);
+    const primaryPublicId =
+      primaryImage?.publicId ?? values.images[0]?.publicId;
 
     await prisma.$transaction(async (tx) => {
       await tx.product.update({
