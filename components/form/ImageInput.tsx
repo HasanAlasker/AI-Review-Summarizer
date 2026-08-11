@@ -1,14 +1,14 @@
 "use client";
 import { useEffect, useRef } from "react";
 import { useField } from "formik";
-import { CldImage, CldUploadButton } from "next-cloudinary";
 import { Field, FieldLabel, FieldError } from "../ui/field";
 import { ErrorMessage } from "formik";
-import { X } from "lucide-react";
+import { X, ImagePlus } from "lucide-react";
 
-interface UploadedImage {
-  publicId: string;
-  url: string;
+export interface PendingImage {
+  id: string;
+  file: File;
+  previewUrl: string;
 }
 
 interface Props {
@@ -18,20 +18,41 @@ interface Props {
 }
 
 export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
-  const [field, , helpers] = useField<UploadedImage[]>(name);
+  const [field, , helpers] = useField<PendingImage[]>(name);
   const images = field.value ?? [];
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  // always-current ref so onSuccess never reads a stale array,
-  // regardless of whether next-cloudinary rebinds the callback
-  const imagesRef = useRef(images);
+  // revoke object URLs on unmount to avoid leaking memory
   useEffect(() => {
-    imagesRef.current = images;
-  }, [images]);
+    return () => {
+      images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  const handleRemove = (publicId: string) => {
-    const next = imagesRef.current.filter((img) => img.publicId !== publicId);
-    imagesRef.current = next;
-    helpers.setValue(next);
+  const handleFilesSelected = (fileList: FileList | null) => {
+    if (!fileList) return;
+
+    const remainingSlots = maxFiles - images.length;
+    const files = Array.from(fileList).slice(0, remainingSlots);
+
+    const newImages: PendingImage[] = files.map((file) => ({
+      id: crypto.randomUUID(),
+      file,
+      previewUrl: URL.createObjectURL(file),
+    }));
+
+    helpers.setValue([...images, ...newImages]);
+    helpers.setTouched(true, false);
+
+    if (inputRef.current) inputRef.current.value = ""; // allow re-selecting same file
+  };
+
+  const handleRemove = (id: string) => {
+    const target = images.find((img) => img.id === id);
+    if (target) URL.revokeObjectURL(target.previewUrl);
+
+    helpers.setValue(images.filter((img) => img.id !== id));
     helpers.setTouched(true, false);
   };
 
@@ -42,17 +63,18 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
       {images.length > 0 && (
         <div className="flex flex-wrap gap-2">
           {images.map((img) => (
-            <div key={img.publicId} className="relative">
-              <CldImage
-                src={img.publicId}
+            <div key={img.id} className="relative">
+              {/* local preview — not yet on Cloudinary, so plain img not CldImage */}
+              <img
+                src={img.previewUrl}
                 alt=""
                 width={120}
                 height={120}
-                className="rounded-md object-cover"
+                className="rounded-md object-cover w-30 h-30"
               />
               <button
                 type="button"
-                onClick={() => handleRemove(img.publicId)}
+                onClick={() => handleRemove(img.id)}
                 className="absolute -top-2 -right-2 bg-black/70 text-white rounded-full p-1"
               >
                 <X size={12} />
@@ -63,34 +85,24 @@ export default function ImageInput({ label, name, maxFiles = 5 }: Props) {
       )}
 
       {images.length < maxFiles && (
-        <CldUploadButton
-          uploadPreset="ECommerce"
-          className="border border-input bg-white dark:bg-[#212121] rounded-md p-2"
-          options={{
-            sources: ["local", "camera"],
-            multiple: true,
-            maxFiles: maxFiles - images.length,
-            defaultSource: "local",
-            cropping: false,
-            showAdvancedOptions: false,
-            clientAllowedFormats: ["jpg", "png", "webp"],
-          }}
-          onSuccess={(result) => {
-            if (!result.event || result.event !== "success") return;
-            const info = result.info as {
-              public_id: string;
-              secure_url: string;
-            };
-
-            const next = [
-              ...imagesRef.current,
-              { publicId: info.public_id, url: info.secure_url },
-            ];
-            imagesRef.current = next; // update ref immediately, synchronously
-            helpers.setValue(next);
-            helpers.setTouched(true, false);
-          }}
-        />
+        <>
+          <input
+            ref={inputRef}
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            multiple
+            hidden
+            onChange={(e) => handleFilesSelected(e.target.files)}
+          />
+          <button
+            type="button"
+            onClick={() => inputRef.current?.click()}
+            className="flex items-center gap-2 border border-input bg-white dark:bg-[#212121] rounded-md p-2 text-sm"
+          >
+            <ImagePlus size={16} />
+            Select images
+          </button>
+        </>
       )}
 
       <ErrorMessage

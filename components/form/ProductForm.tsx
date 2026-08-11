@@ -6,12 +6,13 @@ import { FieldGroup } from "../ui/field";
 import DropList from "./DropList";
 import FormCard from "./FormCard";
 import InputField from "./Input";
+import ImageInput, { PendingImage } from "./ImageInput";
 import { useState } from "react";
 import { Spinner } from "../ui/spinner";
 import { Plus } from "lucide-react";
 import { toast } from "sonner";
 import { FormikHelpers } from "formik";
-import ImageInput from "./ImageInput";
+import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
 
 const validationSchema = Yup.object({
   name: Yup.string().trim().required("Product name is required"),
@@ -21,14 +22,7 @@ const validationSchema = Yup.object({
     .required("Description is required")
     .min(15)
     .max(500),
-  images: Yup.array()
-    .of(
-      Yup.object({
-        publicId: Yup.string().required(),
-        url: Yup.string().url().required(),
-      }),
-    )
-    .min(1, "Please upload at least one image"),
+  images: Yup.array().min(1, "Please select at least one image"),
   price: Yup.number()
     .typeError("Price must be a number")
     .positive("Price must be greater than 0")
@@ -39,7 +33,7 @@ type ProductFormValues = {
   name: string;
   categoryId: string;
   description: string;
-  images: { publicId: string; url: string }[];
+  images: PendingImage[];
   price: number | "";
   stock: number;
 };
@@ -48,40 +42,67 @@ interface Props {
   categoryOptions: { value: string; label: string }[];
 }
 
+const initialValues: ProductFormValues = {
+  name: "",
+  categoryId: "",
+  description: "",
+  images: [],
+  price: "",
+  stock: 1,
+};
+
 export default function ProductForm({ categoryOptions }: Props) {
   const [loading, setLoading] = useState(false);
+  const [loadingLabel, setLoadingLabel] = useState("Submitting");
   const [err, setErr] = useState("");
 
   const handleSubmit = async (
     values: ProductFormValues,
     { resetForm, setErrors }: FormikHelpers<ProductFormValues>,
   ) => {
-    setLoading(false);
     setErr("");
+    setLoading(true);
     try {
-      setLoading(true);
-      const res = await axios.post("/api/admin/product", values);
+      setLoadingLabel("Uploading images");
+      const uploadedImages = await Promise.all(
+        values.images.map((img) => uploadToCloudinary(img.file)),
+      );
+
+      setLoadingLabel("Submitting");
+      const payload = {
+        ...values,
+        images: uploadedImages, // [{ publicId, url }]
+      };
+
+      const res = await axios.post("/api/admin/product", payload);
+
       if (res.status === 201) {
+        values.images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
         resetForm();
         toast.success("Product was added successfully!", {
           position: "bottom-right",
         });
-        setErr("");
       }
     } catch (error) {
-      console.log(error);
+      if (axios.isAxiosError(error)) {
+        const status = error.response?.status;
+        const data = error.response?.data;
+        if (status === 400 && data?.errors) {
+          setErrors(data.errors);
+        } else {
+          setErr(data?.message ?? "Something went wrong. Please try again.");
+          toast.error(data?.message ?? "Something went wrong");
+        }
+      } else {
+        setErr("Something went wrong. Please try again.");
+        toast.error("Something went wrong");
+      }
     } finally {
       setLoading(false);
+      setLoadingLabel("Submitting");
     }
   };
-  const initialValues: ProductFormValues = {
-    name: "",
-    categoryId: "",
-    description: "",
-    images: [],
-    price: "",
-    stock: 1,
-  };
+
   return (
     <FormCard
       title="Add a product"
@@ -97,7 +118,6 @@ export default function ProductForm({ categoryOptions }: Props) {
             iconName="shapes"
             options={categoryOptions}
           />
-          <ImageInput label="Product Images" name="images" maxFiles={5} />
           <InputField
             name="name"
             label="Product Name"
@@ -110,6 +130,7 @@ export default function ProductForm({ categoryOptions }: Props) {
             placeholder="Description"
             iconName="text-align-start"
           />
+          <ImageInput name="images" label="Product Images" maxFiles={5} />
           <InputField
             name="price"
             label="Price"
@@ -122,9 +143,16 @@ export default function ProductForm({ categoryOptions }: Props) {
             placeholder="1"
             iconName="warehouse"
           />
+
+          {err && (
+            <p className="text-sm text-destructive" role="alert">
+              {err}
+            </p>
+          )}
+
           <Button disabled={loading} type="submit">
             {loading ? <Spinner /> : <Plus />}{" "}
-            {loading ? "Submitting" : "Add Product"}
+            {loading ? loadingLabel : "Add Product"}
           </Button>
         </FieldGroup>
       }
