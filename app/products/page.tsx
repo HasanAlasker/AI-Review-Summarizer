@@ -1,14 +1,11 @@
 import EProducts from "@/components/empty/EProducts";
 import Grid from "@/components/general/Grid";
+import AddBtn from "@/components/product/AddBtn";
 import Card from "@/components/product/Card";
-import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
-import { Plus } from "lucide-react";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
-import Link from "next/link";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import AddBtn from "@/components/product/AddBtn";
 
 export default async function page() {
   const products = await prisma.product.findMany({ include: { images: true } });

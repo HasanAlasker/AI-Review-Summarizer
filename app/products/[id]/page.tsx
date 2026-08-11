@@ -34,7 +34,7 @@ export default async function page({ params }: Props) {
               alt={`image of ${product.name}`}
               width={1500}
               height={1500}
-              className="w-full aspect-square object-contain rounded-lg"
+              className="w-full aspect-square object-cover rounded-lg"
             ></Image>
           ) : (
             <PackageOpen

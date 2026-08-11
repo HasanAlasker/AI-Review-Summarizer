@@ -6,13 +6,14 @@ import { FieldGroup } from "../ui/field";
 import DropList from "./DropList";
 import FormCard from "./FormCard";
 import InputField from "./Input";
-import ImageInput, { PendingImage } from "./ImageInput";
+import ImageInput, { ImageItem } from "./ImageInput";
 import { useState } from "react";
 import { Spinner } from "../ui/spinner";
-import { Plus } from "lucide-react";
+import { Plus, Save } from "lucide-react";
 import { toast } from "sonner";
 import { FormikHelpers } from "formik";
 import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
+import { useRouter } from "next/navigation";
 
 const validationSchema = Yup.object({
   name: Yup.string().trim().required("Product name is required"),
@@ -33,28 +34,63 @@ type ProductFormValues = {
   name: string;
   categoryId: string;
   description: string;
-  images: PendingImage[];
+  images: ImageItem[];
   price: number | "";
   stock: number;
 };
 
 interface Props {
   categoryOptions: { value: string; label: string }[];
+  mode?: "create" | "edit";
+  productId?: string;
+  initialData?: {
+    name: string;
+    categoryId: string;
+    description: string;
+    price: number;
+    stock: number;
+    images: { publicId: string; url: string }[];
+  };
 }
 
-const initialValues: ProductFormValues = {
-  name: "",
-  categoryId: "",
-  description: "",
-  images: [],
-  price: "",
-  stock: 1,
-};
-
-export default function ProductForm({ categoryOptions }: Props) {
+export default function ProductForm({
+  categoryOptions,
+  mode = "create",
+  productId,
+  initialData,
+}: Props) {
   const [loading, setLoading] = useState(false);
   const [loadingLabel, setLoadingLabel] = useState("Submitting");
   const [err, setErr] = useState("");
+  const router = useRouter();
+
+  const initialValues: ProductFormValues = initialData
+    ? {
+        name: initialData.name,
+        categoryId: initialData.categoryId,
+        description: initialData.description,
+        price: initialData.price,
+        stock: initialData.stock,
+        images: initialData.images.map((img) => ({
+          kind: "existing" as const,
+          id: img.publicId,
+          publicId: img.publicId,
+          url: img.url,
+        })),
+      }
+    : {
+        name: "",
+        categoryId: "",
+        description: "",
+        images: [],
+        price: "",
+        stock: 1,
+      };
+
+  // snapshot of publicIds present at load time, to diff against on submit
+  const originalPublicIds = new Set(
+    initialData?.images.map((img) => img.publicId) ?? [],
+  );
 
   const handleSubmit = async (
     values: ProductFormValues,
@@ -63,26 +99,65 @@ export default function ProductForm({ categoryOptions }: Props) {
     setErr("");
     setLoading(true);
     try {
-      setLoadingLabel("Uploading images");
-      const uploadedImages = await Promise.all(
-        values.images.map((img) => uploadToCloudinary(img.file)),
+      const newImages = values.images.filter(
+        (img): img is Extract<ImageItem, { kind: "new" }> => img.kind === "new",
+      );
+      const keptExisting = values.images.filter(
+        (img): img is Extract<ImageItem, { kind: "existing" }> =>
+          img.kind === "existing",
+      );
+
+      setLoadingLabel(newImages.length ? "Uploading images" : "Submitting");
+      const uploaded = await Promise.all(
+        newImages.map((img) => uploadToCloudinary(img.file)),
       );
 
       setLoadingLabel("Submitting");
-      const payload = {
-        ...values,
-        images: uploadedImages, // [{ publicId, url }]
-      };
+      const finalImages = [
+        ...keptExisting.map((img) => ({
+          publicId: img.publicId,
+          url: img.url,
+        })),
+        ...uploaded,
+      ];
 
-      const res = await axios.post("/api/admin/product", payload);
+      const payload = { ...values, images: finalImages };
 
-      if (res.status === 201) {
-        values.images.forEach((img) => URL.revokeObjectURL(img.previewUrl));
-        resetForm();
-        toast.success("Product was added successfully!", {
-          position: "bottom-right",
-        });
-      }
+      const res =
+        mode === "edit"
+          ? await axios.patch(`/api/admin/product/${productId}`, payload)
+          : await axios.post("/api/admin/product", payload);
+
+      const success = mode === "edit" ? res.status === 200 : res.status === 201;
+      if (!success) return;
+
+      // Only now that the product record is safely saved do we clean up
+      // Cloudinary — delete images the user removed during this edit.
+      // if (mode === "edit") {
+      //   const keptIds = new Set(keptExisting.map((img) => img.publicId));
+      //   const removedIds = [...originalPublicIds].filter(
+      //     (id) => !keptIds.has(id),
+      //   );
+
+      //   await Promise.allSettled(
+      //     removedIds.map((publicId) =>
+      //       axios.post("/api/cloudinary/delete", { publicId }),
+      //     ),
+      //   );
+      // }
+
+      newImages.forEach((img) => URL.revokeObjectURL(img.previewUrl));
+
+      router.push("/products");
+
+      toast.success(
+        mode === "edit"
+          ? "Product updated successfully!"
+          : "Product was added successfully!",
+        { position: "bottom-right" },
+      );
+
+      if (mode === "create") resetForm();
     } catch (error) {
       if (axios.isAxiosError(error)) {
         const status = error.response?.status;
@@ -105,7 +180,7 @@ export default function ProductForm({ categoryOptions }: Props) {
 
   return (
     <FormCard
-      title="Add a product"
+      title={mode === "edit" ? "Edit product" : "Add a product"}
       description="Details you add here will be visible to store visitors"
       initialValues={initialValues}
       onSubmit={handleSubmit}
@@ -151,8 +226,12 @@ export default function ProductForm({ categoryOptions }: Props) {
           )}
 
           <Button disabled={loading} type="submit">
-            {loading ? <Spinner /> : <Plus />}{" "}
-            {loading ? loadingLabel : "Add Product"}
+            {loading ? <Spinner /> : mode === "edit" ? <Save /> : <Plus />}{" "}
+            {loading
+              ? loadingLabel
+              : mode === "edit"
+                ? "Save Changes"
+                : "Add Product"}
           </Button>
         </FieldGroup>
       }
