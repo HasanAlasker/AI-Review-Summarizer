@@ -9,12 +9,15 @@ import {
   CardTitle,
   Card as ShadCard,
 } from "../ui/card";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import AdminOptions from "./AdminOptions";
 
 interface Props extends Product {
   images: ImageModel[];
 }
 
-export default function Card({
+export default async function Card({
   id,
   name,
   description,
@@ -22,7 +25,10 @@ export default function Card({
   createdAt,
   images,
 }: Props) {
+  const session = await getServerSession(authOptions);
+
   const cover = images[0]?.url;
+
   return (
     <ShadCard className="flex flex-col justify-between">
       <CardContent className="flex flex-col md:flex-row gap-3">
@@ -46,9 +52,13 @@ export default function Card({
       <CardFooter>
         <div className="flex w-full items-center justify-between">
           <p>{"$" + price.toString()}</p>
-          <Link href={`/products/${id}`}>
-            <Button>Learn More</Button>
-          </Link>
+          {session?.user.role === "admin" ? (
+            <AdminOptions productId={id} />
+          ) : (
+            <Link href={`/products/${id}`}>
+              <Button>Learn More</Button>
+            </Link>
+          )}
         </div>
       </CardFooter>
     </ShadCard>
