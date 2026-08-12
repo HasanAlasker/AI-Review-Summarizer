@@ -38,9 +38,9 @@ export default async function page({ params }: Props) {
   const showRunningLow = product.stock > 0 && product.stock <= lowStock;
 
   return (
-    <div className="flex flex-1 min-h-full w-full m-auto">
+    <div className="flex flex-1 min-h-full w-full m-auto bg-background rounded-xl">
       <div className="flex flex-col flex-1 lg:flex-row gap-10 md:gap-10 lg:gap-20">
-        <div className="w-full h-full aspect-square max-w-lg rounded-lg flex justify-center items-center bg-[rgba(255,255,255,0.43)] backdrop-blur-sm dark:bg-[rgba(14,14,14,0.43)]">
+        <div className="w-full aspect-square max-w-lg rounded-lg flex justify-center items-center bg-[rgba(255,255,255,0.43)] backdrop-blur-sm dark:bg-[rgba(14,14,14,0.43)]">
           {imageUrls.length > 0 ? (
             <ProductCarousel
               images={imageUrls}
@@ -50,7 +50,7 @@ export default async function page({ params }: Props) {
             <PackageOpen
               width={"50%"}
               strokeWidth={1}
-              className="text-border h-full m-auto"
+              className="text-border m-auto"
             />
           )}
         </div>

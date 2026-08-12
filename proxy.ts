@@ -8,18 +8,30 @@ export async function proxy(request: NextRequest) {
     secret: process.env.NEXTAUTH_SECRET,
   });
   const { pathname } = request.nextUrl;
+  const isApiRoute = pathname.startsWith("/api/");
+  const isAdminRoute = ["/admin", "/api/admin"].some((p) =>
+    pathname.startsWith(p),
+  );
 
   if (!token) {
-    return NextResponse.redirect(new URL("/api/auth/signin", request.url));
+    if (isApiRoute) {
+      return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
+    }
+    const signInUrl = new URL("/api/auth/signin", request.url);
+    signInUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(signInUrl);
   }
 
-  if (pathname.startsWith("/admin") && token.role !== "admin") {
-    return NextResponse.redirect(new URL("/api/auth/signin", request.url));
+  if (isAdminRoute && token.role !== "admin") {
+    if (isApiRoute) {
+      return NextResponse.json({ message: "Forbidden" }, { status: 403 });
+    }
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/cart", "/admin/:path*"],
+  matcher: ["/cart", "/admin/:path*", "/api/admin/:path*"],
 };
