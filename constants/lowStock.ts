@@ -1,0 +1,1 @@
+export const lowStock = 3

@@ -13,6 +13,7 @@ import {
 import AdminOptions from "./AdminOptions";
 import { Badge } from "../ui/badge";
 import { Flame, Percent } from "lucide-react";
+import { lowStock } from "@/constants/lowStock";
 
 interface Props extends Omit<Product, "price" | "discountPrice"> {
   images: ImageModel[];
@@ -38,7 +39,8 @@ export default function Card({
 }: Props) {
   const cover = images.find((image) => image.isPrimary === true);
 
-  const showRunningLow = stock > 0 && stock <= 3;
+  // lowStock is a contant
+  const showRunningLow = stock > 0 && stock <= lowStock;
 
   return (
     <ShadCard className="flex flex-col justify-between">
@@ -65,7 +67,7 @@ export default function Card({
               </Badge>
             )}
             {showRunningLow && (
-              <Badge className="mt-2 bg-orange-50 text-orange-700">
+              <Badge className="mt-2 bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
                 <Flame /> {stock} left
               </Badge>
             )}

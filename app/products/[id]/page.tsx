@@ -1,8 +1,15 @@
 import EProduct from "@/components/empty/EProduct";
 import { ProductCarousel } from "@/components/product/Carosuel";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { lowStock } from "@/constants/lowStock";
 import { prisma } from "@/lib/prisma";
-import { MessageCircleCode, PackageOpen, ShoppingCart } from "lucide-react";
+import {
+  Flame,
+  MessageCircleCode,
+  PackageOpen,
+  ShoppingCart,
+} from "lucide-react";
 import { Metadata } from "next";
 import Link from "next/link";
 import { cache } from "react";
@@ -28,6 +35,7 @@ export default async function page({ params }: Props) {
     (a, b) => Number(b.isPrimary) - Number(a.isPrimary),
   );
   const imageUrls = orderedImages.map((image) => image.url);
+  const showRunningLow = product.stock > 0 && product.stock <= lowStock;
 
   return (
     <div className="flex flex-1 min-h-full w-full m-auto">
@@ -66,6 +74,11 @@ export default async function page({ params }: Props) {
                 <p className={`text-2xl font-bold`}>
                   ${Number(product?.discountPrice)}
                 </p>
+              )}
+              {showRunningLow && (
+                <Badge className="ml-2 bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                  <Flame /> {product.stock} left
+                </Badge>
               )}
             </div>
 
