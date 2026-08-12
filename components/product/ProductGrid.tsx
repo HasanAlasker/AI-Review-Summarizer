@@ -8,7 +8,7 @@ import type {
 } from "@/lib/generated/prisma/client";
 
 type ProductWithImages = Omit<Product, "price"> & {
-  price: string;
+  price: number;
   images: ImageModel[];
   category: string;
 };

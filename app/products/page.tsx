@@ -11,6 +11,7 @@ import ProductGrid from "@/components/product/ProductGrid";
 export default async function page() {
   const products = await prisma.product.findMany({
     where: { isDeleted: false, stock: { gt: 0 } },
+    orderBy: {createdAt: 'desc'},
     include: { images: true, category: true },
   });
   const session = await getServerSession(authOptions);
@@ -21,7 +22,7 @@ export default async function page() {
   const plainProducts = products.map((p) => ({
     ...p,
     category: p.category.name,
-    price: p.price.toString(), // Decimal -> number
+    price: Number(p.price),
   }));
 
   return (

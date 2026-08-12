@@ -1,4 +1,5 @@
 import EProduct from "@/components/empty/EProduct";
+import { ProductCarousel } from "@/components/product/Carosuel";
 import { Button } from "@/components/ui/button";
 import { prisma } from "@/lib/prisma";
 import { MessageCircleCode, PackageOpen, ShoppingCart } from "lucide-react";
@@ -22,22 +23,22 @@ export default async function page({ params }: Props) {
   const { id } = await params;
   const product = await getProduct(id);
 
-  const cover = product?.images.find((image) => image.isPrimary === true);
-
   if (!product) return <EProduct />;
+
+  const orderedImages = [...product.images].sort(
+    (a, b) => Number(b.isPrimary) - Number(a.isPrimary),
+  );
+  const imageUrls = orderedImages.map((image) => image.url);
 
   return (
     <div className="flex flex-1 min-h-full w-full m-auto">
-      <div className="flex flex-col flex-1 md:flex-row gap-10 md:gap-10 lg:gap-20">
-        <div className="w-full h-full aspect-square max-w-lg rounded-lg border border-border flex justify-center items-center bg-[rgba(255,255,255,0.43)] backdrop-blur-sm dark:bg-[rgba(14,14,14,0.43)]">
-          {cover ? (
-            <Image
-              src={cover.url}
+      <div className="flex flex-col flex-1 lg:flex-row gap-10 md:gap-10 lg:gap-20">
+        <div className="w-full h-full aspect-square max-w-lg rounded-lg flex justify-center items-center bg-[rgba(255,255,255,0.43)] backdrop-blur-sm dark:bg-[rgba(14,14,14,0.43)]">
+          {imageUrls.length > 0 ? (
+            <ProductCarousel
+              images={imageUrls}
               alt={`image of ${product.name}`}
-              width={1500}
-              height={1500}
-              className="w-full aspect-square object-cover rounded-lg"
-            ></Image>
+            />
           ) : (
             <PackageOpen
               width={"50%"}

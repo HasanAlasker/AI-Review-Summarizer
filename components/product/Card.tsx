@@ -15,7 +15,7 @@ interface Props extends Omit<Product, "price"> {
   images: ImageModel[];
   isAdmin: boolean;
   onDelete: (id: string) => void;
-  price: string;
+  price: number;
   category: string;
 }
 
@@ -54,7 +54,7 @@ export default function Card({
       </CardContent>
       <CardFooter>
         <div className="flex w-full items-center justify-between">
-          <p>{"$" + price.toString()}</p>
+          <p>{"$" + price}</p>
           {isAdmin ? (
             <AdminOptions productId={id} onDelete={onDelete} />
           ) : (
