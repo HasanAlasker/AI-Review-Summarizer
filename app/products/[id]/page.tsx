@@ -56,7 +56,20 @@ export default async function page({ params }: Props) {
             <p className="text-md text-muted-foreground">
               Category: {product.category.name}
             </p>
-            <p className="text-2xl font-medium">${Number(product?.price)}</p>
+
+            <div className="flex gap-2 items-baseline">
+              <p
+                className={` ${product.discountPrice ? "text-lg text-muted-foreground line-through" : "text-2xl font-medium"}`}
+              >
+                ${Number(product?.price)}
+              </p>
+              {product.discountPrice && (
+                <p className={`text-2xl font-bold`}>
+                  ${Number(product?.discountPrice)}
+                </p>
+              )}
+            </div>
+
             <Link href={`/products/${id}/reviews`}>
               <Button variant={"outline"}>
                 <MessageCircleCode data-icon={"inline-start"} />
