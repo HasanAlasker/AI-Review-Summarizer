@@ -17,13 +17,13 @@ export function ProductCarousel({ images, alt }: Props) {
   const showNextPrev = images.length > 1;
 
   return (
-    <Carousel className="w-full max-w-lg">
+    <Carousel className="w-full max-w-lg p-0">
       <CarouselContent>
         {images.map((image) => (
           <CarouselItem key={image}>
-            <div className="p-1">
-              <Card>
-                <CardContent className="flex aspect-square items-center justify-center p-6">
+            <div className="p-0">
+              <Card className="p-0">
+                <CardContent className="flex aspect-square items-center justify-center p-0">
                   <Image
                     src={image}
                     alt={alt}
