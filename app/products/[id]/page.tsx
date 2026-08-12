@@ -14,7 +14,7 @@ interface Props {
 export const getProduct = cache(async (id: string) => {
   return prisma.product.findUnique({
     where: { id },
-    include: { images: true },
+    include: { images: true, category: true },
   });
 });
 
@@ -29,7 +29,7 @@ export default async function page({ params }: Props) {
   return (
     <div className="flex flex-1 min-h-full w-full m-auto">
       <div className="flex flex-col flex-1 md:flex-row gap-10 md:gap-10 lg:gap-20">
-        <div className="w-full h-full aspect-square max-w-lg bg-white rounded-lg border border-border flex justify-center items-center">
+        <div className="w-full h-full aspect-square max-w-lg rounded-lg border border-border flex justify-center items-center bg-[rgba(255,255,255,0.43)] backdrop-blur-sm dark:bg-[rgba(14,14,14,0.43)]">
           {cover ? (
             <Image
               src={cover.url}
@@ -51,6 +51,9 @@ export default async function page({ params }: Props) {
             <h2 className="text-4xl text-left font-bold">{product?.name}</h2>
             <p className="text-xl text-muted-foreground">
               {product?.description}
+            </p>
+            <p className="text-md text-muted-foreground">
+              Category: {product.category.name}
             </p>
             <p className="text-2xl font-medium">${product?.price.toString()}</p>
             <Link href={`/products/${id}/reviews`}>

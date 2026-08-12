@@ -10,6 +10,7 @@ import type {
 type ProductWithImages = Omit<Product, "price"> & {
   price: string;
   images: ImageModel[];
+  category: string;
 };
 
 export default function ProductGrid({

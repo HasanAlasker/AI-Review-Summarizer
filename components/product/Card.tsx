@@ -16,12 +16,14 @@ interface Props extends Omit<Product, "price"> {
   isAdmin: boolean;
   onDelete: (id: string) => void;
   price: string;
+  category: string;
 }
 
 export default function Card({
   id,
   name,
   description,
+  category,
   price,
   createdAt,
   images,
@@ -47,7 +49,7 @@ export default function Card({
           <CardTitle>{name}</CardTitle>
           <CardDescription>{description}</CardDescription>
 
-          <p className="mt-3">Stocked at: {createdAt.toLocaleDateString()}</p>
+          <p className="mt-3">{category}</p>
         </div>
       </CardContent>
       <CardFooter>
