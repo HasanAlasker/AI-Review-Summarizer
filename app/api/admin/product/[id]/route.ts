@@ -1,40 +1,14 @@
-import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { v2 as cloudinary } from "cloudinary";
-import * as Yup from "yup";
+import { updateProductSchema } from "@/lib/validation/product";
 import { Decimal } from "@prisma/client/runtime/client";
+import { v2 as cloudinary } from "cloudinary";
+import { NextRequest, NextResponse } from "next/server";
+import * as Yup from "yup";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
-});
-
-const imageSchema = Yup.object({
-  publicId: Yup.string().required(),
-  url: Yup.string().url().required(),
-  isPrimary: Yup.boolean().required(),
-});
-
-const updateProductSchema = Yup.object({
-  name: Yup.string().trim().required(),
-  categoryId: Yup.string().required(),
-  description: Yup.string().trim().required().min(15).max(500),
-  price: Yup.number().positive().required(),
-  discountPrice: Yup.number()
-    .positive()
-    .nullable()
-    .optional()
-    .test(
-      "less-than-price",
-      "discountPrice must be less than price",
-      function (value) {
-        if (value == null) return true;
-        return value < this.parent.price;
-      },
-    ),
-  stock: Yup.number().integer().min(0).required(),
-  images: Yup.array().of(imageSchema).min(1).required(),
 });
 
 export async function PATCH(

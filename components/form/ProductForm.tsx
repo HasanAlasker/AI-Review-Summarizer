@@ -1,33 +1,24 @@
 "use client";
 import { Button } from "@/components/ui/button";
+import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
 import axios from "axios";
+import { FormikHelpers } from "formik";
+import { Plus, Save } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
 import * as Yup from "yup";
 import { FieldGroup } from "../ui/field";
+import { Spinner } from "../ui/spinner";
 import DropList from "./DropList";
 import FormCard from "./FormCard";
-import InputField from "./Input";
 import ImageInput, { ImageItem } from "./ImageInput";
-import { useState } from "react";
-import { Spinner } from "../ui/spinner";
-import { Plus, Save } from "lucide-react";
-import { toast } from "sonner";
-import { FormikHelpers } from "formik";
-import { uploadToCloudinary } from "@/lib/uploadToCloudinary";
-import { useRouter } from "next/navigation";
+import InputField from "./Input";
+import { productBaseSchema } from "@/lib/validation/product";
 
 const validationSchema = Yup.object({
-  name: Yup.string().trim().required("Product name is required"),
-  categoryId: Yup.string().required("Please select a category"),
-  description: Yup.string()
-    .trim()
-    .required("Description is required")
-    .min(15)
-    .max(500),
+  ...productBaseSchema,
   images: Yup.array().min(1, "Please select at least one image"),
-  price: Yup.number()
-    .typeError("Price must be a number")
-    .positive("Price must be greater than 0")
-    .required("Price is required"),
 });
 
 type ProductFormValues = {
@@ -37,6 +28,7 @@ type ProductFormValues = {
   images: ImageItem[];
   price: number | "";
   stock: number;
+  discountPrice: number | null;
 };
 
 interface Props {
@@ -48,6 +40,7 @@ interface Props {
     categoryId: string;
     description: string;
     price: number;
+    discountPrice: number | null;
     stock: number;
     images: { publicId: string; url: string; isPrimary: boolean }[];
   };
@@ -70,6 +63,7 @@ export default function ProductForm({
         categoryId: initialData.categoryId,
         description: initialData.description,
         price: initialData.price,
+        discountPrice: initialData.discountPrice,
         stock: initialData.stock,
         images: initialData.images.map((img) => ({
           kind: "existing" as const,
@@ -83,15 +77,11 @@ export default function ProductForm({
         name: "",
         categoryId: "",
         description: "",
+        discountPrice: null,
         images: [],
         price: "",
         stock: 1,
       };
-
-  // snapshot of publicIds present at load time, to diff against on submit
-  const originalPublicIds = new Set(
-    initialData?.images.map((img) => img.publicId) ?? [],
-  );
 
   const handleSubmit = async (
     values: ProductFormValues,
@@ -144,7 +134,6 @@ export default function ProductForm({
         mode === "edit"
           ? "Product updated successfully!"
           : "Product was added successfully!",
-        
       );
 
       if (mode === "create") resetForm();
@@ -201,6 +190,12 @@ export default function ProductForm({
             label="Price"
             placeholder="0.00"
             iconName="banknote"
+          />
+          <InputField
+            name="discountPrice"
+            label="Discount Price (optional)"
+            placeholder="0.00"
+            iconName="tag"
           />
           <InputField
             name="stock"

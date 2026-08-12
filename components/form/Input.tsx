@@ -26,8 +26,19 @@ export default function InputField({
   multiline,
   maxHeight,
 }: Props) {
-  const [field, meta] = useField(name);
+  const [field, meta, helpers] = useField(name);
   const hasErr = meta.touched && meta.error;
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (type !== "number") {
+      field.onChange(e);
+      return;
+    }
+    const raw = e.target.value;
+    // empty string -> undefined so Yup's required()/nullable() logic
+    // runs instead of Number("") silently becoming 0
+    helpers.setValue(raw === "" ? undefined : Number(raw));
+  };
 
   return (
     <Field>
@@ -39,6 +50,8 @@ export default function InputField({
           type={type ?? "text"}
           aria-invalid={!!hasErr}
           {...field}
+          value={field.value ?? ""}
+          onChange={handleChange}
         />
         {iconName && (
           <InputGroupAddon>

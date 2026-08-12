@@ -1,4 +1,3 @@
-// /admin/edit/product/[id]/page.tsx
 import ProductForm from "@/components/form/ProductForm";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
@@ -35,11 +34,12 @@ export default async function EditProductPage({ params }: Props) {
         categoryId: product.categoryId,
         description: product.description!,
         price: Number(product.price),
+        discountPrice: Number(product.discountPrice),
         stock: product.stock,
         images: product.images.map((img) => ({
           publicId: img.publicId,
           url: img.url,
-          isPrimary: img.isPrimary
+          isPrimary: img.isPrimary,
         })),
       }}
     />

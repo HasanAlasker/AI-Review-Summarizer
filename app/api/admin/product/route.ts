@@ -1,34 +1,8 @@
 import { prisma } from "@/lib/prisma";
+import { createProductSchema } from "@/lib/validation/product";
 import { Decimal } from "@prisma/client/runtime/client";
 import { NextRequest, NextResponse } from "next/server";
 import * as Yup from "yup";
-
-const imageSchema = Yup.object({
-  publicId: Yup.string().required(),
-  url: Yup.string().url().required(),
-  isPrimary: Yup.boolean().required(),
-});
-
-const createProductSchema = Yup.object({
-  name: Yup.string().trim().required(),
-  categoryId: Yup.string().required(),
-  description: Yup.string().trim().required().min(15).max(500),
-  price: Yup.number().positive().required(),
-  discountPrice: Yup.number()
-    .positive()
-    .nullable()
-    .optional()
-    .test(
-      "less-than-price",
-      "discountPrice must be less than price",
-      function (value) {
-        if (value == null) return true;
-        return value < this.parent.price;
-      },
-    ),
-  stock: Yup.number().integer().min(0).required(),
-  images: Yup.array().of(imageSchema).min(1).required(),
-});
 
 export async function POST(req: NextRequest) {
   try {
