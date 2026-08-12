@@ -1,12 +1,10 @@
 import EProducts from "@/components/empty/EProducts";
-import Grid from "@/components/general/Grid";
 import AddBtn from "@/components/product/AddBtn";
-import Card from "@/components/product/Card";
+import ProductGrid from "@/components/product/ProductGrid";
 import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import ProductGrid from "@/components/product/ProductGrid";
 
 export default async function page() {
   const products = await prisma.product.findMany({
@@ -23,6 +21,7 @@ export default async function page() {
     ...p,
     category: p.category.name,
     price: Number(p.price),
+    discountPrice: Number(p.discountPrice)
   }));
 
   return (

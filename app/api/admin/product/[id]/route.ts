@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { v2 as cloudinary } from "cloudinary";
 import * as Yup from "yup";
+import { Decimal } from "@prisma/client/runtime/client";
 
 cloudinary.config({
   cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -20,6 +21,18 @@ const updateProductSchema = Yup.object({
   categoryId: Yup.string().required(),
   description: Yup.string().trim().required().min(15).max(500),
   price: Yup.number().positive().required(),
+  discountPrice: Yup.number()
+    .positive()
+    .nullable()
+    .optional()
+    .test(
+      "less-than-price",
+      "discountPrice must be less than price",
+      function (value) {
+        if (value == null) return true;
+        return value < this.parent.price;
+      },
+    ),
   stock: Yup.number().integer().min(0).required(),
   images: Yup.array().of(imageSchema).min(1).required(),
 });
@@ -72,6 +85,10 @@ export async function PATCH(
           categoryId: values.categoryId,
           description: values.description,
           price: values.price,
+          discountPrice:
+            values.discountPrice != null
+              ? new Decimal(values.discountPrice)
+              : null,
           stock: values.stock,
         },
       });

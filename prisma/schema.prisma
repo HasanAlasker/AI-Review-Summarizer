@@ -121,20 +121,21 @@ model Image {
 }
 
 model Product {
-  id          String      @id @default(uuid())
-  name        String
-  description String?
-  price       Decimal
-  createdAt   DateTime    @default(now())
-  categoryId  String
-  category    Category    @relation(fields: [categoryId], references: [id])
-  reviews     Review[]
-  summary     Summary?
-  cartItems   CartItem[]
-  orderItems  OrderItem[]
-  stock       Int         @default(1)
-  isDeleted   Boolean     @default(false)
-  images      Image[]
+  id            String      @id @default(uuid())
+  name          String
+  description   String?
+  price         Decimal     @db.Decimal(10, 2)
+  discountPrice Decimal?     @db.Decimal(10, 2) 
+  createdAt     DateTime    @default(now())
+  categoryId    String
+  category      Category    @relation(fields: [categoryId], references: [id])
+  reviews       Review[]
+  summary       Summary?
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  stock         Int         @default(1)
+  isDeleted     Boolean     @default(false)
+  images        Image[]
 }
 
 model Review {

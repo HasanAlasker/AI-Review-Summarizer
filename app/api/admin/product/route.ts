@@ -14,6 +14,18 @@ const createProductSchema = Yup.object({
   categoryId: Yup.string().required(),
   description: Yup.string().trim().required().min(15).max(500),
   price: Yup.number().positive().required(),
+  discountPrice: Yup.number()
+    .positive()
+    .nullable()
+    .optional()
+    .test(
+      "less-than-price",
+      "discountPrice must be less than price",
+      function (value) {
+        if (value == null) return true;
+        return value < this.parent.price;
+      },
+    ),
   stock: Yup.number().integer().min(0).required(),
   images: Yup.array().of(imageSchema).min(1).required(),
 });
@@ -38,6 +50,10 @@ export async function POST(req: NextRequest) {
           name: values.name,
           description: values.description,
           price: new Decimal(values.price),
+          discountPrice:
+            values.discountPrice != null
+              ? new Decimal(values.discountPrice)
+              : null,
           categoryId: values.categoryId,
           stock: values.stock,
         },
@@ -68,7 +84,7 @@ export async function POST(req: NextRequest) {
     console.error("POST /api/admin/product error:", error);
     return NextResponse.json(
       { message: "Something went wrong" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
