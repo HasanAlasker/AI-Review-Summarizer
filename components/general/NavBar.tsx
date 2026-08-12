@@ -2,13 +2,11 @@
 import { useTheme } from "@/app/store/useTheme";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
-  LayoutDashboard,
   LogOut,
   Moon,
   ShoppingCart,
   Store,
   Sun,
-  Undo2,
   WalletCards,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
@@ -24,7 +22,7 @@ export default function NavBar() {
   return (
     <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
       <ButtonGroup>
-        <NavBtn path="/products" children={<Store />} />
+        <NavBtn path="/products" children={<Store />} tooltip="Shop" />
       </ButtonGroup>
 
       <ButtonGroup>
@@ -32,15 +30,27 @@ export default function NavBar() {
           <NavBtn path="/api/auth/signin" children={"Sign in"} />
         )}
         {session?.user.role === "user" && (
-          <NavBtn path="/cart" children={<ShoppingCart />} />
+          <NavBtn path="/cart" children={<ShoppingCart />} tooltip="My cart" />
         )}
         {session?.user.role === "admin" && (
-          <NavBtn path="/admin/orders" children={<WalletCards />} />
+          <NavBtn
+            path="/admin/orders"
+            children={<WalletCards />}
+            tooltip="Orders"
+          />
         )}
 
-        <NavBtn toggleTheme children={!isDark ? <Moon /> : <Sun />} />
+        <NavBtn
+          toggleTheme
+          children={!isDark ? <Moon /> : <Sun />}
+          tooltip={isDark ? "Light theme" : "Dark theme"}
+        />
         {status === "authenticated" && (
-          <NavBtn path="/api/auth/signout" children={<LogOut color="red" />} />
+          <NavBtn
+            path="/api/auth/signout"
+            children={<LogOut color="red" />}
+            tooltip="Sign out"
+          />
         )}
       </ButtonGroup>
     </nav>

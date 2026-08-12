@@ -7,6 +7,7 @@ import ScrollToTop from "@/components/general/ScrollToTop";
 import NavBar from "@/components/general/NavBar";
 import AuthProvider from "@/components/auth/AuthProvider";
 import { Toaster } from "sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -49,15 +50,17 @@ export default function RootLayout({
     >
       <body className="min-h-svh flex flex-col gap-10 max-w-6xl mx-auto pb-10 lg:pb-20 px-5 lg:px-10">
         <AuthProvider>
-          <NavBar />
-          <main className="relative flex flex-col flex-1">
-            <div className="bg-grid-white fixed inset-0 -z-1"></div>
+          <TooltipProvider>
+            <NavBar />
+            <main className="relative flex flex-col flex-1">
+              <div className="bg-grid-white fixed inset-0 -z-1"></div>
 
-            {children}
-            <LoadTheme />
-            <ScrollToTop />
-          </main>
-          <Toaster />
+              {children}
+              <LoadTheme />
+              <ScrollToTop />
+            </main>
+            <Toaster />
+          </TooltipProvider>
         </AuthProvider>
       </body>
     </html>

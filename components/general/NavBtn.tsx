@@ -3,15 +3,23 @@ import { useRouter } from "next/navigation";
 import { ReactNode } from "react";
 import { Button } from "../ui/button";
 import { useTheme } from "@/app/store/useTheme";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 interface Props {
   children: ReactNode;
   back?: boolean;
   path?: string;
   toggleTheme?: boolean;
+  tooltip?: string;
 }
 
-export default function NavBtn({ children, back, path, toggleTheme }: Props) {
+export default function NavBtn({
+  children,
+  back,
+  path,
+  tooltip,
+  toggleTheme,
+}: Props) {
   const { themeToggle } = useTheme();
 
   const router = useRouter();
@@ -22,8 +30,15 @@ export default function NavBtn({ children, back, path, toggleTheme }: Props) {
   };
 
   return (
-    <Button variant={"outline"} onClick={handleClick}>
-      {children}
-    </Button>
+    <Tooltip>
+      <TooltipTrigger
+        render={
+          <Button variant={"outline"} onClick={handleClick}>
+            {children}
+          </Button>
+        }
+      ></TooltipTrigger>
+      {tooltip && <TooltipContent>{tooltip}</TooltipContent>}
+    </Tooltip>
   );
 }
