@@ -56,7 +56,7 @@ export default async function page({ params }: Props) {
             <p className="text-md text-muted-foreground">
               Category: {product.category.name}
             </p>
-            <p className="text-2xl font-medium">${product?.price.toString()}</p>
+            <p className="text-2xl font-medium">${Number(product?.price)}</p>
             <Link href={`/products/${id}/reviews`}>
               <Button variant={"outline"}>
                 <MessageCircleCode data-icon={"inline-start"} />

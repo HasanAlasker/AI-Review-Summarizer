@@ -14,6 +14,8 @@ interface Props {
 }
 
 export function ProductCarousel({ images, alt }: Props) {
+  const showNextPrev = images.length > 1;
+
   return (
     <Carousel className="w-full max-w-lg">
       <CarouselContent>
@@ -35,8 +37,8 @@ export function ProductCarousel({ images, alt }: Props) {
           </CarouselItem>
         ))}
       </CarouselContent>
-      <CarouselPrevious className={"hidden lg:flex"} />
-      <CarouselNext className={"hidden lg:flex"} />
+      {showNextPrev && <CarouselPrevious className={"hidden lg:flex"} />}
+      {showNextPrev && <CarouselNext className={"hidden lg:flex"} />}
     </Carousel>
   );
 }

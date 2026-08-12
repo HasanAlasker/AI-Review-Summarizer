@@ -36,14 +36,16 @@ export default function Card({
     <ShadCard className="flex flex-col justify-between">
       <CardContent className="flex flex-col md:flex-row gap-5">
         {cover && (
-          <Image
-            src={cover.url}
-            alt={`image of ${name}`}
-            width={1200}
-            height={1200}
-            quality={100}
-            className="aspect-square object-cover w-full max-w-xs self-center md:w-30 rounded-md"
-          />
+          <Link href={`/products/${id}`}>
+            <Image
+              src={cover.url}
+              alt={`image of ${name}`}
+              width={1200}
+              height={1200}
+              quality={100}
+              className="aspect-square object-cover w-full max-w-xs self-center md:w-30 rounded-md"
+            />
+          </Link>
         )}
         <div className="flex flex-1 flex-col">
           <CardTitle>{name}</CardTitle>
