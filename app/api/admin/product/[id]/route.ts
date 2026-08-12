@@ -51,7 +51,7 @@ export async function PATCH(
     );
 
     // images present before but missing from the incoming payload -> removed by the user
-    const toSoftDelete = existing.images.filter(
+    const toDelete = existing.images.filter(
       (img) => !incomingPublicIds.has(img.publicId),
     );
 
@@ -76,10 +76,9 @@ export async function PATCH(
         },
       });
 
-      if (toSoftDelete.length) {
-        await tx.image.updateMany({
-          where: { id: { in: toSoftDelete.map((img) => img.id) } },
-          data: { isDeleted: true, isPrimary: false },
+      if (toDelete.length) {
+        await tx.image.deleteMany({
+          where: { id: { in: toDelete.map((img) => img.id) } },
         });
       }
 
@@ -109,9 +108,9 @@ export async function PATCH(
 
     // Cloudinary cleanup happens only after the DB transaction commits,
     // so a failed transaction never orphans a still-referenced image.
-    if (toSoftDelete.length) {
+    if (toDelete.length) {
       await Promise.allSettled(
-        toSoftDelete.map((img) => cloudinary.uploader.destroy(img.publicId)),
+        toDelete.map((img) => cloudinary.uploader.destroy(img.publicId)),
       );
     }
 
@@ -132,4 +131,3 @@ export async function PATCH(
     );
   }
 }
-
