@@ -5,8 +5,10 @@ import ECart from "@/components/empty/ECart";
 
 export default async function page() {
   const session = await getServerSession(authOptions);
+  const userId = session?.user.id;
+  
   const cart = await prisma.cart.findUnique({
-    where: { userId: session?.user.id },
+    where: { userId },
     include: { items: true },
   });
 

@@ -19,16 +19,15 @@ export default function ECart() {
         <EmptyMedia variant={"icon"}>
           <ShoppingCart />
         </EmptyMedia>
-        <EmptyTitle>No items found</EmptyTitle>
+        <EmptyTitle>Cart is empty</EmptyTitle>
         <EmptyDescription>
-          Your cart doesn't have any products in it currently, continue
-          shopping?
+          Your cart doesn't have any items in it
         </EmptyDescription>
       </EmptyHeader>
       <EmptyContent className="flex-row gap-4 justify-center items-center">
         <Button onClick={() => router.push("/products")}>
           <ShoppingBasket />
-          Shop
+          Continue Shopping
         </Button>
       </EmptyContent>
     </Empty>

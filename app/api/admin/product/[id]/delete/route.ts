@@ -13,7 +13,6 @@ export async function PATCH(req: NextRequest, { params }: Props) {
     });
     return NextResponse.json({ deletedProduct: product }, { status: 200 });
   } catch (error) {
-    console.error("GET /summary error:", error);
     return NextResponse.json(
       { message: "Something went wrong" },
       { status: 500 },
