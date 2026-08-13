@@ -22,19 +22,24 @@ export const authOptions: NextAuthOptions = {
       // `user` is only defined on sign-in, not on every request
       if (user) {
         token.role = (user as any).role;
+        token.id = user.id;
       }
       // On subsequent requests, re-fetch fresh role from DB in case it changed
       else if (token.email) {
         const dbUser = await prisma.user.findUnique({
           where: { email: token.email },
         });
-        if (dbUser) token.role = dbUser.role;
+        if (dbUser) {
+          token.role = dbUser.role;
+          token.id = dbUser.id
+        }
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
         (session.user as any).role = token.role;
+        (session.user as any).id = token.id ?? token.sub
       }
       return session;
     },

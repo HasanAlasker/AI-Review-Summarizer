@@ -125,7 +125,7 @@ model Product {
   name          String
   description   String?
   price         Decimal     @db.Decimal(10, 2)
-  discountPrice Decimal?     @db.Decimal(10, 2) 
+  discountPrice Decimal?    @db.Decimal(10, 2)
   createdAt     DateTime    @default(now())
   categoryId    String
   category      Category    @relation(fields: [categoryId], references: [id])
