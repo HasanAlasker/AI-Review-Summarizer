@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 const cartInclude = {
   items: {
+    where: { product: { isDeleted: false } },
     include: {
       product: {
         select: {
@@ -17,7 +18,7 @@ const cartInclude = {
       },
     },
   },
-};
+} as const;
 
 export async function GET(req: NextRequest) {
   try {

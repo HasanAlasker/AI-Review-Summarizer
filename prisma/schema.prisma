@@ -69,7 +69,7 @@ model CartItem {
   cartId    String
   cart      Cart    @relation(fields: [cartId], references: [id], onDelete: Cascade)
   productId String
-  product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
   quantity  Int     @default(1)
 
   @@unique([cartId, productId]) // prevents duplicate rows for same product; bump quantity instead
@@ -117,7 +117,7 @@ model Image {
   isDeleted Boolean  @default(false)
   createdAt DateTime @default(now())
   productId String
-  product   Product  @relation(fields: [productId], references: [id])
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
 }
 
 model Product {

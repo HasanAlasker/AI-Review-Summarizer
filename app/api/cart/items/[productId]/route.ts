@@ -7,6 +7,7 @@ interface Props {
 }
 
 // edit item
+// todo: check product stock
 export async function PATCH(req: NextRequest, { params }: Props) {
   try {
     const { productId } = await params;
@@ -23,6 +24,19 @@ export async function PATCH(req: NextRequest, { params }: Props) {
     const cart = await prisma.cart.findUnique({ where: { userId } });
     if (!cart) {
       return NextResponse.json({ error: "Cart not found" }, { status: 404 });
+    }
+
+    const product = await prisma.product.findUnique({
+      where: { id: productId },
+    });
+    if (!product) {
+      return NextResponse.json({ error: "Product not found" }, { status: 404 });
+    }
+    if (quantity > product.stock) {
+      return NextResponse.json(
+        { error: `Only ${product.stock} in stock`, available: product.stock },
+        { status: 409 },
+      );
     }
 
     const item = await prisma.cartItem.update({

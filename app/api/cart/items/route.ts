@@ -17,15 +17,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
 
     const product = await prisma.product.findUnique({
-      where: { id: productId },
-      select: {
-        id: true,
-        name: true,
-        price: true,
-        category: true,
-        images: true,
-        discountPrice: true,
-      },
+      where: { id: productId, isDeleted: false },
     });
     if (!product)
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
@@ -35,6 +27,17 @@ export async function POST(req: NextRequest) {
       create: { userId },
       update: {},
     });
+
+    const existing = await prisma.cartItem.findUnique({
+      where: { cartId_productId: { cartId: cart.id, productId } },
+    });
+    const resultingQty = (existing?.quantity ?? 0) + quantity;
+    if (resultingQty > product.stock) {
+      return NextResponse.json(
+        { error: `Only ${product.stock} in stock`, available: product.stock },
+        { status: 409 },
+      );
+    }
 
     const item = await prisma.cartItem.upsert({
       where: { cartId_productId: { cartId: cart.id, productId } },
