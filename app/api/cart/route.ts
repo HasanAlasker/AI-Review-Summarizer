@@ -38,7 +38,7 @@ export async function GET(req: NextRequest) {
       });
     }
 
-    return NextResponse.json(cart);
+    return NextResponse.json(cart, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -58,11 +58,11 @@ export async function DELETE(req: NextRequest) {
       where: { userId },
     });
 
-    if (!cart) return NextResponse.json({ success: true }); // nothing to clear
+    if (!cart) return NextResponse.json({ success: true }, { status: 200 }); // nothing to clear
 
     await prisma.cartItem.deleteMany({ where: { cartId: cart.id } });
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error(error);
     return NextResponse.json(
