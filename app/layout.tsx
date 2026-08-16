@@ -8,6 +8,7 @@ import NavBar from "@/components/general/NavBar";
 import AuthProvider from "@/components/auth/AuthProvider";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import LoadCart from "./cart/LoadCart";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -57,6 +58,7 @@ export default function RootLayout({
                 <div className="bg-grid-white fixed inset-0 -z-1"></div>
                 {children}
                 <LoadTheme />
+                <LoadCart />
                 <ScrollToTop />
               </main>
               <Toaster />

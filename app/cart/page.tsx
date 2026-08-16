@@ -1,17 +1,18 @@
-import { prisma } from "@/lib/prisma";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+"use client";
 import ECart from "@/components/empty/ECart";
+import { useCartStore } from "../store/useCart";
 
-export default async function page() {
-  const session = await getServerSession(authOptions);
-  const userId = session?.user.id;
-  
-  const cart = await prisma.cart.findUnique({
-    where: { userId },
-    include: { items: true },
-  });
+export default function page() {
+  const items = useCartStore((s) => s.items);
 
-  if (!cart || cart.items.length === 0) return <ECart />;
-  return <div>page</div>;
+  if (items.length === 0) return <ECart />;
+  return (
+    <div>
+      {items.map((i) => (
+        <h1 key={i.productId}>
+          {i.product.name} {i.quantity.toString()}
+        </h1>
+      ))}
+    </div>
+  );
 }
