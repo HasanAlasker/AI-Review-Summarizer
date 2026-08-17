@@ -1,9 +1,9 @@
 "use client";
 import ECart from "@/components/empty/ECart";
-import { useCartStore } from "../store/useCart";
+import { useCart } from "../store/useCart";
 
 export default function page() {
-  const items = useCartStore((s) => s.items);
+  const items = useCart((s) => s.items);
 
   if (items.length === 0) return <ECart />;
   return (

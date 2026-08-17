@@ -36,7 +36,7 @@ interface getRes {
   items: CartItem[];
 }
 
-export const useCartStore = create<CartStore>()((set, get) => ({
+export const useCart = create<CartStore>()((set, get) => ({
   items: [],
   status: "idle",
   hasHydrated: false,
@@ -100,6 +100,7 @@ export const useCartStore = create<CartStore>()((set, get) => ({
     } catch (error) {
       console.error("Add item failed:", error);
       set({ items: prevItems, status: "error" }); // rollback
+      throw error;
     }
   },
 
@@ -118,10 +119,9 @@ export const useCartStore = create<CartStore>()((set, get) => ({
     });
 
     try {
-      const res = await axios.patch<CartItem>(
-        `/api/cart/items/${productId}`,
-        { quantity },
-      );
+      const res = await axios.patch<CartItem>(`/api/cart/items/${productId}`, {
+        quantity,
+      });
       if (res.status !== 200) throw new Error("Updating quantity failed");
 
       set((state) => ({

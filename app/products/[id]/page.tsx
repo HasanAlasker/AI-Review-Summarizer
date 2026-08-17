@@ -1,3 +1,4 @@
+import AddToCartBtn from "@/components/cart/AddToCartBtn";
 import EProduct from "@/components/empty/EProduct";
 import { ProductCarousel } from "@/components/product/Carosuel";
 import { Badge } from "@/components/ui/badge";
@@ -89,10 +90,7 @@ export default async function page({ params }: Props) {
               </Button>
             </Link>
           </div>
-          <Button className="py-6">
-            <ShoppingCart data-icon={"inline-start"} />
-            Add to cart
-          </Button>
+          <AddToCartBtn productId={id}/>
         </div>
       </div>
     </div>

@@ -1,11 +1,11 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { useCartStore } from "../store/useCart";
+import { useCart } from "../store/useCart";
 
 export default function LoadCart() {
-  const hydrate = useCartStore((s) => s.hydrate);
-  const reset = useCartStore((s) => s.reset);
+  const hydrate = useCart((s) => s.hydrate);
+  const reset = useCart((s) => s.reset);
   const { status } = useSession();
 
   useEffect(() => {
