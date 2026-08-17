@@ -41,6 +41,7 @@ export default function NavBar() {
             path="/cart"
             children={<ShoppingCart />}
             tooltip={`My cart ${items > 0 ? "(" + items + ")" : ""}`}
+            badge={items > 0}
           />
         )}
         {session?.user.role === "admin" && (
