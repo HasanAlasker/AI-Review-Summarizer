@@ -57,10 +57,8 @@ export async function PATCH(req: NextRequest, { params }: Props) {
 }
 
 // delete item
-export async function DELETE(
-  _req: Request,
-  { params }: { params: { productId: string } },
-) {
+export async function DELETE(req: NextRequest, { params }: Props) {
+  const { productId } = await params;
   const userId = await requireUserId();
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -74,7 +72,7 @@ export async function DELETE(
   await prisma.cartItem
     .delete({
       where: {
-        cartId_productId: { cartId: cart.id, productId: params.productId },
+        cartId_productId: { cartId: cart.id, productId },
       },
     })
     .catch(() => null); // fine if it was already removed

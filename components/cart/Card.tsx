@@ -2,12 +2,12 @@ import { CartItem } from "@/app/store/useCart";
 import Image from "next/image";
 import Link from "next/link";
 import {
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardTitle,
-  Card as ShadCard,
+    CardContent,
+    CardDescription,
+    CardTitle,
+    Card as ShadCard
 } from "../ui/card";
+import Footer from "./CardFooter";
 
 export default function Card({ id, productId, quantity, product }: CartItem) {
   return (
@@ -36,7 +36,7 @@ export default function Card({ id, productId, quantity, product }: CartItem) {
           </CardDescription>
         </div>
       </CardContent>
-      <CardFooter></CardFooter>
+      <Footer productId={productId} quantity={quantity} />
     </ShadCard>
   );
 }
