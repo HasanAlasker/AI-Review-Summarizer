@@ -1,16 +1,16 @@
 import axios from "axios";
 import { create } from "zustand";
 
-interface CartItem {
+export interface CartItem {
   id: string;
   productId: string;
   quantity: number;
   product: {
     name: string;
-    category: string;
+    category: { name: string; id: string };
     price: number;
     discountPrice?: number;
-    image?: string | null;
+    images: { url: string }[];
   };
 }
 

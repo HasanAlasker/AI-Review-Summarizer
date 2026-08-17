@@ -1,6 +1,7 @@
 import { requireUserId } from "@/app/utils/requireUserId";
 import { prisma } from "@/lib/prisma";
 import { NextRequest, NextResponse } from "next/server";
+import { productInclude } from "../route";
 
 interface Props {
   params: Promise<{ productId: string }>;
@@ -42,18 +43,7 @@ export async function PATCH(req: NextRequest, { params }: Props) {
     const item = await prisma.cartItem.update({
       where: { cartId_productId: { cartId: cart.id, productId } },
       data: { quantity },
-      include: {
-        product: {
-          select: {
-            id: true,
-            name: true,
-            price: true,
-            category: true,
-            images: true,
-            discountPrice: true,
-          },
-        },
-      },
+      include: productInclude,
     });
 
     return NextResponse.json(item);

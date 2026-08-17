@@ -1,19 +1,18 @@
+import { lowStock } from "@/constants/lowStock";
 import { Image as ImageModel, Product } from "@/lib/generated/prisma/client";
+import { Flame, Percent } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import {
-  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
   CardTitle,
-  Card as ShadCard,
+  Card as ShadCard
 } from "../ui/card";
 import AdminOptions from "./AdminOptions";
-import { Badge } from "../ui/badge";
-import { Flame, Percent } from "lucide-react";
-import { lowStock } from "@/constants/lowStock";
 
 interface Props extends Omit<Product, "price" | "discountPrice"> {
   images: ImageModel[];
