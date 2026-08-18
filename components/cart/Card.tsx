@@ -2,10 +2,10 @@ import { CartItem } from "@/app/store/useCart";
 import Image from "next/image";
 import Link from "next/link";
 import {
-    CardContent,
-    CardDescription,
-    CardTitle,
-    Card as ShadCard
+  CardContent,
+  CardDescription,
+  CardTitle,
+  Card as ShadCard,
 } from "../ui/card";
 import Footer from "./CardFooter";
 
@@ -31,12 +31,13 @@ export default function Card({ id, productId, quantity, product }: CartItem) {
             <div>Unit price: $ {product.discountPrice ?? product.price}</div>
             <div>Count: {quantity}</div>
             <div className="font-medium text-primary mt-2">
-              Total: {quantity * (product.discountPrice ?? product.price)}
+              Total:{" "}
+              {(quantity * (product.discountPrice ?? product.price)).toFixed(2)}
             </div>
           </CardDescription>
         </div>
       </CardContent>
-      <Footer productId={productId} quantity={quantity} />
+      <Footer productId={productId} quantity={quantity} stock={product.stock} />
     </ShadCard>
   );
 }

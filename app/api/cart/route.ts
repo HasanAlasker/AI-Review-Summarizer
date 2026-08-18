@@ -14,6 +14,7 @@ const cartInclude = {
           category: true,
           discountPrice: true,
           images: { where: { isPrimary: true }, select: { url: true } },
+          stock: true
         },
       },
     },

@@ -11,6 +11,7 @@ export interface CartItem {
     price: number;
     discountPrice?: number;
     images: { url: string }[];
+    stock: number;
   };
 }
 
@@ -30,6 +31,8 @@ interface CartStore {
   totalItems: () => number;
   totalPrice: () => number;
   getItem: (productId: string) => CartItem | undefined;
+
+  requestTokens?: Record<string, number>;
 }
 
 interface getRes {
@@ -111,12 +114,16 @@ export const useCart = create<CartStore>()((set, get) => ({
     const existing = prevItems.find((item) => item.productId === productId);
     if (!existing) return;
 
-    set({
-      items: prevItems.map((item) =>
+    // bump a per-item request token
+    const token = (get().requestTokens?.[productId] ?? 0) + 1;
+
+    set((state) => ({
+      items: state.items.map((item) =>
         item.productId === productId ? { ...item, quantity } : item,
       ),
+      requestTokens: { ...state.requestTokens, [productId]: token },
       status: "syncing",
-    });
+    }));
 
     try {
       const res = await axios.patch<CartItem>(`/api/cart/items/${productId}`, {
@@ -124,15 +131,20 @@ export const useCart = create<CartStore>()((set, get) => ({
       });
       if (res.status !== 200) throw new Error("Updating quantity failed");
 
-      set((state) => ({
-        items: state.items.map((item) =>
-          item.productId === productId ? res.data : item,
-        ),
-        status: "idle",
-      }));
+      // only apply if this is still the latest request for this item
+      if (get().requestTokens?.[productId] === token) {
+        set((state) => ({
+          items: state.items.map((item) =>
+            item.productId === productId ? res.data : item,
+          ),
+          status: "idle",
+        }));
+      }
     } catch (error) {
-      console.error("Update quantity failed:", error);
-      set({ items: prevItems, status: "error" }); // rollback
+      if (get().requestTokens?.[productId] === token) {
+        set({ items: prevItems, status: "error" });
+      }
+      throw error;
     }
   },
 
