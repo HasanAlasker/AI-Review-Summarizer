@@ -5,6 +5,7 @@ import Grid from "@/components/general/Grid";
 import Card from "@/components/cart/Card";
 import ClearCartBtn from "@/components/cart/ClearCartBtn";
 import Loading from "./loading";
+import CheckoutBtn from "@/components/cart/CheckoutBtn";
 
 export default function page() {
   const items = useCart((s) => s.items);
@@ -18,7 +19,7 @@ export default function page() {
         <h1 className="text-xl font-bold">
           Total: $ {useCart.getState().totalPrice().toFixed(2)}
         </h1>
-        <ClearCartBtn />
+        <CheckoutBtn />
       </div>
       <Grid>
         {items.map((i) => (
@@ -31,6 +32,9 @@ export default function page() {
           />
         ))}
       </Grid>
+      <div className="mt-5">
+        <ClearCartBtn />
+      </div>
     </div>
   );
 }
