@@ -21,8 +21,10 @@ export const authOptions: NextAuthOptions = {
     async jwt({ token, user }) {
       // `user` is only defined on sign-in, not on every request
       if (user) {
-        token.role = (user as any).role;
-        token.id = user.id;
+        token.role = user.role!;
+        token.id = user.id!;
+        token.phone = user.phone ?? undefined;
+        token.street = user.street ?? undefined;
       }
       // On subsequent requests, re-fetch fresh role from DB in case it changed
       else if (token.email) {
@@ -31,15 +33,19 @@ export const authOptions: NextAuthOptions = {
         });
         if (dbUser) {
           token.role = dbUser.role;
-          token.id = dbUser.id
+          token.id = dbUser.id;
+          token.phone = dbUser.phone ?? undefined;
+          token.street = dbUser.street ?? undefined;
         }
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
-        (session.user as any).role = token.role;
-        (session.user as any).id = token.id ?? token.sub
+        session.user.role = token.role;
+        session.user.id = token.id ?? token.sub;
+        session.user.phone = token.phone ?? undefined;
+        session.user.street = token.street ?? undefined;
       }
       return session;
     },
