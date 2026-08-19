@@ -82,7 +82,7 @@ model Order {
   userId    String
   user      User        @relation(fields: [userId], references: [id])
   items     OrderItem[]
-  total     Decimal
+  total     Decimal     @db.Decimal(10, 2)
   status    OrderStatus @default(PENDING)
   createdAt DateTime    @default(now())
 }
@@ -94,7 +94,7 @@ model OrderItem {
   productId String
   product   Product @relation(fields: [productId], references: [id])
   quantity  Int
-  price     Decimal
+  price     Decimal @db.Decimal(10, 2)
 }
 
 enum OrderStatus {

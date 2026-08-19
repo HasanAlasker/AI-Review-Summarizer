@@ -1,4 +1,7 @@
 "use client";
+import { placeOrder } from "@/app/actions/order";
+import { updateUserInfo } from "@/app/actions/user";
+import { useCart } from "@/app/store/useCart";
 import {
   Dialog,
   DialogClose,
@@ -10,17 +13,16 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Form } from "formik";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Check, X } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
+import { toast } from "sonner";
 import * as Yup from "yup";
 import AppForm from "../form/AppForm";
 import InputField from "../form/Input";
 import { Button } from "../ui/button";
 import { FieldGroup } from "../ui/field";
 import { Spinner } from "../ui/spinner";
-import { updateUserInfo } from "@/app/actions/user";
-import { toast } from "sonner";
 export interface FormValues {
   phone: string;
   street: string;
@@ -37,6 +39,7 @@ const validationSchema: Yup.ObjectSchema<FormValues> = Yup.object({
 
 export default function CheckoutBtn() {
   const { data, update } = useSession();
+  const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const initialValues: FormValues = {
@@ -44,28 +47,45 @@ export default function CheckoutBtn() {
     street: data?.user.street ?? "",
   };
 
-  const handleSubmit = async (values: FormValues) => {
+ const handleSubmit = async (values: FormValues) => {
     setLoading(true);
     try {
-      await updateUserInfo(values);
-      await update(); // jwt() re-fetches from DB itself
-      // continue checkout flow
-      // close dialog here
-    } catch (err) {
-      console.error(err);
-      toast.error("Couldn't confirm order, try later");
+      try {
+        await updateUserInfo(values);
+      } catch (err) {
+        console.error("updateUserInfo failed:", err);
+        toast.error("Couldn't save your delivery info, try again");
+        return;
+      }
+
+      try {
+        await placeOrder();
+      } catch (err) {
+        console.error("placeOrder failed:", err);
+        toast.error(
+          err instanceof Error ? err.message : "Couldn't place your order, try again",
+        );
+        return;
+      }
+
+      // both succeeded — safe to clear cart and refresh session
+      useCart.getState().clearCart();
+      await update();
+
+      toast.success("Order placed!");
+      setOpen(false);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button onClick={() => {}} disabled={loading} className="py-6">
+          <Button onClick={() => {}} disabled={loading} className="py-6 px-3">
             Checkout
-            {loading ? <Spinner /> : <ArrowRight data-icon={"inline-start"} />}
+            <ArrowRight data-icon={"inline-end"} />
           </Button>
         }
       />
@@ -98,8 +118,17 @@ export default function CheckoutBtn() {
               />
             </FieldGroup>
             <DialogFooter className="mt-7">
-              <DialogClose render={<Button variant="outline">Cancel</Button>} />
-              <Button type="submit">Confirm</Button>
+              <DialogClose
+                render={
+                  <Button variant="outline" disabled={loading}>
+                    Cancel <X data-icon={"inline-end"} />
+                  </Button>
+                }
+              />
+              <Button type="submit" disabled={loading}>
+                {loading ? "Placing order" : "Confirm"}
+                {loading ? <Spinner /> : <Check data-icon={"inline-end"} />}
+              </Button>
             </DialogFooter>
           </Form>
         </AppForm>
