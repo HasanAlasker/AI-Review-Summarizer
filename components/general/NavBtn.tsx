@@ -42,7 +42,7 @@ export default function NavBtn({
           >
             {children}
             {badge && (
-              <div className="bg-destructive w-1.5 aspect-square rounded-full absolute top-2 right-2" />
+              <div className="bg-red-600 w-1.5 aspect-square rounded-full absolute top-2 right-2" />
             )}
           </Button>
         }

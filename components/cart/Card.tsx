@@ -21,7 +21,7 @@ export default function Card({ id, productId, quantity, product }: CartItem) {
               width={1200}
               height={1200}
               quality={100}
-              className="aspect-square object-cover w-full max-w-xs self-center md:w-30 rounded-md"
+              className="aspect-square object-cover w-full max-w-xs self-center md:w-30 rounded-md mx-auto"
             />
           )}
         </Link>

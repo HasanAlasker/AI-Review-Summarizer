@@ -10,7 +10,7 @@ import {
   CardDescription,
   CardFooter,
   CardTitle,
-  Card as ShadCard
+  Card as ShadCard,
 } from "../ui/card";
 import AdminOptions from "./AdminOptions";
 
@@ -52,7 +52,7 @@ export default function Card({
               width={1200}
               height={1200}
               quality={100}
-              className="aspect-square object-cover w-full max-w-xs self-center md:w-30 rounded-md"
+              className="aspect-square object-cover w-full max-w-xs self-center md:w-30 rounded-md mx-auto"
             />
           </Link>
         )}
