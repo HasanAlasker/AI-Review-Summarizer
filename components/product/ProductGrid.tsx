@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Grid from "@/components/general/Grid";
 import Card from "@/components/product/Card";
 import type {
@@ -22,6 +22,10 @@ export default function ProductGrid({
   isAdmin: boolean;
 }) {
   const [products, setProducts] = useState(initialProducts);
+
+  useEffect(() => {
+    setProducts(initialProducts);
+  }, [initialProducts]);
 
   const handleDelete = (id: string) => {
     setProducts((prev) => prev.filter((p) => p.id !== id));
