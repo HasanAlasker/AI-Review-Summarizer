@@ -4,10 +4,14 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
 
-export const placeOrder = async () => {
+type PlaceOrderResult =
+  | { success: true; order: { id: string; total: number } }
+  | { success: false; message: string };
+
+export const placeOrder = async (): Promise<PlaceOrderResult> => {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id || !session.user.phone || !session.user.street) {
-    throw new Error("Incomplete user info");
+    return { success: false, message: "Incomplete user info" };
   }
 
   const userId = session.user.id;
@@ -17,23 +21,29 @@ export const placeOrder = async () => {
     include: {
       items: {
         include: {
-          product: {
-            select: { id: true, price: true, stock: true, name: true },
-          },
+          product: { select: { price: true, stock: true, name: true } },
         },
       },
     },
   });
 
   if (!cart || cart.items.length === 0) {
-    throw new Error("Cart is empty");
+    return { success: false, message: "Cart is empty" };
   }
 
-  // Verify stock up front (fast fail before hitting the DB transaction)
-  for (const item of cart.items) {
-    if (item.product.stock < item.quantity) {
-      throw new Error(`Not enough stock for ${item.product.name}`);
-    }
+  const outOfStock = cart.items.filter(
+    (item) => item.product.stock < item.quantity,
+  );
+
+  if (outOfStock.length > 0) {
+    const names = outOfStock.map((item) => item.product.name).join(", ");
+    return {
+      success: false,
+      message:
+        outOfStock.length === 1
+          ? `Not enough stock for ${names}`
+          : `Not enough stock for: ${names}`,
+    };
   }
 
   const total = cart.items.reduce(
@@ -43,18 +53,22 @@ export const placeOrder = async () => {
 
   try {
     const order = await prisma.$transaction(async (tx) => {
-      // Atomically decrement stock — updateMany with a `gte` guard prevents
-      // overselling under concurrent requests. If it doesn't match, someone
-      // else beat us to the last units.
+      // Re-check inside the transaction too — stock could've changed
+      // between the check above and now (race condition window)
+      const failed: string[] = [];
+
       for (const item of cart.items) {
         const result = await tx.product.updateMany({
           where: { id: item.productId, stock: { gte: item.quantity } },
           data: { stock: { decrement: item.quantity } },
         });
-
         if (result.count === 0) {
-          throw new Error(`Not enough stock for ${item.product.name}`);
+          failed.push(item.product.name);
         }
+      }
+
+      if (failed.length > 0) {
+        throw new Error(`Not enough stock for: ${failed.join(", ")}`);
       }
 
       const newOrder = await tx.order.create({
@@ -66,29 +80,26 @@ export const placeOrder = async () => {
             create: cart.items.map((item) => ({
               productId: item.productId,
               quantity: item.quantity,
-              price: item.product.price, // snapshot price at time of order
+              price: item.product.price,
             })),
           },
         },
         include: { items: true },
       });
 
-      // Clear the cart
       await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
-
       return newOrder;
     });
 
     return {
-      ...order,
-      total: Number(order.total),
-      items: order.items.map((item) => ({
-        ...item,
-        price: Number(item.price),
-      })),
+      success: true,
+      order: { id: order.id, total: Number(order.total) },
     };
   } catch (error) {
+    // Log the real error server-side (this DOES show up in your server logs / Vercel logs)
     console.error("placeOrder failed:", error);
-    throw error instanceof Error ? error : new Error("Failed to place order");
+    const message =
+      error instanceof Error ? error.message : "Failed to place order";
+    return { success: false, message };
   }
 };

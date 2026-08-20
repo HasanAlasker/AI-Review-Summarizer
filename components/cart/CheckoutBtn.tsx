@@ -23,6 +23,7 @@ import InputField from "../form/Input";
 import { Button } from "../ui/button";
 import { FieldGroup } from "../ui/field";
 import { Spinner } from "../ui/spinner";
+
 export interface FormValues {
   phone: string;
   street: string;
@@ -48,36 +49,33 @@ export default function CheckoutBtn() {
   };
 
  const handleSubmit = async (values: FormValues) => {
-    setLoading(true);
-    try {
-      try {
-        await updateUserInfo(values);
-      } catch (err) {
-        console.error("updateUserInfo failed:", err);
-        toast.error("Couldn't save your delivery info, try again");
-        return;
-      }
-
-      try {
-        await placeOrder();
-      } catch (err) {
-        console.error("placeOrder failed:", err);
-        toast.error(
-          err instanceof Error ? err.message : "Couldn't place your order, try again",
-        );
-        return;
-      }
-
-      // both succeeded — safe to clear cart and refresh session
-      useCart.getState().clearCart();
-      await update();
-
-      toast.success("Order placed!");
-      setOpen(false);
-    } finally {
-      setLoading(false);
+  setLoading(true);
+  try {
+    const userResult = await updateUserInfo(values);
+    if (!userResult.success) {
+      toast.error(userResult.message);
+      return;
     }
-  };
+
+    const orderResult = await placeOrder();
+    if (!orderResult.success) {
+      toast.error(orderResult.message);
+      return;
+    }
+
+    useCart.getState().clearCart();
+    await update();
+
+    toast.success("Order placed!");
+    setOpen(false);
+  } catch (err) {
+    // Only truly unexpected errors land here now (network failure, etc.)
+    console.error(err);
+    toast.error("Something went wrong, try again");
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

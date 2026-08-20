@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { prisma } from "@/lib/prisma";
 import * as Yup from "yup";
 import { authOptions } from "../api/auth/[...nextauth]/route";
+import { FormValues } from "@/components/cart/CheckoutBtn";
 
 const updateSchema = Yup.object({
   phone: Yup.string()
@@ -11,24 +12,34 @@ const updateSchema = Yup.object({
   street: Yup.string().required().min(3),
 });
 
-export async function updateUserInfo(values: {
-  phone: string;
-  street: string;
-}) {
+type UpdateUserResult =
+  | { success: true; user: { phone: string | null; street: string | null } }
+  | { success: false; message: string };
+  
+export async function updateUserInfo(values: FormValues): Promise<UpdateUserResult> {
   const session = await getServerSession(authOptions);
   if (!session?.user?.id) {
-    throw new Error("Not authenticated");
+    return { success: false, message: "Not authenticated" };
   }
 
-  await updateSchema.validate(values);
+  try {
+    await updateSchema.validate(values);
+  } catch (err) {
+    return {
+      success: false,
+      message: err instanceof Yup.ValidationError ? err.message : "Invalid input",
+    };
+  }
 
-  const updated = await prisma.user.update({
-    where: { id: session.user.id },
-    data: {
-      phone: values.phone,
-      street: values.street,
-    },
-  });
-
-  return updated;
+  try {
+    const updated = await prisma.user.update({
+      where: { id: session.user.id },
+      data: { phone: values.phone, street: values.street },
+      select: {phone: true, street: true}
+    });
+    return { success: true, user: updated };
+  } catch (error) {
+    console.error("updateUserInfo failed:", error);
+    return { success: false, message: "Couldn't save your info" };
+  }
 }
