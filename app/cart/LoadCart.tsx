@@ -7,16 +7,21 @@ export default function LoadCart() {
   const hydrate = useCart((s) => s.hydrate);
   const hasHydrated = useCart((s) => s.hasHydrated);
   const reset = useCart((s) => s.reset);
-  const { status } = useSession();
+  const { status, data } = useSession();
 
   useEffect(() => {
-    if (status === "authenticated" && !hasHydrated) {
+    if (status === "loading") return;
+
+    if (
+      status === "authenticated" &&
+      data.user.role === "user" &&
+      !hasHydrated
+    ) {
       hydrate();
-    }
-    if (status === "unauthenticated") {
+    } else if (status === "unauthenticated") {
       reset();
     }
-  }, [status]);
+  }, [status, data, hasHydrated]);
 
   return null;
 }

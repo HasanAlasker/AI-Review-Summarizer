@@ -26,6 +26,7 @@ export interface OrderStore {
   hasHydrated: boolean;
 
   hydrate: () => Promise<void>;
+  reset: () => void;
   updateStatus: (orderId: string, status: OrderStatus) => Promise<void>;
   getOrder: (orderId: string) => OrderItem | undefined;
   countOrders: () => number;
@@ -43,13 +44,16 @@ export const useOrder = create<OrderStore>()((set, get) => ({
       if (res.status !== 200) throw new Error("Failed to load orders");
       set({ orders: res.data ?? [], status: "idle", hasHydrated: true });
     } catch (error) {
-      console.error("Cart hydration failed:", error);
+      console.error("Orders hydration failed:", error);
       set({ status: "error", hasHydrated: true });
     }
+  },
+  reset: () => {
+    set({ orders: [], status: "idle", hasHydrated: false });
   },
   updateStatus: async () => {},
   getOrder: () => {},
   countOrders: () => {
-    return get().orders.length;
+    return get().orders.map((o) => o.status === "PENDING").length;
   },
 }));

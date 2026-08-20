@@ -13,6 +13,7 @@ import {
 import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import NavBtn from "./NavBtn";
+import { useOrder } from "@/app/store/useOrder";
 
 export default function NavBar() {
   const isDark = useTheme((state) => state.isDark);
@@ -22,9 +23,17 @@ export default function NavBar() {
   const cartItems = useCart((s) => s.items);
   const [items, setItems] = useState(countItems());
 
+  const ordersInStore = useOrder((s) => s.orders);
+  const countOrders = useOrder((s) => s.countOrders);
+  const [orders, setOrders] = useState(0);
+
   useEffect(() => {
-    setItems(countItems);
+    if (session?.user.role === "user") setItems(countItems);
   }, [cartItems]);
+
+  useEffect(() => {
+    if (session?.user.role === "admin") setOrders(countOrders);
+  }, [ordersInStore, session]);
 
   return (
     <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
@@ -48,7 +57,8 @@ export default function NavBar() {
           <NavBtn
             path="/admin/orders"
             children={<WalletCards />}
-            tooltip="Orders"
+            tooltip={`Orders ${orders > 0 ? "(" + orders + ")" : ""}`}
+            badge={orders > 0}
           />
         )}
 

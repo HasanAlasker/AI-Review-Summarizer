@@ -9,6 +9,7 @@ import AuthProvider from "@/components/auth/AuthProvider";
 import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LoadCart from "./cart/LoadCart";
+import LoadOrders from "./admin/orders/LoadOrders";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -59,6 +60,7 @@ export default function RootLayout({
                 {children}
                 <LoadTheme />
                 <LoadCart />
+                <LoadOrders />
                 <ScrollToTop />
               </main>
               <Toaster />
