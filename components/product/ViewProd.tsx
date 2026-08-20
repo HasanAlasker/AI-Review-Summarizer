@@ -7,13 +7,18 @@ import { Button } from "../ui/button";
 import { ProductCarousel } from "./Carosuel";
 
 interface Props {
-    id: string
-    product: Product & {category: Category}
-    imageUrls: string[]
-    runningLow?: boolean
+  id: string;
+  product: Product & { category: Category };
+  imageUrls: string[];
+  runningLow?: boolean;
 }
 
-export default function ViewProd({id, product, imageUrls, runningLow }: Props) {
+export default function ViewProd({
+  id,
+  product,
+  imageUrls,
+  runningLow,
+}: Props) {
   return (
     <div className="flex flex-1 min-h-full w-full m-auto bg-background rounded-xl">
       <div className="flex flex-col flex-1 lg:flex-row gap-10 md:gap-10 lg:gap-20">
@@ -41,23 +46,27 @@ export default function ViewProd({id, product, imageUrls, runningLow }: Props) {
               Category: {product.category.name}
             </p>
 
-            <div className="flex gap-2 items-baseline">
-              <p
-                className={` ${product.discountPrice ? "text-lg text-muted-foreground line-through" : "text-2xl font-medium"}`}
-              >
-                ${Number(product?.price)}
-              </p>
-              {product.discountPrice && (
-                <p className={`text-2xl font-bold`}>
-                  ${Number(product?.discountPrice)}
+            {product.stock > 0 ? (
+              <div className="flex gap-2 items-baseline">
+                <p
+                  className={` ${product.discountPrice ? "text-lg text-muted-foreground line-through" : "text-2xl font-medium"}`}
+                >
+                  ${Number(product?.price)}
                 </p>
-              )}
-              {runningLow && (
-                <Badge className="ml-2 bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
-                  <Flame /> {product.stock} left
-                </Badge>
-              )}
-            </div>
+                {product.discountPrice && (
+                  <p className={`text-2xl font-bold`}>
+                    ${Number(product?.discountPrice)}
+                  </p>
+                )}
+                {runningLow && (
+                  <Badge className="ml-2 bg-orange-50 text-orange-700 dark:bg-orange-950 dark:text-orange-300">
+                    <Flame /> {product.stock} left
+                  </Badge>
+                )}
+              </div>
+            ) : (
+              <p className="font-bold">Out of stock</p>
+            )}
 
             <Link href={`/products/${id}/reviews`}>
               <Button variant={"outline"}>
