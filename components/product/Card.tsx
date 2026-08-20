@@ -71,7 +71,10 @@ export default function Card({
               </Badge>
             )}
           </div>
-          <p className="mt-3">{category}</p>
+          <div className="flex gap-2">
+            <p className="mt-3">{category}</p>
+            {isAdmin && <p className="mt-3">Stock: {stock}</p>}
+          </div>
         </div>
       </CardContent>
       <CardFooter>
