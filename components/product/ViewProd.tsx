@@ -21,7 +21,7 @@ export default function ViewProd({
 }: Props) {
   return (
     <div className="flex flex-1 min-h-full w-full m-auto bg-background rounded-xl">
-      <div className="flex flex-col flex-1 lg:flex-row gap-10 md:gap-10 lg:gap-20">
+      <div className="flex flex-col flex-1 lg:flex-row gap-5 md:gap-10 lg:gap-20">
         <div className="w-full aspect-square max-w-lg rounded-lg flex justify-center items-center bg-[rgba(255,255,255,0.43)] backdrop-blur-sm dark:bg-[rgba(14,14,14,0.43)]">
           {imageUrls.length > 0 ? (
             <ProductCarousel
@@ -36,8 +36,8 @@ export default function ViewProd({
             />
           )}
         </div>
-        <div className="flex flex-col justify-between gap-15">
-          <div className="flex flex-col gap-10 h-full">
+        <div className="flex flex-col justify-between gap-8 md:gap-15">
+          <div className="flex flex-col gap-5 md:gap-10 h-full">
             <h2 className="text-4xl text-left font-bold">{product?.name}</h2>
             <p className="text-xl text-muted-foreground">
               {product?.description}
