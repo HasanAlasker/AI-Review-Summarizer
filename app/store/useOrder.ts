@@ -52,7 +52,9 @@ export const useOrder = create<OrderStore>()((set, get) => ({
     set({ orders: [], status: "idle", hasHydrated: false });
   },
   updateStatus: async () => {},
-  getOrder: () => {},
+  getOrder: () => {
+    return undefined;
+  },
   countOrders: () => {
     return get().orders.map((o) => o.status === "PENDING").length;
   },
