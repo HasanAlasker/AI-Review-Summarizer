@@ -10,9 +10,10 @@ import { useRouter } from "next/navigation";
 
 interface Props {
   productId: string;
+  outOfStock: boolean
 }
 
-export default function AddToCartBtn({ productId }: Props) {
+export default function AddToCartBtn({ productId, outOfStock }: Props) {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
 
@@ -30,7 +31,7 @@ export default function AddToCartBtn({ productId }: Props) {
       setLoading(true);
       await addItem(productId)
         .then(() => toast.success("Item added to cart!"))
-        .catch(() => toast.error("Failed to add item"));
+        .catch(() => toast.error("Failed to add item, not enough stock"));
     } catch (error) {
     } finally {
       setLoading(false);
@@ -40,7 +41,7 @@ export default function AddToCartBtn({ productId }: Props) {
   const admin = session?.user.role === "admin";
 
   return (
-    <Button onClick={handleClick} disabled={admin || loading} className="py-6">
+    <Button onClick={handleClick} disabled={admin || loading || outOfStock } className="py-6">
       {loading ? <Spinner /> : <ShoppingCart data-icon={"inline-start"} />}
       Add to cart
     </Button>
