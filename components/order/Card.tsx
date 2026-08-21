@@ -100,8 +100,8 @@ export default function Card({
           <p className="font-bold">${total.toFixed(2)}</p>
         </div>
         <Link className={"self-end"} href={`/admin/orders/${orderId}`}>
-          <Button className={"self-end"}>
-            View <Eye />
+          <Button className={"px-3"}>
+            View <Eye data-icon={"inline-end"} />
           </Button>
         </Link>
       </CardFooter>
