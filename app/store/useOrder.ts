@@ -30,7 +30,6 @@ export interface OrderStore {
   hydrate: () => Promise<void>;
   reset: () => void;
   updateStatus: (orderId: string, status: OrderStatus) => Promise<void>;
-  getOrder: (orderId: string) => OrderItem | undefined;
   countOrders: () => number;
 }
 
@@ -65,9 +64,6 @@ export const useOrder = create<OrderStore>()((set, get) => ({
       set({ orders, status: "error" });
       throw error;
     }
-  },
-  getOrder: () => {
-    return undefined;
   },
   countOrders: () => {
     return get().orders.filter((o) => o.status === "PENDING").length;

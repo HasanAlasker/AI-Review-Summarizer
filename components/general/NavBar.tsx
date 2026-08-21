@@ -57,7 +57,7 @@ export default function NavBar() {
           <NavBtn
             path="/admin/orders"
             children={<WalletCards />}
-            tooltip={`Orders ${orders > 0 ? "(" + orders + ")" : ""}`}
+            tooltip={`Orders ${orders > 0 ? "(" + orders + " pending )" : ""}`}
             badge={orders > 0}
           />
         )}

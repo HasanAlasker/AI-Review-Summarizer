@@ -1,4 +1,3 @@
-// app/admin/orders/[id]/page.tsx
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
@@ -24,7 +23,7 @@ export default async function page({ params }: Props) {
   if (!order) notFound();
 
   return (
-    <div className="p-6 flex flex-col gap-6">
+    <div className="flex flex-col gap-6">
       <div className="flex items-start justify-between">
         <div>
           <h1 className="text-2xl font-bold">Order #{order.id.slice(0, 8)}</h1>
