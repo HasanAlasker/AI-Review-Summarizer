@@ -1,3 +1,4 @@
+import EOrders from "@/components/empty/EOrders";
 import OrderGrid from "@/components/order/OrderGrid";
 import StatusFilter from "@/components/order/StatusFilter";
 import { OrderStatus } from "@/lib/generated/prisma/enums";
@@ -20,7 +21,11 @@ export default async function page({ searchParams }: Props) {
   return (
     <div className="flex flex-col gap-5">
       <StatusFilter currentStatus={statusFilter ?? "PENDING"} />
-      <OrderGrid orders={orders} />
+      {orders.length > 0 ? (
+        <OrderGrid orders={orders} />
+      ) : (
+        <EOrders status={statusFilter ?? "PENDING"} />
+      )}
     </div>
   );
 }
