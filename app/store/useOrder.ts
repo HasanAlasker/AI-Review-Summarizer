@@ -3,6 +3,7 @@ import axios from "axios";
 import { create } from "zustand";
 
 interface OrderItem {
+  id: string;
   quantity: number;
   price: number;
   product: {
@@ -12,6 +13,7 @@ interface OrderItem {
 }
 
 interface Order {
+  id: string;
   userName: string;
   phone: string;
   street: string;
@@ -51,11 +53,23 @@ export const useOrder = create<OrderStore>()((set, get) => ({
   reset: () => {
     set({ orders: [], status: "idle", hasHydrated: false });
   },
-  updateStatus: async () => {},
+  updateStatus: async (orderId, status) => {
+    const orders = get().orders;
+    set({
+      orders: orders.map((o) => (o.id === orderId ? { ...o, status } : o)),
+    });
+    try {
+      const res = await axios.patch(`/api/admin/orders/${orderId}`, { status });
+      if (res.status !== 200) throw new Error("Updating status failed");
+    } catch (error) {
+      set({ orders, status: "error" });
+      throw error;
+    }
+  },
   getOrder: () => {
     return undefined;
   },
   countOrders: () => {
-    return get().orders.map((o) => o.status === "PENDING").length;
+    return get().orders.filter((o) => o.status === "PENDING").length;
   },
 }));

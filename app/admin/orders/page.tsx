@@ -37,6 +37,7 @@ export default async function page({ searchParams }: Props) {
         {orders.map((o) => (
           <Card
             key={o.id}
+            orderId={o.id}
             userName={o.user.name!}
             phone={o.user.phone!}
             street={o.user.street!}

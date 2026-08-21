@@ -9,6 +9,9 @@ import {
   CardTitle,
 } from "../ui/card";
 import { Separator } from "../ui/separator";
+import { Button } from "../ui/button";
+import Link from "next/link";
+import { Eye } from "lucide-react";
 
 interface OrderItem {
   quantity: number;
@@ -20,6 +23,7 @@ interface OrderItem {
 }
 
 interface Props {
+  orderId: string;
   userName: string;
   phone: string;
   street: string;
@@ -39,6 +43,7 @@ const statusStyles: Record<OrderStatus, string> = {
 };
 
 export default function Card({
+  orderId,
   userName,
   phone,
   street,
@@ -89,11 +94,16 @@ export default function Card({
         </div>
       </CardContent>
 
-      <CardFooter>
+      <CardFooter className="flex flex-col gap-6">
         <div className="flex w-full items-center justify-between">
           <p className="text-sm text-muted-foreground">Total</p>
           <p className="font-bold">${total.toFixed(2)}</p>
         </div>
+        <Link className={"self-end"} href={`/admin/orders/${orderId}`}>
+          <Button className={"self-end"}>
+            View <Eye />
+          </Button>
+        </Link>
       </CardFooter>
     </ShadCard>
   );
