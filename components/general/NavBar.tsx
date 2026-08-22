@@ -14,9 +14,16 @@ import { useSession } from "next-auth/react";
 import { useEffect, useState } from "react";
 import NavBtn from "./NavBtn";
 import { useOrder } from "@/app/store/useOrder";
+import { usePathname, useSearchParams } from "next/navigation";
 
 export default function NavBar() {
   const isDark = useTheme((state) => state.isDark);
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+
+  const callbackUrl = encodeURIComponent(
+    `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`,
+  );
 
   const { data: session, status } = useSession();
   const countItems = useCart((s) => s.totalItems);
@@ -43,7 +50,10 @@ export default function NavBar() {
 
       <ButtonGroup>
         {status === "unauthenticated" && (
-          <NavBtn path="/api/auth/signin" children={"Sign in"} />
+          <NavBtn
+            path={`/api/auth/signin?callbackUrl=${callbackUrl}`}
+            children={"Sign in"}
+          />
         )}
         {session?.user.role === "user" && (
           <NavBtn
