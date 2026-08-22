@@ -30,7 +30,7 @@ export default async function page({ params }: Props) {
     />
   ));
 
-  if (reviews.length === 0) return <EReviews />;
+  if (reviews.length === 0) return <EReviews productId={id} />;
 
   return (
     <div className="flex flex-1 flex-col gap-10">

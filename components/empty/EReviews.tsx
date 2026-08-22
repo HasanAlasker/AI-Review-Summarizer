@@ -9,11 +9,15 @@ import {
 } from "@/components/ui/empty";
 import { ArrowLeft, MessageSquareCode } from "lucide-react";
 import { useRouter } from "next/navigation";
-import Modal from "../review/Modal";
+import RatingModal from "../review/Modal";
 import { Button } from "../ui/button";
 import { useSession } from "next-auth/react";
 
-export default function EReviews() {
+interface Props {
+  productId: string;
+}
+
+export default function EReviews({ productId }: Props) {
   const router = useRouter();
   const { data } = useSession();
   const isAdmin = data?.user.role === "admin";
@@ -28,7 +32,7 @@ export default function EReviews() {
         <EmptyDescription>This product has no reviews yet</EmptyDescription>
       </EmptyHeader>
       <EmptyContent className="flex-row gap-4 justify-center items-center">
-        {!isAdmin && <Modal />}
+        {!isAdmin && <RatingModal productId={productId} />}
         <Button
           variant={!isAdmin ? "secondary" : "default"}
           onClick={() => router.back()}

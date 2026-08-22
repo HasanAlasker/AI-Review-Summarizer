@@ -17,6 +17,10 @@ import InputField from "../form/Input";
 import * as Yup from "yup";
 import { Form } from "formik";
 import { FieldGroup } from "../ui/field";
+import axios from "axios";
+import { toast } from "sonner";
+import { useState } from "react";
+import { Spinner } from "../ui/spinner";
 
 const validationSchema = Yup.object({
   rating: Yup.number()
@@ -25,25 +29,42 @@ const validationSchema = Yup.object({
   review: Yup.string().trim().min(15).max(550).required("Review is required"),
 });
 
+interface Props {
+  productId: string;
+  variant?: "default" | "secondary" | "outline";
+}
 interface FormProps {
   rating: number;
   review: string;
 }
-export default function Modal() {
+
+export default function RatingModal({ productId, variant }: Props) {
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
   const initialValues = {
     rating: 0,
     review: "",
   };
 
   const handleSubmit = async (values: FormProps) => {
-    console.log(values);
-    console.log("hello");
+    setLoading(true);
+    try {
+      const res = await axios.post(`/api/reviews/${productId}`, values);
+      if (res.status === 201) {
+        toast.success("Review posted successfully!");
+        setOpen(false);
+      }
+    } catch (error) {
+      toast.error("Failed to submit review!");
+    } finally {
+      setLoading(false);
+    }
   };
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
-          <Button>
+          <Button variant={variant ?? "default"}>
             <Star />
             Leave a review
           </Button>
@@ -64,27 +85,27 @@ export default function Modal() {
         >
           <Form>
             <FieldGroup>
-                
-            <Rating name="rating" />
-            <InputField
-              name="review"
-              label="Review"
-              placeholder="Your Review"
-              iconName="message-square"
-              multiline
-            />
-            <DialogFooter>
-              <DialogClose
-                render={
-                  <Button variant="outline">
-                    Cancel <X data-icon={"inline-end"} />
-                  </Button>
-                }
+              <Rating name="rating" />
+              <InputField
+                name="review"
+                label="Review"
+                placeholder="Your Review"
+                iconName="message-square"
+                multiline
               />
-              <Button type="submit">
-                Submit <Check data-icon={"inline-end"} />
-              </Button>
-            </DialogFooter>
+              <DialogFooter>
+                <DialogClose
+                  render={
+                    <Button type="button" disabled={loading} variant="outline">
+                      Cancel <X data-icon={"inline-end"} />
+                    </Button>
+                  }
+                />
+                <Button type="submit" disabled={loading}>
+                  Submit{" "}
+                  {loading ? <Spinner /> : <Check data-icon={"inline-end"} />}
+                </Button>
+              </DialogFooter>
             </FieldGroup>
           </Form>
         </AppForm>

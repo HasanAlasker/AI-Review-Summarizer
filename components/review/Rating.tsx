@@ -26,11 +26,9 @@ export default function Rating({ name }: Props) {
           />
         ))}
       </div>
-      <ErrorMessage
-        name={name}
-        component={FieldError}
-        className="text-red-500 text-sm"
-      />
+      {hasErr && (
+        <FieldError className="text-red-500 text-sm">{meta.error}</FieldError>
+      )}
     </Field>
   );
 }

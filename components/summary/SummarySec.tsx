@@ -1,10 +1,11 @@
 "use client";
+import { Summary } from "@/lib/generated/prisma/client";
+import axios from "axios";
 import { useEffect, useState } from "react";
+import RatingModal from "../review/Modal";
+import SkeletonCard from "./Skeleton";
 import SumBtn from "./SumBtn";
 import SummaryBox from "./Summary";
-import axios from "axios";
-import { Summary } from "@/lib/generated/prisma/client";
-import SkeletonCard from "./Skeleton";
 
 interface Props {
   id: string;
@@ -48,15 +49,19 @@ export default function SummarySec({ id: productId }: Props) {
   return (
     <div className="flex flex-col gap-10">
       {loading && <SkeletonCard />}
-      {noSummary && !loading && (
-        <SumBtn
-          productId={productId}
-          loading={loading}
-          setSummary={setSummary}
-          setLoading={setLoading}
-          setErr={setErr}
-        />
-      )}
+      <div className="flex justify-between">
+        {noSummary && !loading && (
+          <SumBtn
+            productId={productId}
+            loading={loading}
+            setSummary={setSummary}
+            setLoading={setLoading}
+            setErr={setErr}
+          />
+        )}
+        <RatingModal productId={productId} variant="outline" />
+      </div>
+
       {summary && !loading && (
         <SummaryBox
           content={summary.content}

@@ -38,12 +38,11 @@ export default function SumBtn({
 
   return (
     <Button
-      size={"lg"}
-      className="flex justify-center items-center text-lg self-start py-6 px-6"
+      className="flex justify-center items-center self-start"
       onClick={handleSummarization}
       disabled={loading}
     >
-      {loading ? <Spinner /> : <Sparkles className="size-4.5" />}
+      {loading ? <Spinner /> : <Sparkles />}
 
       <p>{loading ? "Summarizing" : "Summarize"}</p>
     </Button>
