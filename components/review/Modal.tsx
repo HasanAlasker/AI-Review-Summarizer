@@ -1,8 +1,9 @@
 "use client";
-import { Star } from "lucide-react";
+import { Check, Star, X } from "lucide-react";
 import { Button } from "../ui/button";
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
   DialogFooter,
@@ -13,6 +14,16 @@ import {
 import Rating from "./Rating";
 import AppForm from "../form/AppForm";
 import InputField from "../form/Input";
+import * as Yup from "yup";
+import { Form } from "formik";
+import { FieldGroup } from "../ui/field";
+
+const validationSchema = Yup.object({
+  rating: Yup.number()
+    .min(1, "Please select a rating")
+    .required("Rating is required"),
+  review: Yup.string().trim().min(15).max(550).required("Review is required"),
+});
 
 interface FormProps {
   rating: number;
@@ -24,7 +35,10 @@ export default function Modal() {
     review: "",
   };
 
-  const handleSubmit = async (values: FormProps) => {};
+  const handleSubmit = async (values: FormProps) => {
+    console.log(values);
+    console.log("hello");
+  };
   return (
     <Dialog>
       <DialogTrigger
@@ -43,17 +57,37 @@ export default function Modal() {
             and cons, to be as helpful as possible to other customers.
           </DialogDescription>
         </DialogHeader>
-        <AppForm initialValues={initialValues} onSubmit={handleSubmit}>
-          <Rating />
-          <InputField
-            name="review"
-            label="Review"
-            placeholder="Your Review"
-            iconName="message-square"
-            multiline
-          />
+        <AppForm
+          initialValues={initialValues}
+          validationSchema={validationSchema}
+          onSubmit={handleSubmit}
+        >
+          <Form>
+            <FieldGroup>
+                
+            <Rating name="rating" />
+            <InputField
+              name="review"
+              label="Review"
+              placeholder="Your Review"
+              iconName="message-square"
+              multiline
+            />
+            <DialogFooter>
+              <DialogClose
+                render={
+                  <Button variant="outline">
+                    Cancel <X data-icon={"inline-end"} />
+                  </Button>
+                }
+              />
+              <Button type="submit">
+                Submit <Check data-icon={"inline-end"} />
+              </Button>
+            </DialogFooter>
+            </FieldGroup>
+          </Form>
         </AppForm>
-        <DialogFooter></DialogFooter>
       </DialogContent>
     </Dialog>
   );
