@@ -7,5 +7,5 @@ export default function LoadTheme() {
   useEffect(() => {
     loadTheme();
   }, []);
-  return <></>;
+  return null;
 }

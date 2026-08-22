@@ -183,6 +183,7 @@ export default function ProductForm({
             label="Description"
             placeholder="Description"
             iconName="text-align-start"
+            multiline
           />
           <ImageInput name="images" label="Product Images" maxFiles={5} />
           <InputField
