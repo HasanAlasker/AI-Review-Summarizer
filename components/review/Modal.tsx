@@ -19,8 +19,12 @@ import { Form } from "formik";
 import { FieldGroup } from "../ui/field";
 import axios from "axios";
 import { toast } from "sonner";
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Spinner } from "../ui/spinner";
+import { ReviewWithRelations } from "@/types/reviewWithRel";
+import { useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
+import { buildOptimisticReview } from "@/lib/helper/reviews/buildOptimisticRev";
 
 const validationSchema = Yup.object({
   rating: Yup.number()
@@ -32,13 +36,16 @@ const validationSchema = Yup.object({
 interface Props {
   productId: string;
   variant?: "default" | "secondary" | "outline";
+  setReviews?: Dispatch<SetStateAction<ReviewWithRelations[]>>;
 }
 interface FormProps {
   rating: number;
   review: string;
 }
 
-export default function RatingModal({ productId, variant }: Props) {
+export default function RatingModal({ productId, variant, setReviews }: Props) {
+  const { data: session } = useSession();
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const initialValues = {
@@ -48,11 +55,27 @@ export default function RatingModal({ productId, variant }: Props) {
 
   const handleSubmit = async (values: FormProps) => {
     setLoading(true);
+    if (!session?.user) {
+      toast.error("You must login before!");
+      setLoading(false);
+      return;
+    }
+
+    setReviews?.((p) => [
+      buildOptimisticReview({
+        content: values.review,
+        rating: values.rating,
+        productId,
+        user: session?.user,
+      }),
+      ...p,
+    ]);
     try {
       const res = await axios.post(`/api/reviews/${productId}`, values);
       if (res.status === 201) {
         toast.success("Review posted successfully!");
         setOpen(false);
+        router.refresh();
       }
     } catch (error) {
       toast.error("Failed to submit review!");

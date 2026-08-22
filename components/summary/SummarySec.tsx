@@ -1,20 +1,22 @@
 "use client";
 import { Summary } from "@/lib/generated/prisma/client";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { Dispatch, SetStateAction, useEffect, useState } from "react";
 import RatingModal from "../review/Modal";
 import SkeletonCard from "./Skeleton";
 import SumBtn from "./SumBtn";
 import SummaryBox from "./Summary";
+import { ReviewWithRelations } from "@/types/reviewWithRel";
 
 interface Props {
   id: string;
+  setReviews?: Dispatch<SetStateAction<ReviewWithRelations[]>>;
 }
 export interface summaryResponse {
   summary: Summary | undefined;
 }
 
-export default function SummarySec({ id: productId }: Props) {
+export default function SummarySec({ id: productId, setReviews }: Props) {
   const [summary, setSummary] = useState<Summary>();
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState("");
@@ -59,7 +61,11 @@ export default function SummarySec({ id: productId }: Props) {
             setErr={setErr}
           />
         )}
-        <RatingModal productId={productId} variant="outline" />
+        <RatingModal
+          productId={productId}
+          variant="outline"
+          setReviews={setReviews}
+        />
       </div>
 
       {summary && !loading && (
