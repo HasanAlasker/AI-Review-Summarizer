@@ -19,11 +19,8 @@ import { usePathname, useSearchParams } from "next/navigation";
 export default function NavBar() {
   const isDark = useTheme((state) => state.isDark);
   const pathname = usePathname();
-  const searchParams = useSearchParams();
 
-  const callbackUrl = encodeURIComponent(
-    `${pathname}${searchParams.toString() ? `?${searchParams}` : ""}`,
-  );
+  const callbackUrl = encodeURIComponent(pathname);
 
   const { data: session, status } = useSession();
   const countItems = useCart((s) => s.totalItems);
