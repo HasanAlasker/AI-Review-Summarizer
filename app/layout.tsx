@@ -10,6 +10,7 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LoadCart from "./cart/LoadCart";
 import LoadOrders from "./admin/orders/LoadOrders";
+import { Suspense } from "react";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -54,7 +55,9 @@ export default function RootLayout({
         <AuthProvider>
           <TooltipProvider>
             <div className="min-h-svh flex flex-col gap-10 max-w-6xl mx-auto pb-10 lg:pb-20 px-5 lg:px-10">
-              <NavBar />
+              <Suspense fallback={null}>
+                <NavBar />
+              </Suspense>
               <main className="relative flex flex-col flex-1">
                 <div className="bg-grid-white fixed inset-0 -z-1"></div>
                 {children}
