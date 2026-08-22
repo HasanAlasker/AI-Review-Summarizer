@@ -82,6 +82,7 @@ export default function RatingModal({ productId, variant }: Props) {
           initialValues={initialValues}
           validationSchema={validationSchema}
           onSubmit={handleSubmit}
+          validateOnBlur={false}
         >
           <Form>
             <FieldGroup>

@@ -7,6 +7,7 @@ interface Props<T> {
   validationSchema?: object;
   onSubmit: (values: T, helpers: any) => void;
   enableReinitialize?: boolean;
+  validateOnBlur?: boolean;
 }
 
 function AppForm<T extends object>({
@@ -15,6 +16,7 @@ function AppForm<T extends object>({
   validationSchema,
   onSubmit,
   enableReinitialize,
+  validateOnBlur,
 }: Props<T>) {
   return (
     <Formik
@@ -22,6 +24,7 @@ function AppForm<T extends object>({
       validationSchema={validationSchema}
       onSubmit={onSubmit}
       enableReinitialize={enableReinitialize}
+      validateOnBlur={validateOnBlur ?? true}
     >
       {(formikProps) => (
         <>{typeof children === "function" ? children(formikProps) : children}</>
