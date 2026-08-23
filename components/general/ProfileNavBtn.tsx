@@ -38,10 +38,12 @@ export function ProfileNavBtn() {
             <User />
             Profile
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Truck />
-            Orders
-          </DropdownMenuItem>
+          <Link href="/orders">
+            <DropdownMenuItem>
+              <Truck />
+              Orders
+            </DropdownMenuItem>
+          </Link>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>

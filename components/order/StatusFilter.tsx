@@ -1,9 +1,7 @@
 "use client";
-import { useOrder } from "@/app/store/useOrder";
 import { OrderStatus } from "@/lib/generated/prisma/enums";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
-import { toast } from "sonner";
 import {
   Select,
   SelectContent,

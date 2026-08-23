@@ -1,3 +1,4 @@
+"use server";
 import { OrderStatus } from "@/lib/generated/prisma/client";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
@@ -12,6 +13,7 @@ import { Separator } from "../ui/separator";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { Eye } from "lucide-react";
+import { getServerSession } from "next-auth";
 
 interface OrderItem {
   quantity: number;
@@ -42,7 +44,7 @@ const statusStyles: Record<OrderStatus, string> = {
   CANCELLED: "bg-red-50 text-red-700 dark:bg-red-950 dark:text-red-300",
 };
 
-export default function Card({
+export default async function Card({
   orderId,
   userName,
   phone,
@@ -51,6 +53,9 @@ export default function Card({
   total,
   items,
 }: Props) {
+  const session = await getServerSession();
+  const isAdmin = session?.user.role === "admin";
+
   return (
     <ShadCard className="flex flex-col justify-between">
       <CardContent className="flex flex-col gap-4">
@@ -99,11 +104,13 @@ export default function Card({
           <p className="text-sm text-muted-foreground">Total</p>
           <p className="font-bold">${total.toFixed(2)}</p>
         </div>
-        <Link className={"self-end"} href={`/admin/orders/${orderId}`}>
-          <Button className={"px-3"}>
-            View <Eye data-icon={"inline-end"} />
-          </Button>
-        </Link>
+        {isAdmin && (
+          <Link className={"self-end"} href={`/admin/orders/${orderId}`}>
+            <Button className={"px-3"}>
+              View <Eye data-icon={"inline-end"} />
+            </Button>
+          </Link>
+        )}
       </CardFooter>
     </ShadCard>
   );
