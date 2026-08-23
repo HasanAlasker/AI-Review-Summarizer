@@ -6,8 +6,7 @@ export default function Loading() {
   return (
     <div className="flex flex-col gap-5">
       <div className="flex w-full items-center justify-between">
-        <Skeleton width={150} height={20} />
-        <Skeleton width={120} height={35} />
+        <Skeleton width={150} height={35} />
       </div>
       <Grid>
         <ProductSkeleton />

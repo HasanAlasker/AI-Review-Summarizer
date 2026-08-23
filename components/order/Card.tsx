@@ -1,4 +1,3 @@
-"use server";
 import { OrderStatus } from "@/lib/generated/prisma/client";
 import Image from "next/image";
 import { Badge } from "../ui/badge";
@@ -14,6 +13,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import { Eye } from "lucide-react";
 import { getServerSession } from "next-auth";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 interface OrderItem {
   quantity: number;
@@ -53,7 +53,7 @@ export default async function Card({
   total,
   items,
 }: Props) {
-  const session = await getServerSession();
+  const session = await getServerSession(authOptions);
   const isAdmin = session?.user.role === "admin";
 
   return (
