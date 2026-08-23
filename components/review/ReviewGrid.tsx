@@ -4,13 +4,19 @@ import Grid from "../general/Grid";
 import { ReviewWithRelations } from "@/types/reviewWithRel";
 import Card from "./Card";
 import SummarySec from "../summary/SummarySec";
+import { Summary } from "@/lib/generated/prisma/client";
 
 interface Props {
   productId: string;
+  serverSummary: Summary | null;
   reviews: ReviewWithRelations[];
 }
 
-export default function ReviewGrid({ productId, reviews }: Props) {
+export default function ReviewGrid({
+  productId,
+  serverSummary,
+  reviews,
+}: Props) {
   const [reviewList, setReviews] = useState(reviews);
 
   useEffect(() => {
@@ -19,7 +25,11 @@ export default function ReviewGrid({ productId, reviews }: Props) {
 
   return (
     <div className="flex flex-1 flex-col gap-10">
-      <SummarySec id={productId} setReviews={setReviews} />
+      <SummarySec
+        id={productId}
+        setReviews={setReviews}
+        serverSummary={serverSummary}
+      />
       <Grid>
         {reviewList.map((r) => (
           <Card

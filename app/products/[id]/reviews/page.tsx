@@ -12,14 +12,20 @@ export default async function page({ params }: Props) {
   const { id } = await params;
   const reviews = await prisma.review.findMany({
     where: { productId: id },
-    orderBy: {createdAt: 'desc'},
+    orderBy: { createdAt: "desc" },
     ...reviewWithRelations,
   });
 
+  const summary = await prisma.summary.findUnique({ where: { productId: id } });
+
   if (reviews.length === 0) return <EReviews productId={id} />;
 
-  return <ReviewGrid productId={id} reviews={reviews} />;
+  return (
+    <ReviewGrid productId={id} reviews={reviews} serverSummary={summary} />
+  );
 }
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Reviews",

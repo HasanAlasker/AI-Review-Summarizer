@@ -59,7 +59,7 @@ export async function POST(req: NextRequest, { params }: Props) {
 
     const savedSummary = await prisma.summary.upsert({
       where: { productId },
-      update: { content: summary },
+      update: { content: summary, createdAt: new Date() },
       create: { productId, content: summary, expiresAt: expiresIn },
     });
 

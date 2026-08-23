@@ -10,7 +10,7 @@ import { summaryResponse } from "./SummarySec";
 interface Props {
   productId: string;
   loading: boolean;
-  setSummary: Dispatch<SetStateAction<Summary | undefined>>;
+  setSummary: Dispatch<SetStateAction<Summary | null>>;
   setLoading: Dispatch<SetStateAction<boolean>>;
   setErr: Dispatch<SetStateAction<string>>;
 }
