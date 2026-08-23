@@ -38,12 +38,14 @@ export default function ViewProd({
         </div>
         <div className="flex flex-col justify-between gap-8 md:gap-15">
           <div className="flex flex-col gap-5 md:gap-10 h-full">
-            <h2 className="text-4xl text-left font-bold">{product?.name}</h2>
-            <p className="text-xl text-muted-foreground">
+            <h2 className="text-2xl md:text-4xl text-left font-bold">
+              {product?.name}
+            </h2>
+            <p className="text-md md:text-xl text-muted-foreground">
               {product?.description}
             </p>
-            <p className="text-md text-muted-foreground">
-              Category: {product.category.name}
+            <p className="text-sm md:text-md text-muted-foreground">
+              {product.category.name}
             </p>
 
             {product.stock > 0 ? (

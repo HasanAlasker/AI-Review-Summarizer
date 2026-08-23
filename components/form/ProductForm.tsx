@@ -128,7 +128,7 @@ export default function ProductForm({
 
       newImages.forEach((img) => URL.revokeObjectURL(img.previewUrl));
 
-      router.push("/products");
+      router.back();
 
       toast.success(
         mode === "edit"
