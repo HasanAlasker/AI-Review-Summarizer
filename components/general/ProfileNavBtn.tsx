@@ -34,10 +34,12 @@ export function ProfileNavBtn() {
       <DropdownMenuContent className="w-40" align="end">
         <DropdownMenuGroup>
           <DropdownMenuLabel>My Account</DropdownMenuLabel>
-          <DropdownMenuItem>
-            <User />
-            Profile
-          </DropdownMenuItem>
+          <Link href="/profile">
+            <DropdownMenuItem>
+              <User />
+              Profile
+            </DropdownMenuItem>
+          </Link>
           <Link href="/orders">
             <DropdownMenuItem>
               <Truck />
