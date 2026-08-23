@@ -1,5 +1,6 @@
 "use client";
 import { useCart } from "@/app/store/useCart";
+import { useOrder } from "@/app/store/useOrder";
 import { useTheme } from "@/app/store/useTheme";
 import { ButtonGroup } from "@/components/ui/button-group";
 import {
@@ -11,10 +12,10 @@ import {
   WalletCards,
 } from "lucide-react";
 import { useSession } from "next-auth/react";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import NavBtn from "./NavBtn";
-import { useOrder } from "@/app/store/useOrder";
-import { usePathname, useSearchParams } from "next/navigation";
+import { ProfileNavBtn } from "./ProfileNavBtn";
 
 export default function NavBar() {
   const isDark = useTheme((state) => state.isDark);
@@ -31,14 +32,28 @@ export default function NavBar() {
   const countOrders = useOrder((s) => s.countOrders);
   const [orders, setOrders] = useState(0);
 
+  const isUser = session?.user.role === "user";
+  const isAdmin = session?.user.role === "admin";
+
   useEffect(() => {
-    if (session?.user.role === "user") setItems(countItems);
+    if (isUser) setItems(countItems);
   }, [cartItems]);
 
   useEffect(() => {
-    if (session?.user.role === "admin") setOrders(countOrders);
+    if (isAdmin) setOrders(countOrders);
   }, [ordersInStore, session]);
 
+  const SignOutBtn = () => {
+    return isUser ? (
+      <ProfileNavBtn />
+    ) : (
+      <NavBtn
+        path="/api/auth/signout"
+        children={<LogOut color="red" />}
+        tooltip="Sign out"
+      />
+    );
+  };
   return (
     <nav className="z-50 flex w-full mx-auto justify-between py-4 lg:py-8 top-0 right-0 left-0 sticky bg-background/50 backdrop-blur-md self-start h-fit">
       <ButtonGroup>
@@ -52,7 +67,7 @@ export default function NavBar() {
             children={"Sign in"}
           />
         )}
-        {session?.user.role === "user" && (
+        {isUser && (
           <NavBtn
             path="/cart"
             children={<ShoppingCart />}
@@ -60,7 +75,7 @@ export default function NavBar() {
             badge={items > 0}
           />
         )}
-        {session?.user.role === "admin" && (
+        {isAdmin && (
           <NavBtn
             path="/admin/orders"
             children={<WalletCards />}
@@ -74,13 +89,7 @@ export default function NavBar() {
           children={!isDark ? <Moon /> : <Sun />}
           tooltip={isDark ? "Light theme" : "Dark theme"}
         />
-        {status === "authenticated" && (
-          <NavBtn
-            path="/api/auth/signout"
-            children={<LogOut color="red" />}
-            tooltip="Sign out"
-          />
-        )}
+        {status === "authenticated" && <SignOutBtn />}
       </ButtonGroup>
     </nav>
   );
