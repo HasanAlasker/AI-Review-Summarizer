@@ -139,25 +139,25 @@ export default function Filter({ categories }: Props) {
             <Label htmlFor="discount">Discounted</Label>
           </div>
 
+          <div className="flex items-center gap-2">
+            <Checkbox
+              id="limited"
+              checked={limited}
+              onCheckedChange={(v) => setLimited(v === true)}
+            />
+            <Label htmlFor="limited">Low stock</Label>
+          </div>
+
           {isAdmin && (
             <div className="flex items-center gap-2">
               <Checkbox
-                id="limited"
-                checked={limited}
-                onCheckedChange={(v) => setLimited(v === true)}
+                id="outOfStock"
+                checked={outOfStock}
+                onCheckedChange={(v) => setOutOfStock(v === true)}
               />
-              <Label htmlFor="limited">Low stock</Label>
+              <Label htmlFor="outOfStock">Out of stock</Label>
             </div>
           )}
-
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="outOfStock"
-              checked={outOfStock}
-              onCheckedChange={(v) => setOutOfStock(v === true)}
-            />
-            <Label htmlFor="outOfStock">Out of stock</Label>
-          </div>
         </div>
 
         <DialogFooter className="flex gap-2">
