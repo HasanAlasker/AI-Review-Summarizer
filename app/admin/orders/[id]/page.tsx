@@ -1,9 +1,10 @@
+import CustomerInfo from "@/components/order/CustomerInfo";
+import StatusSelect from "@/components/order/StatusDDL";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/prisma";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Separator } from "@/components/ui/separator";
-import StatusSelect from "@/components/order/StatusDDL";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -21,6 +22,21 @@ export default async function page({ params }: Props) {
   });
 
   if (!order) notFound();
+  const plainOrder = {
+    ...order,
+    total: Number(order.total),
+    items: order.items.map((i) => ({
+      ...i,
+      price: Number(i.price),
+      product: {
+        ...i.product,
+        price: Number(i.product.price),
+        discountPrice: i.product.discountPrice
+          ? Number(i.product.discountPrice)
+          : null,
+      },
+    })),
+  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,21 +50,7 @@ export default async function page({ params }: Props) {
         <StatusSelect orderId={order.id} currentStatus={order.status} />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Customer</CardTitle>
-        </CardHeader>
-        <CardContent className="flex flex-col gap-1 text-sm">
-          <p>{order.user.name}</p>
-          <p className="text-muted-foreground">{order.user.email}</p>
-          {order.user.phone && (
-            <p className="text-muted-foreground">{order.user.phone}</p>
-          )}
-          {order.user.street && (
-            <p className="text-muted-foreground">{order.user.street}</p>
-          )}
-        </CardContent>
-      </Card>
+      <CustomerInfo order={plainOrder} />
 
       <Card>
         <CardHeader>
