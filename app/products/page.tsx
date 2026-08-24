@@ -1,15 +1,15 @@
 import EProducts from "@/components/empty/EProducts";
-import AdminActions from "@/components/product/AdminActions";
+import ProductActions from "@/components/product/ProductActions";
 import ProductGrid from "@/components/product/ProductGrid";
+import { lowStock } from "@/constants/lowStock";
+import { Prisma } from "@/lib/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
-import ProductActions from "@/components/product/ProductActions";
-import { Prisma } from "@/lib/generated/prisma/client";
-import { lowStock } from "@/constants/lowStock";
 interface Props {
   searchParams: Promise<{
+    q: string;
     outOfStock?: string;
     category: string;
     price: string;
@@ -19,7 +19,8 @@ interface Props {
 }
 
 export default async function page({ searchParams }: Props) {
-  const { outOfStock, category, price, discount, limited } = await searchParams;
+  const { q, outOfStock, category, price, discount, limited } =
+    await searchParams;
   const showOutOfStock = outOfStock === "true";
   const showLimited = limited === "true";
   const discounted = discount === "true";
@@ -28,6 +29,13 @@ export default async function page({ searchParams }: Props) {
     isDeleted: false,
   };
 
+  if (q) {
+    where.OR = [
+      { name: { contains: q, mode: "insensitive" } },
+      { description: { contains: q, mode: "insensitive" } },
+    ];
+  }
+
   if (showOutOfStock) {
     where.stock = 0;
   } else if (showLimited) {
@@ -35,11 +43,10 @@ export default async function page({ searchParams }: Props) {
   } else {
     where.stock = { gt: 0 };
   }
-
+  
   if (discounted) {
     where.discountPrice = { not: null };
   }
-
   if (category) {
     where.category = { name: { equals: category, mode: "insensitive" } };
   }
@@ -71,7 +78,6 @@ export default async function page({ searchParams }: Props) {
 
   return (
     <div className="flex flex-col gap-5">
-      {session?.user.role === "admin" && <AdminActions />}
       <ProductActions categories={categories} />
       <ProductGrid initialProducts={plainProducts} isAdmin={isAdmin} />
     </div>

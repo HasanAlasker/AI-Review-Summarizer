@@ -54,7 +54,7 @@ export default function Filter({ categories }: Props) {
   }));
 
   const applyFilters = () => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams.toString());
 
     if (outOfStock) params.set("outOfStock", "true");
     if (limited) params.set("limited", "true");
@@ -67,12 +67,19 @@ export default function Filter({ categories }: Props) {
   };
 
   const resetFilters = () => {
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("outOfStock");
+    params.delete("limited");
+    params.delete("discount");
+    params.delete("category");
+    params.delete("price");
+
     setOutOfStock(false);
     setLimited(false);
     setDiscount(false);
     setCategory("");
     setPrice("");
-    router.push(pathname);
+    router.push(`${pathname}?${params.toString()}`);
     setOpen(false);
   };
 

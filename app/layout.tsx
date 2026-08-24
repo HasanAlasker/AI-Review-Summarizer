@@ -53,10 +53,10 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <TooltipProvider>
-            <div className="min-h-svh flex flex-col gap-10 max-w-6xl min-[1700px]:max-w-7xl mx-auto pb-10 lg:pb-20 px-5 lg:px-10">
+            <div className="min-h-svh flex flex-col gap-10 max-w-6xl min-[1600px]:max-w-7xl mx-auto pb-10 lg:pb-20 px-5 lg:px-10">
               <NavBar />
               <main className="relative flex flex-col flex-1">
-                <div className="bg-grid-white fixed inset-0 -z-1"></div>
+                {/* <div className="bg-grid-white fixed inset-0 -z-1"></div> */}
                 {children}
                 <LoadTheme />
                 <LoadCart />
