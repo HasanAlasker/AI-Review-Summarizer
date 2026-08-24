@@ -1,27 +1,22 @@
 "use client";
-import { useRouter, useSearchParams, usePathname } from "next/navigation";
-import { useState } from "react";
+import { PriceFilter } from "@/constants/priceFilter";
+import { SelectOption } from "@/types/selectOptions";
+import { Funnel } from "lucide-react";
+import { useSession } from "next-auth/react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { useEffect, useState } from "react";
+import FilterCheckbox from "../form/FilterCheckbox";
+import FilterSelect from "../form/FilterSelect";
+import { Button } from "../ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-  DialogFooter,
 } from "../ui/dialog";
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
-import { Label } from "../ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-import { Funnel } from "lucide-react";
-import { useSession } from "next-auth/react";
-import { PriceFilter } from "@/constants/priceFilter";
+import { FieldGroup } from "../ui/field";
 
 interface Props {
   categories: {
@@ -37,17 +32,26 @@ export default function Filter({ categories }: Props) {
   const { data: session } = useSession();
   const isAdmin = session?.user.role === "admin";
 
-  const [outOfStock, setOutOfStock] = useState(
-    searchParams.get("outOfStock") === "true",
-  );
-  const [limited, setLimited] = useState(
-    searchParams.get("limited") === "true",
-  );
-  const [discount, setDiscount] = useState(
-    searchParams.get("discount") === "true",
-  );
-  const [category, setCategory] = useState(searchParams.get("category") ?? "");
-  const [price, setPrice] = useState(searchParams.get("price") ?? "");
+  const [open, setOpen] = useState(false);
+  const [outOfStock, setOutOfStock] = useState(false);
+  const [limited, setLimited] = useState(false);
+  const [discount, setDiscount] = useState(false);
+  const [category, setCategory] = useState("");
+  const [price, setPrice] = useState("");
+
+  useEffect(() => {
+    if (!open) return;
+    setOutOfStock(searchParams.get("outOfStock") === "true");
+    setLimited(searchParams.get("limited") === "true");
+    setDiscount(searchParams.get("discount") === "true");
+    setCategory(searchParams.get("category") ?? "");
+    setPrice(searchParams.get("price") ?? "");
+  }, [open, searchParams]);
+
+  const categoryItems: SelectOption[] = categories.map((c) => ({
+    label: c.name,
+    value: c.name,
+  }));
 
   const applyFilters = () => {
     const params = new URLSearchParams();
@@ -59,6 +63,7 @@ export default function Filter({ categories }: Props) {
     if (price) params.set("price", price);
 
     router.push(`${pathname}?${params.toString()}`);
+    setOpen(false);
   };
 
   const resetFilters = () => {
@@ -68,15 +73,11 @@ export default function Filter({ categories }: Props) {
     setCategory("");
     setPrice("");
     router.push(pathname);
+    setOpen(false);
   };
 
-  const categoryItems = categories.map((c) => ({
-    label: c.name,
-    value: c.name,
-  }));
-
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
         render={
           <Button variant={"secondary"}>
@@ -89,76 +90,44 @@ export default function Filter({ categories }: Props) {
           <DialogTitle>Search Filter</DialogTitle>
         </DialogHeader>
 
-        <div className="flex flex-col gap-5 py-2">
-          <div className="flex flex-col gap-2">
-            <Label>Category</Label>
-            <Select
-              items={categoryItems}
-              value={category}
-              onValueChange={(value) => setCategory(value ?? "")}
-            >
-              <SelectTrigger className={"w-full"}>
-                <SelectValue placeholder="All categories" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map((c) => (
-                  <SelectItem key={c.id} value={c.name}>
-                    {c.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+        <FieldGroup>
+          <FilterSelect
+            label="Category"
+            placeholder="All categories"
+            items={categoryItems}
+            value={category}
+            onChange={setCategory}
+          />
 
-          <div className="flex flex-col gap-2">
-            <Label>Sort by</Label>
-            <Select
-              items={PriceFilter}
-              value={price}
-              onValueChange={(value) => setPrice(value ?? "")}
-            >
-              <SelectTrigger className={"w-full"}>
-                <SelectValue placeholder="Newest" />
-              </SelectTrigger>
-              <SelectContent>
-                {PriceFilter.map((pf) => (
-                  <SelectItem key={pf.label} value={pf.value}>
-                    {pf.label}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
+          <FilterSelect
+            label="Sort by"
+            placeholder="Newest"
+            items={PriceFilter}
+            value={price}
+            onChange={setPrice}
+          />
 
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="discount"
-              checked={discount}
-              onCheckedChange={(v) => setDiscount(v === true)}
-            />
-            <Label htmlFor="discount">Discounted</Label>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <Checkbox
-              id="limited"
-              checked={limited}
-              onCheckedChange={(v) => setLimited(v === true)}
-            />
-            <Label htmlFor="limited">Low stock</Label>
-          </div>
-
+          <FilterCheckbox
+            id="discount"
+            label="Discounted"
+            checked={discount}
+            onChange={setDiscount}
+          />
+          <FilterCheckbox
+            id="limited"
+            label="Low stock"
+            checked={limited}
+            onChange={setLimited}
+          />
           {isAdmin && (
-            <div className="flex items-center gap-2">
-              <Checkbox
-                id="outOfStock"
-                checked={outOfStock}
-                onCheckedChange={(v) => setOutOfStock(v === true)}
-              />
-              <Label htmlFor="outOfStock">Out of stock</Label>
-            </div>
+            <FilterCheckbox
+              id="outOfStock"
+              label="Out of stock"
+              checked={outOfStock}
+              onChange={setOutOfStock}
+            />
           )}
-        </div>
+        </FieldGroup>
 
         <DialogFooter className="flex gap-2">
           <Button variant="outline" onClick={resetFilters}>
