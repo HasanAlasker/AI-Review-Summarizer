@@ -42,7 +42,7 @@ export default async function ProfilePage() {
   const user = session.user;
 
   return (
-    <div className="flex w-full flex-col justify-center">
+    <div className="m-auto flex w-full flex-col justify-center">
       <Card>
         <CardHeader className="flex flex-col items-center gap-4 text-center sm:flex-row sm:items-center sm:text-left">
           <Avatar className="h-20 w-20">
