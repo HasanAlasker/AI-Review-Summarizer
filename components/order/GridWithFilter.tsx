@@ -1,9 +1,8 @@
-import React from "react";
+import { OrderStatus } from "@/lib/generated/prisma/enums";
+import { OrderWithRelations } from "@/types/orderWithRel";
 import EOrders from "../empty/EOrders";
 import OrderGrid from "./OrderGrid";
 import StatusFilter from "./StatusFilter";
-import { OrderStatus } from "@/lib/generated/prisma/enums";
-import { OrderWithRelations } from "@/types/orderWithRel";
 
 interface Props {
   statusFilter: OrderStatus;

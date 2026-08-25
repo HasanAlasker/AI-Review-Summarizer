@@ -56,7 +56,7 @@ export default function RatingModal({ productId, variant, setReviews }: Props) {
   const handleSubmit = async (values: FormProps) => {
     setLoading(true);
     if (!session?.user) {
-      toast.error("You must login before!");
+      toast.error("You must login first!");
       setLoading(false);
       return;
     }

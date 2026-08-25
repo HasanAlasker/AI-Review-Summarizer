@@ -1,5 +1,8 @@
 "use client";
+import { SerializedOrder } from "@/types/orderWithRel";
 import { Check, Clipboard } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -8,9 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../ui/card";
-import { OrderWithRelations, SerializedOrder } from "@/types/orderWithRel";
-import { useState } from "react";
-import { toast } from "sonner";
 
 interface Props {
   order: SerializedOrder;
