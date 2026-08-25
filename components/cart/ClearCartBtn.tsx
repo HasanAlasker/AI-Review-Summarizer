@@ -1,4 +1,3 @@
-import loading from "@/app/products/loading";
 import { ShoppingBasket } from "lucide-react";
 import { Spinner } from "../ui/spinner";
 import { useCart } from "@/app/store/useCart";
