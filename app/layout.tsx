@@ -10,6 +10,7 @@ import { Toaster } from "sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import LoadCart from "./cart/LoadCart";
 import LoadOrders from "./admin/orders/LoadOrders";
+import Footer from "@/components/general/Footer";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -63,6 +64,7 @@ export default function RootLayout({
                 <LoadOrders />
                 <ScrollToTop />
               </main>
+              <Footer />
               <Toaster />
             </div>
           </TooltipProvider>
