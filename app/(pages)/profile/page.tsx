@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Info, Mail, MapPin, Phone } from "lucide-react";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+import { authOptions } from "../../api/auth/[...nextauth]/route";
 import { getServerSession } from "next-auth/next";
 
 function ProfileRow({

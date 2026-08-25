@@ -1,16 +1,15 @@
+import AuthProvider from "@/components/auth/AuthProvider";
+import LoadTheme from "@/components/general/LoadTheme";
+import NavBar from "@/components/general/NavBar";
+import ScrollToTop from "@/components/general/ScrollToTop";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
 import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
-import "./globals.css";
-import LoadTheme from "@/components/general/LoadTheme";
-import ScrollToTop from "@/components/general/ScrollToTop";
-import NavBar from "@/components/general/NavBar";
-import AuthProvider from "@/components/auth/AuthProvider";
 import { Toaster } from "sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
-import LoadCart from "./cart/LoadCart";
-import LoadOrders from "./admin/orders/LoadOrders";
-import Footer from "@/components/general/Footer";
+import LoadOrders from "./(pages)/admin/orders/LoadOrders";
+import LoadCart from "./(pages)/cart/LoadCart";
+import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -54,7 +53,7 @@ export default function RootLayout({
       <body>
         <AuthProvider>
           <TooltipProvider>
-            <div className="min-h-svh flex flex-col gap-10 max-w-6xl min-[1600px]:max-w-7xl mx-auto pb-10 lg:pb-20 px-5 lg:px-10">
+            <div className="min-h-svh flex flex-col gap-10 max-w-6xl min-[1600px]:max-w-7xl mx-auto px-5 lg:px-10">
               <NavBar />
               <main className="relative flex flex-col flex-1">
                 {/* <div className="bg-grid-white fixed inset-0 -z-1"></div> */}
@@ -64,7 +63,6 @@ export default function RootLayout({
                 <LoadOrders />
                 <ScrollToTop />
               </main>
-              <Footer />
               <Toaster />
             </div>
           </TooltipProvider>

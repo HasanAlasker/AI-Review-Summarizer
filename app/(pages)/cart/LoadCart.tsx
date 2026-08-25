@@ -1,7 +1,7 @@
 "use client";
 import { useSession } from "next-auth/react";
 import { useEffect } from "react";
-import { useCart } from "../store/useCart";
+import { useCart } from "../../store/useCart";
 
 export default function LoadCart() {
   const hydrate = useCart((s) => s.hydrate);

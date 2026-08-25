@@ -37,7 +37,7 @@ export default function Footer() {
   if (pathname === "/") return null;
   const year = new Date().getFullYear();
   return (
-    <Card className="mt-10 md:px-10 md:py-15 md:gap-10">
+    <Card className="md:px-10 md:py-15 md:gap-10">
       <CardHeader className="flex flex-col gap-8 items-center md:flex-row md:justify-between md:items-start md:gap-12 ">
         <div className="flex flex-col gap-5 max-w-lg md:max-w-md">
           <div className="flex flex-col gap-2 w-fit">
@@ -104,9 +104,11 @@ export default function Footer() {
         <p>© {year} Matjr - All rights reserved</p>
         <p className="text text-xs">
           Website developed by{" "}
-          <Button variant={"link"} className={"pl-1"}>
-            Alasker Technologies
-          </Button>
+          <a target="_blank" href={"https://alasker.dev"}>
+            <Button variant={"link"} className={"pl-1"}>
+              Alasker Technologies
+            </Button>
+          </a>
         </p>
       </CardFooter>
     </Card>

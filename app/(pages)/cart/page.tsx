@@ -1,6 +1,6 @@
 "use client";
 import ECart from "@/components/empty/ECart";
-import { useCart } from "../store/useCart";
+import { useCart } from "../../store/useCart";
 import Grid from "@/components/general/Grid";
 import Card from "@/components/cart/Card";
 import ClearCartBtn from "@/components/cart/ClearCartBtn";
