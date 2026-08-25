@@ -1,14 +1,14 @@
 "use client";
-import { Card, CardFooter, CardHeader } from "../ui/card";
-import icon from "../../public/icon.png";
 import Image from "next/image";
-import { Button } from "../ui/button";
-import { MdOutlineEmail, MdOutlineWhatsapp } from "react-icons/md";
-import { Separator } from "../ui/separator";
-import { Input } from "../ui/input";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
+import { MdOutlineEmail, MdOutlineWhatsapp } from "react-icons/md";
 import { toast } from "sonner";
+import icon from "../../public/icon.png";
+import { Button } from "../ui/button";
+import { Card, CardFooter, CardHeader } from "../ui/card";
+import { Input } from "../ui/input";
+import { Separator } from "../ui/separator";
 import { Spinner } from "../ui/spinner";
 
 export default function Footer() {
