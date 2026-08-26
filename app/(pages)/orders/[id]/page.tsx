@@ -1,6 +1,8 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
+import { statusStyles } from "@/components/order/Card";
 import CustomerInfo from "@/components/order/CustomerInfo";
 import StatusSelect from "@/components/order/StatusDDL";
+import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/prisma";
@@ -56,6 +58,7 @@ export default async function page({ params }: Props) {
             Placed {order.createdAt.toLocaleDateString()}
           </p>
         </div>
+          <Badge className={statusStyles[order.status]}>{order.status}</Badge>
       </div>
 
       <CustomerInfo order={plainOrder} />

@@ -34,7 +34,7 @@ interface Props {
   items: OrderItem[];
 }
 
-const statusStyles: Record<OrderStatus, string> = {
+export const statusStyles: Record<OrderStatus, string> = {
   PENDING:
     "bg-yellow-50 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
   PAID: "bg-blue-50 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
