@@ -1,11 +1,16 @@
 "use server";
-
 import { getServerSession } from "next-auth";
 import { authOptions } from "../api/auth/[...nextauth]/route";
 import { prisma } from "@/lib/prisma";
+import {
+  orderWithRelations,
+  SerializedOrder,
+  serializeOrder,
+} from "@/types/orderWithRel";
+import { EmailClient } from "@/lib/sendEmail";
 
 type PlaceOrderResult =
-  | { success: true; order: { id: string; total: number } }
+  | { success: true; order: SerializedOrder }
   | { success: false; message: string };
 
 export const placeOrder = async (): Promise<PlaceOrderResult> => {
@@ -53,8 +58,6 @@ export const placeOrder = async (): Promise<PlaceOrderResult> => {
 
   try {
     const order = await prisma.$transaction(async (tx) => {
-      // Re-check inside the transaction too — stock could've changed
-      // between the check above and now (race condition window)
       const failed: string[] = [];
 
       for (const item of cart.items) {
@@ -84,19 +87,27 @@ export const placeOrder = async (): Promise<PlaceOrderResult> => {
             })),
           },
         },
-        include: { items: true },
+        ...orderWithRelations,
       });
 
       await tx.cartItem.deleteMany({ where: { cartId: cart.id } });
       return newOrder;
     });
 
-    return {
-      success: true,
-      order: { id: order.id, total: Number(order.total) },
-    };
+    const result = { success: true as const, order: serializeOrder(order) };
+
+    try {
+      await EmailClient.OrderConfirmation(
+        result.order,
+        `${process.env.NEXTAUTH_URL}/orders/${result.order.id}`,
+        // "https://matjr.alasker.dev/icon.png",
+      );
+    } catch (err) {
+      console.error("Failed to send confirmation email:", err);
+    }
+
+    return result;
   } catch (error) {
-    // Log the real error server-side (this DOES show up in your server logs / Vercel logs)
     console.error("placeOrder failed:", error);
     const message =
       error instanceof Error ? error.message : "Failed to place order";

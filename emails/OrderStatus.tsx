@@ -101,9 +101,7 @@ export default function OrderStatusUpdate({
               {logoUrl ? (
                 <Img src={logoUrl} alt="Logo" height="32" className="mb-1" />
               ) : (
-                <Text className="text-white text-lg font-bold m-0">
-                  Your Store
-                </Text>
+                <Text className="text-white text-lg font-bold m-0">Matjr</Text>
               )}
             </Section>
 
