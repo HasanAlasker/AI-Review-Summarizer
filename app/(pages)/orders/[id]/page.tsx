@@ -27,10 +27,10 @@ export default async function page({ params }: Props) {
     },
   });
 
-  if (!session) {
-    return notFound(); // go to signin instead
-  }
-  if (session.user.id !== order?.userId) return notFound();
+  // if (!session) {
+  //   return notFound(); // go to signin instead
+  // }
+  // if (session.user.id !== order?.userId) return notFound();
 
   if (!order) notFound();
   const plainOrder = {
