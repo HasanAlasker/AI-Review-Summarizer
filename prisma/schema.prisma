@@ -160,3 +160,10 @@ model Summary {
   productId String   @unique
   product   Product  @relation(fields: [productId], references: [id])
 }
+
+model Subscription {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  isDeleted Boolean  @default(false)
+}
