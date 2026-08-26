@@ -7,7 +7,7 @@ import {
   CardTitle,
   Card as ShadCard,
 } from "../ui/card";
-import Footer from "./CardFooter";
+import Stepper from "./Stepper";
 
 export default function Card({ id, productId, quantity, product }: CartItem) {
   return (
@@ -37,7 +37,7 @@ export default function Card({ id, productId, quantity, product }: CartItem) {
           </CardDescription>
         </div>
       </CardContent>
-      <Footer productId={productId} quantity={quantity} stock={product.stock} />
+      <Stepper productId={productId} quantity={quantity} stock={product.stock} />
     </ShadCard>
   );
 }

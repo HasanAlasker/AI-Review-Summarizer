@@ -9,9 +9,15 @@ interface Props {
   productId: string;
   quantity: number;
   stock: number;
+  hideDelete?: boolean;
 }
 
-export default function Footer({ quantity, productId, stock }: Props) {
+export default function Stepper({
+  quantity,
+  productId,
+  stock,
+  hideDelete = false,
+}: Props) {
   const removeItem = useCart((s) => s.removeItem);
   const updateQuantity = useCart((s) => s.updateQuantity);
 
@@ -53,11 +59,17 @@ export default function Footer({ quantity, productId, stock }: Props) {
   return (
     <CardFooter>
       <div className="flex w-full justify-between">
-        <Button variant={"destructive"} onClick={handleRemove}>
-          <Trash2 />
-        </Button>
+        {!hideDelete && (
+          <Button variant={"destructive"} onClick={handleRemove}>
+            <Trash2 />
+          </Button>
+        )}
         <div className="flex gap-2 items-center">
-          <Button variant={"outline"} onClick={handleDec} disabled={localQty === 1}>
+          <Button
+            variant={"outline"}
+            onClick={handleDec}
+            disabled={localQty === 1}
+          >
             <Minus />
           </Button>
           <p>{localQty}</p>

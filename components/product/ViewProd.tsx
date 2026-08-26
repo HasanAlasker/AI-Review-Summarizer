@@ -77,7 +77,11 @@ export default function ViewProd({
               </Button>
             </Link>
           </div>
-          <AddToCartBtn productId={id} outOfStock={product.stock === 0} />
+          <AddToCartBtn
+            productId={id}
+            outOfStock={product.stock === 0}
+            stock={product.stock}
+          />
         </div>
       </div>
     </div>
