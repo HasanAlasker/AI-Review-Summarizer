@@ -41,7 +41,12 @@ export const EmailClient = {
       to: order.user.email!,
       subject: "Order status update",
       react: (
-        <OrderStatusUpdate order={order} {...tracking} logoUrl={logoUrl} />
+        <OrderStatusUpdate
+          order={order}
+          {...tracking}
+          logoUrl={logoUrl}
+          trackingUrl={tracking?.trackingUrl}
+        />
       ),
     });
   },

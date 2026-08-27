@@ -1,5 +1,6 @@
 import {
   Body,
+  Button,
   Column,
   Container,
   Head,
@@ -173,6 +174,17 @@ export default function OrderStatusUpdate({
                 </Section>
               </>
             ) : null}
+
+            {trackingUrl && (
+              <Section className="px-8 py-6 text-center">
+                <Button
+                  href={trackingUrl}
+                  className="bg-black text-white text-sm font-medium px-6 py-3 rounded-md box-border"
+                >
+                  View your order
+                </Button>
+              </Section>
+            )}
 
             <Hr className="border-gray-200 mx-8 w-auto" />
 
