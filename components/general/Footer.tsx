@@ -39,7 +39,7 @@ export default function Footer() {
   const year = new Date().getFullYear();
   return (
     <Card className="md:px-10 md:py-15 md:gap-10">
-      <CardHeader className="flex flex-col items-center flex-1 gap-8 md:flex-row md:gap-12 lg:items-stretch">
+      <CardHeader className="flex flex-col items-center justify-around flex-1 gap-8 md:flex-row md:gap-12 lg:items-stretch">
         <div className="flex flex-col gap-5 max-w-lg md:max-w-md">
           <div className="flex flex-col gap-2 w-fit">
             <Image
@@ -86,7 +86,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="flex flex-1 flex-col justify-between gap-5 max-w-lg lg:min-w-md lg:min-h-full">
+        <div className="flex flex-1 flex-col justify-between gap-5 max-w-lg md:max-w-md lg:min-h-full">
           <div className="flex flex-col gap-5">
             <h4 className="text-lg font-bold">Stay in the loop</h4>
             <p className="text-chart-3 ">
