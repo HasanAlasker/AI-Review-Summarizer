@@ -7,8 +7,11 @@ import { prisma } from "@/lib/prisma";
 import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { PaginationComp } from "@/components/general/Pagination";
 interface Props {
   searchParams: Promise<{
+    page: string;
+    pageSize?: string;
     q: string;
     outOfStock?: string;
     category: string;
@@ -19,8 +22,16 @@ interface Props {
 }
 
 export default async function page({ searchParams }: Props) {
-  const { q, outOfStock, category, price, discount, limited } =
-    await searchParams;
+  const {
+    page = 1,
+    pageSize = 1,
+    q,
+    outOfStock,
+    category,
+    price,
+    discount,
+    limited,
+  } = await searchParams;
   const showOutOfStock = outOfStock === "true";
   const showLimited = limited === "true";
   const discounted = discount === "true";
@@ -43,7 +54,7 @@ export default async function page({ searchParams }: Props) {
   } else {
     where.stock = { gt: 0 };
   }
-  
+
   if (discounted) {
     where.discountPrice = { not: null };
   }
@@ -51,6 +62,7 @@ export default async function page({ searchParams }: Props) {
     where.category = { name: { equals: category, mode: "insensitive" } };
   }
 
+  const count = await prisma.product.count({ where });
   const products = await prisma.product.findMany({
     where,
     orderBy:
@@ -59,9 +71,13 @@ export default async function page({ searchParams }: Props) {
         : price === "desc"
           ? { price: "desc" }
           : { createdAt: "desc" },
+    skip: (Number(page) - 1) * Number(pageSize ?? 10),
+    take: Number(pageSize),
     include: { images: true, category: true },
   });
 
+  const currentPage = Math.max(1, Number(page) || 1);
+  const totalPages = Math.max(1, Math.ceil(count / Number(pageSize)));
   const categories = await prisma.category.findMany();
 
   const session = await getServerSession(authOptions);
@@ -80,6 +96,11 @@ export default async function page({ searchParams }: Props) {
     <div className="flex flex-col gap-5">
       <ProductActions categories={categories} />
       <ProductGrid initialProducts={plainProducts} isAdmin={isAdmin} />
+      <PaginationComp
+        searchParams={await searchParams}
+        currentPage={currentPage}
+        totalPages={totalPages}
+      />
     </div>
   );
 }
