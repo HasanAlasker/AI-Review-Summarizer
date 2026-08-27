@@ -24,7 +24,7 @@ interface Props {
 export default async function page({ searchParams }: Props) {
   const {
     page = 1,
-    pageSize = 1,
+    pageSize = 10,
     q,
     outOfStock,
     category,

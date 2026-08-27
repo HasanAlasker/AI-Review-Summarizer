@@ -35,7 +35,8 @@ export function PaginationComp({
 
   // simple windowing: show first, last, current +/-1, ellipsis elsewhere
   const visible = pages.filter(
-    (p) => p === 1 || p === totalPages || Math.abs(p - currentPage) <= 1,
+    (p) => p === 1 || p === totalPages || p === currentPage
+    //  || Math.abs(p - currentPage) <= 1,
   );
 
   return (
