@@ -40,7 +40,7 @@ export function PaginationComp({
   );
 
   return (
-    <Pagination>
+    <Pagination className="md:justify-end">
       <PaginationContent>
         <PaginationItem>
           <PaginationPrevious
