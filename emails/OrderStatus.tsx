@@ -84,7 +84,7 @@ export default function OrderStatusUpdate({
   carrier,
   estimatedDelivery,
   logoUrl,
-  supportEmail = "support@example.com",
+  supportEmail = "noreply@alasker.dev",
 }: OrderStatusUpdateTemplateProps) {
   const copy = STATUS_COPY[order.status];
   const { user } = order;

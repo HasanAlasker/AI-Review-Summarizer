@@ -39,7 +39,7 @@ export default function OrderConfirmation({
   orderUrl,
   currency = "$",
   logoUrl,
-  supportEmail = "support@example.com",
+  supportEmail = "noreply@alasker.dev",
 }: OrderConfirmationTemplateProps) {
   const { user } = order;
 
