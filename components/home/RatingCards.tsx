@@ -13,7 +13,7 @@ export default function RatingCards({ rating, content, user }: Props) {
     <Card className="[--card-spacing:--spacing(4)]">
       <CardHeader>
         <CardTitle className="flex gap-2 justify-center items-center">
-          <p className="text-sm text-gray-600">{user}</p>
+          <p className="text-sm text-gray-600 dark:text-gray-400">{user}</p>
           <div className="flex">
             {Array.from({ length: 5 }).map((_, i) => (
               <Star

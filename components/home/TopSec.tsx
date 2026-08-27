@@ -19,7 +19,7 @@ export default function TopSec() {
         distilled into a single, honest summary in seconds.
       </p>
       <Link href={"/products"}>
-        <Button className={"mt-5 lg:mt-10 lg:text-lg lg:py-6 lg:px-4"}>
+        <Button size={"lg"} className={"mt-5 lg:mt-10 lg:text-lg lg:py-6 lg:px-4"}>
           View Products
           <ArrowRight className="lg:size-6" />
         </Button>
