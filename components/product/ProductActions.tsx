@@ -1,15 +1,10 @@
-import React from "react";
+import { prisma } from "@/lib/prisma";
 import Filter from "./Filter";
 import { SearchBox } from "./Search";
 
-interface Props {
-  categories: {
-    id: string;
-    name: string;
-  }[];
-}
+export default async function ProductActions() {
+  const categories = await prisma.category.findMany();
 
-export default function ProductActions({ categories }: Props) {
   return (
     <div className="flex w-full justify-between">
       <SearchBox />

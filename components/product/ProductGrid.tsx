@@ -6,6 +6,7 @@ import type {
   Product,
   Image as ImageModel,
 } from "@/lib/generated/prisma/client";
+import { useSession } from "next-auth/react";
 
 type ProductWithImages = Omit<Product, "price" | "discountPrice"> & {
   price: number;
@@ -16,12 +17,13 @@ type ProductWithImages = Omit<Product, "price" | "discountPrice"> & {
 
 export default function ProductGrid({
   initialProducts,
-  isAdmin,
 }: {
   initialProducts: ProductWithImages[];
-  isAdmin: boolean;
 }) {
   const [products, setProducts] = useState(initialProducts);
+
+  const { data: session } = useSession();
+  const isAdmin = session?.user.role === "admin";
 
   useEffect(() => {
     setProducts(initialProducts);

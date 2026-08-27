@@ -3,6 +3,7 @@ import StatusSelect from "@/components/order/StatusDDL";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/prisma";
+import { serializeOrder } from "@/types/orderWithRel";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 
@@ -22,21 +23,6 @@ export default async function page({ params }: Props) {
   });
 
   if (!order) notFound();
-  const plainOrder = {
-    ...order,
-    total: Number(order.total),
-    items: order.items.map((i) => ({
-      ...i,
-      price: Number(i.price),
-      product: {
-        ...i.product,
-        price: Number(i.product.price),
-        discountPrice: i.product.discountPrice
-          ? Number(i.product.discountPrice)
-          : null,
-      },
-    })),
-  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -50,7 +36,7 @@ export default async function page({ params }: Props) {
         <StatusSelect orderId={order.id} currentStatus={order.status} />
       </div>
 
-      <CustomerInfo order={plainOrder} />
+      <CustomerInfo order={serializeOrder(order)} />
 
       <Card>
         <CardHeader>

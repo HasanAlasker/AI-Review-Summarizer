@@ -24,7 +24,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: { default: "Review Sum", template: "%s | Review Sum" },
+  title: { default: "Matjr", template: "%s | Matjr" },
   description:
     "Instead of scrolling through pages of reviews, get the last ten distilled into a single, honest summary in seconds.",
 };

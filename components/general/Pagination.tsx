@@ -7,12 +7,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from "@/components/ui/pagination";
-
-interface Props {
-  currentPage: number;
-  totalPages: number;
-  searchParams: Record<string, string | undefined>;
-}
+import { PaginationProps } from "@/types/pagination";
 
 function buildHref(
   page: number,
@@ -30,12 +25,12 @@ export function PaginationComp({
   currentPage,
   totalPages,
   searchParams,
-}: Props) {
+}: PaginationProps) {
   const pages = Array.from({ length: totalPages }, (_, i) => i + 1);
 
   // simple windowing: show first, last, current +/-1, ellipsis elsewhere
   const visible = pages.filter(
-    (p) => p === 1 || p === totalPages || p === currentPage
+    (p) => p === 1 || p === totalPages || p === currentPage,
     //  || Math.abs(p - currentPage) <= 1,
   );
 

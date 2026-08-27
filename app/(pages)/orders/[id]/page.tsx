@@ -1,15 +1,14 @@
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { statusStyles } from "@/components/order/Card";
 import CustomerInfo from "@/components/order/CustomerInfo";
-import StatusSelect from "@/components/order/StatusDDL";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/prisma";
+import { serializeOrder } from "@/types/orderWithRel";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import { toast } from "sonner";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -33,21 +32,6 @@ export default async function page({ params }: Props) {
   // if (session.user.id !== order?.userId) return notFound();
 
   if (!order) notFound();
-  const plainOrder = {
-    ...order,
-    total: Number(order.total),
-    items: order.items.map((i) => ({
-      ...i,
-      price: Number(i.price),
-      product: {
-        ...i.product,
-        price: Number(i.product.price),
-        discountPrice: i.product.discountPrice
-          ? Number(i.product.discountPrice)
-          : null,
-      },
-    })),
-  };
 
   return (
     <div className="flex flex-col gap-6">
@@ -58,10 +42,10 @@ export default async function page({ params }: Props) {
             Placed {order.createdAt.toLocaleDateString()}
           </p>
         </div>
-          <Badge className={statusStyles[order.status]}>{order.status}</Badge>
+        <Badge className={statusStyles[order.status]}>{order.status}</Badge>
       </div>
 
-      <CustomerInfo order={plainOrder} />
+      <CustomerInfo order={serializeOrder(order)} />
 
       <Card>
         <CardHeader>
