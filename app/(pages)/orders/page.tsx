@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { orderWithRelations } from "@/types/orderWithRel";
 import { getServerSession } from "next-auth";
 import { authOptions } from "../../api/auth/[...nextauth]/route";
+import { Metadata } from "next";
 
 interface Props {
   searchParams: Promise<{ status?: OrderStatus }>;
@@ -25,3 +26,7 @@ export default async function page({ searchParams }: Props) {
     <GridWithFilter orders={orders} statusFilter={statusFilter ?? "PENDING"} />
   );
 }
+
+export const metadata: Metadata = {
+  title: "Orders",
+};

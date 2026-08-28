@@ -10,6 +10,7 @@ import { Input } from "../ui/input";
 import { Separator } from "../ui/separator";
 import { Spinner } from "../ui/spinner";
 import { subscribe } from "@/app/actions/subscribe";
+import Link from "next/link";
 
 export default function Footer() {
   const [email, setEmail] = useState("");
@@ -111,13 +112,17 @@ export default function Footer() {
           </div>
 
           <div className="flex gap-1 items-center justify-self-end">
-            <Button className={"p-0"} variant={"link"}>
-              Privacy Policy
-            </Button>
+            <Link href="/privacy">
+              <Button className={"p-0"} variant={"link"}>
+                Privacy Policy
+              </Button>
+            </Link>
             &
-            <Button className={"p-0"} variant={"link"}>
-              Terms of Service
-            </Button>
+            <Link href="/terms">
+              <Button className={"p-0"} variant={"link"}>
+                Terms of Service
+              </Button>
+            </Link>
           </div>
         </div>
       </CardHeader>

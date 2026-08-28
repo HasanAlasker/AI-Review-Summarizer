@@ -4,8 +4,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { prisma } from "@/lib/prisma";
 import { serializeOrder } from "@/types/orderWithRel";
+import { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
+import { title } from "process";
 
 interface Props {
   params: Promise<{ id: string }>;
@@ -77,6 +79,13 @@ export default async function page({ params }: Props) {
       </Card>
     </div>
   );
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  return {
+    title: `Order - ${id.slice(0,8)}`,
+  };
 }
 
 export const dynamic = "force-dynamic";

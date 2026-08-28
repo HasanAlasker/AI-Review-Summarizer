@@ -6,6 +6,7 @@ import Card from "@/components/cart/Card";
 import ClearCartBtn from "@/components/cart/ClearCartBtn";
 import Loading from "./loading";
 import CheckoutBtn from "@/components/cart/CheckoutBtn";
+import { Metadata } from "next";
 
 export default function page() {
   const items = useCart((s) => s.items);
@@ -38,3 +39,8 @@ export default function page() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Cart",
+  description: "View your cart.",
+};
