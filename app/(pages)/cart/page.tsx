@@ -40,7 +40,3 @@ export default function page() {
   );
 }
 
-export const metadata: Metadata = {
-  title: "Cart",
-  description: "View your cart.",
-};
