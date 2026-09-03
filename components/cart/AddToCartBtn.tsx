@@ -1,12 +1,12 @@
 "use client";
-import { ShoppingCart } from "lucide-react";
-import { Button } from "../ui/button";
 import { useCart } from "@/app/store/useCart";
-import { useEffect, useState } from "react";
-import { Spinner } from "../ui/spinner";
-import { toast } from "sonner";
+import { ShoppingCart } from "lucide-react";
 import { useSession } from "next-auth/react";
 import { usePathname, useRouter } from "next/navigation";
+import { useState } from "react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Spinner } from "../ui/spinner";
 import Stepper from "./Stepper";
 
 interface Props {
@@ -18,7 +18,6 @@ interface Props {
 export default function AddToCartBtn({ productId, outOfStock, stock }: Props) {
   const getItem = useCart((s) => s.getItem);
   const item = useCart((s) => s.items.find((i) => i.productId === productId));
-  const status = useCart((s) => s.status);
   const hasHydrated = useCart((s) => s.hasHydrated);
   const [loading, setLoading] = useState(false);
   const exists = !!item;
@@ -50,7 +49,7 @@ export default function AddToCartBtn({ productId, outOfStock, stock }: Props) {
   };
 
   const admin = session?.user.role === "admin";
-  const loadBtn = loading || !hasHydrated
+  const loadBtn = loading || (session?.user.role === "user" && !hasHydrated);
 
   const Render = () => {
     return exists ? (
